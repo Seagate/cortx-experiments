@@ -147,8 +147,8 @@ def Switch(argument):
         12: KvPutWithLockAcquire,
         13: KvPutReleaseLock,
         14: DestroySession,
-	    15: CreateACL,
-	    16: UpdateACL,
+	15: CreateACL,
+	16: UpdateACL,
     }
     #function call
     switcher[argument]()
