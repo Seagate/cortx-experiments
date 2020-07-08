@@ -18,15 +18,14 @@ end = 0
 def createObjs():
     start = time.time()
     for i in range(100000):
+	# To print time interval after 1K entry.
         if i%1000 == 0:
             end = time.time()
             command = 'echo '+'Runtime after '+str((i+1))+' is :'+str((end-start))+'>> logfileInterval.txt' 
             os.system(command)
-            #os.system("echo 'runtime of the program is : ' ''"print("Runtime of the program is : ",(end - start))
 
         filename = 'keyFile_'+str(i)+'.txt'
         
-        #c.kv.put(filename, '@myFile.txt')
         os.system('consul kv put '+filename+' @my1kFile.txt')
 
     end = time.time()
