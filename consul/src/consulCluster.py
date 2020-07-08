@@ -1,75 +1,73 @@
+# This script is used as a consul client to query consul server.
+# Make sure you are running this script on a consul server which is already connected to a cluster.
+# Purpose of this script is to make sure that your data stays 
+
 from __future__ import print_function
 import consul
 import os
 import subprocess
 import socket
 
-c = consul.Consul( )
-#c = consul.Consul(host='10.230.241.123', port='1301')
-#c = consul.Consul(host='10.230.243.145',port=8301, scheme='http', verify=False)
+# creates a consul client object for the local host
+c = consul.Consul()
 
-def startAgent():
-    #os.system("start ls /k dir")
-    #subprocess.call('ls', shell=True)
-    agentType = ''
-    if int(raw_input(' Press 0: client mode\n Press 1: server mode\n')):
-        agentType = 'server'
-    nodeName = raw_input('enter node name you want to create!\n')
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-    print("Try running agent", ip_address, " in ",agentType," mode by running following command in other terminal :\n")
-    cmd = 'sudo consul agent -'+agentType+' -bind='+ip_address+' -node='+nodeName+' -data-dir=/tmp/consul -config-dir=/etc/consul.d\n'
-    print(cmd)
-    #os.system(cmd)
-
-def JoinCluster():
-    #c.agent.join('10.230.241.123', wan=False)
-    cmd = 'consul join 10.230.241.123'
-    os.system(cmd)
-
-
+# To get the list of existing members in the cluster
 def ConsulMembers():
     print ("member list  : ")
     mem = c.agent.members(wan=False)
     for var in mem:
         print(var,'\n')
 
-
+# To perform KV 'put' operation
 def KvstorePut():
     key1 = raw_input("enter key : ")
     val1 = raw_input("enter value : ")
     c.kv.put(key1, val1)
 
 
+# To perform KV 'get' operation
 def KvstoreGet():
     key1 = raw_input("Enter key : ")
     T = c.kv.get(key1, index=None)
     print (T[1:])
 
+# To 'get' all the stored keys on consul servers
 def KvGetAll():
     cmd = 'consul kv get -recurse'
     os.system(cmd)
 
+	
+# To 'delete' all the stored keys on consul servers
 def KvDeletekey():
     key = raw_input('Input key to delete')
     c.kv.delete(key)
 
+	
+# To query leader info for the cluster
 def LeaderInfo():
     print(c.status.leader())
     #print(c.status.peers())
 
-def startSession():
-    print ("starting the session : \n",c.session.create())
-
+	
+# To leave the consul
 def LeaveConsul():
     os.system('consul leave')
 
+
+# To start a session
+def startSession():
+    print ("starting the session : \n",c.session.create())
+
+
+# To list all the started sessions
 def ListSessions():
     t = c.session.list()
     for i in t[1:]:
         for x in i:
             print (x,'\n')
 
+	
+# To perform KV 'put' with a session locking
 def KvPutWithLockAcquire():
     session_id = raw_input('provide session_id to acquire lock :\n')
     key = raw_input('provide key :\n')
@@ -80,6 +78,8 @@ def KvPutWithLockAcquire():
     else:
         print('Acquisition Failed!\n')
 
+	
+# To release session lock on a particular key 
 def KvPutReleaseLock():
     session_id = raw_input('provide session_id to acquire lock :\n')
     key = raw_input('provide key :\n')
@@ -88,6 +88,8 @@ def KvPutReleaseLock():
     else:
         print('Release Failed!\n')
 
+	
+# To destroy created session
 def DestroySession():
     session_id = raw_input('Input session_id to destroy!')
     if True == c.session.destroy(session_id):
@@ -95,7 +97,13 @@ def DestroySession():
     else:
         print('Destroy Failed!\n')
 
-
+	
+# To create ACL with your desired rules
+# Client options is to be selected for for simple policy creation and application
+# Management option allows more flexibility of creating and deleting tokens.
+# Make sure you have bootstrap token to pass here as a 'management token'
+# Bootstrap token creation can be done using cli command 'consul acl bootstrap' if not created
+# Refer to : https://learn.hashicorp.com/consul/security-networking/production-acls#consul-kv-tokens
 def CreateACL():
     tInput = int(raw_input('enter 0 for "management" token\nenter 1 for "client" token\n'))
     rule = None
@@ -113,8 +121,20 @@ def CreateACL():
 
     print('acl_id is : ', token_id)
 
+	
+# Apply token globally to the agent [To be used only after creating a session]
+def ApplyACL():
+    acl_id = raw_input("enter ACL token to update global policy :\n")
+    os.system('export CONSUL_HTTP_TOKEN=' + acl_id)
+    print("ACL applied globally\n")
 
 
+# To update ACL token with new rules
+# Client options is to be selected for for simple policy creation and application
+# Management option allows more flexibility of creating and deleting tokens.
+# Make sure you have bootstrap token to pass here as a 'management token'
+# Bootstrap token creation can be done using cli command 'consul acl bootstrap' if not created
+# Refer to : https://learn.hashicorp.com/consul/security-networking/production-acls#consul-kv-tokens
 def UpdateACL():
     tInput = int(raw_input('enter 0 for "management" token\nenter 1 for "client" token\n'))
     rule = None
@@ -133,22 +153,21 @@ def UpdateACL():
 
 def Switch(argument):
     switcher = {
-        1: startAgent,
-        2: JoinCluster,
-        3: ConsulMembers,
-        4: KvstorePut,
-        5: KvstoreGet,
-        6: KvGetAll,
-        7: KvDeletekey,
-        8: LeaderInfo,
-        9: startSession,
-        0: LeaveConsul,
-        11: ListSessions,
-        12: KvPutWithLockAcquire,
-        13: KvPutReleaseLock,
-        14: DestroySession,
-	15: CreateACL,
-	16: UpdateACL,
+        1: ConsulMembers,
+        2: KvstorePut,
+        3: KvstoreGet,
+        4: KvGetAll,
+        5: KvDeletekey,
+        6: LeaderInfo,
+        7: LeaveConsul,
+        8: startSession,
+        9: ListSessions,
+        10: KvPutWithLockAcquire,
+        11: KvPutReleaseLock,
+        12: DestroySession,
+	13: CreateACL,
+	14: ApplyACL,
+	14: UpdateACL,
     }
     #function call
     switcher[argument]()
@@ -156,22 +175,21 @@ def Switch(argument):
 
 def printList():
     print("******************************************\n")
-    print("press 1 for starting an agent")
-    print("press 2 for Joining a member to cluster")
-    print("press 3 to see memberlist")
-    print("press 4 to put key-val")
-    print("press 5 to get val")
-    print("press 6 to get all key-val")
-    print("press 7 to delete a key-val pari")
-    print("press 8 for leader info")
-    print("press 9 to create a session")
-    print("press 0 to leave consul")
-    print("press 11 to list sessions")
-    print("press 12 to acquire lock")
-    print("press 13 to release lock")
-    print("press 14 to destroy session")
-    print("press 15 to create ACL")
-    print("press 16 to update ACL")
+    print("press 1 to see memberlist")
+    print("press 2 to put key-val")
+    print("press 3 to get val")
+    print("press 4 to get all key-val")
+    print("press 5 to delete a key-val pari")
+    print("press 6 for leader info")
+    print("press 7 to leave consul")
+    print("press 8 to create a session")
+    print("press 9 to list sessions")
+    print("press 10 to acquire lock")
+    print("press 11 to release lock")
+    print("press 12 to destroy session")
+    print("press 13 to create ACL")
+    print("press 14 to apply ACL globally")
+    print("press 15 to update ACL")
     print("******************************************\n")
 
     choice = int(input())
