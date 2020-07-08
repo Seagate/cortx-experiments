@@ -3,7 +3,7 @@
 *	unzip consul_1.7.3_linux_amd64.zip [insatall zip unzip : yum install zip unzip -y]
 *	sudo mv consul /bin/
 *	fire 'consul' and you should be looking at consul help as shown below.
- * <p align="center"><img src="../images/consul_help.JPG?raw=true"></p>
+ <p align="center"><img src="../images/consul_help.JPG?raw=true"></p>
  
 ## Running consul agent [server mode only]
 In this section we will be Running the consul as a server in a development mode to understand the default consul functionalities without extra configuration.
