@@ -1,0 +1,4 @@
+key "foo" {
+  policy = "read"
+}
+
