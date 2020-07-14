@@ -16,7 +16,7 @@
         {
             "type": "keyprefix",
             "prefix": "foobar/",
-            "args": ["/usr/bin/echo2.sh", "rajkumar"]
+            "args": ["/usr/bin/create1k_KV.sh", "rajkumar"]
         }
     ],
 
