@@ -51,9 +51,9 @@
   
       
   
-* All consul request needs token as the argument now. Nothing can happen without acl token passing. 
+4. All consul request needs token as the argument now. Nothing can happen without acl token passing. 
 
-4. Do this in all servers or agents 
+5. Do this in all servers or agents 
 
   * export CONSUL_HTTP_TOKEN=4411f091-a4c9-48e6-0884-1fcb092da1c8 
 
@@ -61,9 +61,9 @@
 
   * i.e. Consul members –token “<token_id>”  
 
-5. To check whether things are done properly or not, one can fire any consul command without passing token_id (in not exported as in point a.), there won’t be any action on fired consul command. Even ‘consul members’ won’t work. 
+6. To check whether things are done properly or not, one can fire any consul command without passing token_id (in not exported as in point a.), there won’t be any action on fired consul command. Even ‘consul members’ won’t work. 
 
-6. Create agent policy 
+7. Create agent policy 
 
 
   { 
@@ -106,15 +106,15 @@
 
 
 
-7. Create agent policy now 
+8. Create agent policy now 
 
-* $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
+  * $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
 
  
 
-8. Create consul agent token 
+9. Create consul agent token 
 
-* consul acl token create -description "Agent Token" -policy-name "agent-token" 
+   * consul acl token create -description "Agent Token" -policy-name "agent-token" 
 
  
 
