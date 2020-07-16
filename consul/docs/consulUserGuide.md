@@ -19,11 +19,11 @@ In this section we will be Running the consul as a server in a development mode 
     *	i.e. Web service definition would look like.
     *	‘{“service”:{“name”:”web”, “tags”: [“rails”], “port”:80}}’
    * Paste this into file {directory chosen in first step}/consul.d/web.json
-*	Restart the agent
-  * consul agent –dev –config-dir= {directory chosen in first step}/consul.d -node=myMachine
-*	Quering the service
-  *	Curl http://localhost:8500/v1/catalog/service/web 
-* for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
+* Restart the agent
+* consul agent –dev –config-dir= {directory chosen in first step}/consul.d -node=myMachine
+* Quering the service
+  * Curl http://localhost:8500/v1/catalog/service/web 
+  * for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
 
 ## KV store using consul kv cli
 * Two ways to store key-value
@@ -31,8 +31,8 @@ In this section we will be Running the consul as a server in a development mode 
   * consul kv cli
   
 * Put 
-  *	consul kv put key val
-  *	example : consul kv put foo bar	
+  * consul kv put key val
+  * example : consul kv put foo bar	
 * Get
   * consul kv get -recurse
   * consul kv get key
@@ -75,16 +75,16 @@ In this section we will be Running the consul as a server in a development mode 
   * We get an error messsage as as modify index is 101 and we our cas condition says 97 value: “Error! Did not write to foo: CAS failed”
 
 ## Locking in KV
-*	One can create a lock and attach process with that. As soon as one acquires that lock, process starts and if any-other process try to acquire the same lock then it has to wait and hence serialization is mandated using locking.
-*	Consul lock {options} prefix child-process
- *	Prefix is a lock(or semaphore) which is writable area
- *	Child-process is something which gets invoked when lock gets acquired.
-  *	I.e. consul lock sem1 pwd
+* One can create a lock and attach process with that. As soon as one acquires that lock, process starts and if any-other process try to acquire the same lock then it has to wait and hence serialization is mandated using locking.
+* Consul lock {options} prefix child-process
+	* Prefix is a lock(or semaphore) which is writable area
+	* Child-process is something which gets invoked when lock gets acquired.
+	* i.e. consul lock sem1 pwd
 
 ## Multi Node Cluster Setup
-*	On the first node (N1) install consul and run consul with the following command- 
+* On the first node (N1) install consul and run consul with the following command- 
 
-consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SERVERS_NODES_IN_CLUSTER> -node=<NODE_NAME> -data-dir=<DATA_DIR_PATH> -config-dir=<CONFIG_DIR_PATH>
+	* consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SERVERS_NODES_IN_CLUSTER> -node=<NODE_NAME> -data-dir=<DATA_DIR_PATH> -config-dir=<CONFIG_DIR_PATH>
 
 `-server           = if the node is server (blank for client)`
 
@@ -100,21 +100,21 @@ consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SE
 
 `-retry-join       = List of IP address/DNS address of any of the node in the cluster`
 
-*	Similarly, on other nodes install consul and run consul with the same command without the –bootstrap-expect option.
+* Similarly, on other nodes install consul and run consul with the same command without the –bootstrap-expect option.
 
-*	Now join the nodes from N1 to form a cluster using the following command
+* Now join the nodes from N1 to form a cluster using the following command
 
 `consul join <IP_ADDR_N2> <IP_ADDR_OF_N3>`
 
-*	Verify the nodes are in sync by adding a kv pair on one node and reading the same from the other nodes
+* Verify the nodes are in sync by adding a kv pair on one node and reading the same from the other nodes
 
 
 
 ## Create consul cluster using config file (json)
-*	Create a directory to store the configuration file for consul.
-    mkdir path_to_consfigdir/config_dir
+* Create a directory to store the configuration file for consul.
+	* mkdir path_to_consfigdir/config_dir
 
-*	In the config_dir , create a conf.json file and add the following content (along with your config params here) to it
+* In the config_dir , create a conf.json file and add the following content (along with your config params here) to it
 
     {
         “server” : <true for server, false for client>,
@@ -133,12 +133,12 @@ consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SE
         ]
     }
 
-*	Start the consul agent (server or client) using the command 
-    consul agent –config-dir=<path to your config dir>
+* Start the consul agent (server or client) using the command 
+	* consul agent –config-dir=<path to your config dir>
 
-*	Define the bootstrap_expect option only in one server as only a single server can be present in bootstrap mode in a cluster. Never use bootstrap_expect option on multiple agents.
+* Define the bootstrap_expect option only in one server as only a single server can be present in bootstrap mode in a cluster. Never use bootstrap_expect option on multiple agents.
 
-*	Similarly start the other agents by defining the configuration file for each agent without the bootstrap_expect option.
+* Similarly start the other agents by defining the configuration file for each agent without the bootstrap_expect option.
 
-*	The agents will automatically join to form a cluster if the retry join addresses of the nodes in the cluster are defined correctly.
- * i.e. "ssc-vm-XXXX.colo.seagate.com"
+* The agents will automatically join to form a cluster if the retry join addresses of the nodes in the cluster are defined correctly.
+	* i.e. "ssc-vm-XXXX.colo.seagate.com"
