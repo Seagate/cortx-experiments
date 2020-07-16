@@ -30,25 +30,26 @@ Two ways to store key-value
   * http api
   * consul kv cli
 * Put 
-  *	[format] --> consul kv put key val
-  *	consul kv put -flag=40 key value
+  *	consul kv put key val
+  *	example : consul kv put foo bar
 *	Get
   *	consul kv get -recurse
-  *	[format] --> consul kv get key
+  *	consul kv get key
   *	consul kv get -detailed key
-  *	Value will be returned with other metadata
+  * example : consul kv get foo
 *	delete
-  *	[format ]consul kv delete key
+  *	consul kv delete key
   *	consul kv delete -recurse prefix
+  * example : consul kv delete foo
 *	Update(put)
   *	consul kv put foo bar
-  *	consul kv get foo --> bar
+  *	consul kv get foo
   *	consul kv put foo one
-  *	consul kv get foo --> one
-  *	Check before setting a value to a key [CAS – check and set]
+  *	consul kv get foo
+*	Check before setting a value to a key (CAS – check and set)
   *	consul kv get -detailed key
-  *	consul kv put -cas[check and set] -modify-index=27 key val
-  *	consul kv put -cas[check and set] -modify-index=123 key val
+  *	consul kv put -cas -modify-index=27 key val
+  *	consul kv put -cas -modify-index=123 key val
   *	for example checkout sequence of following command-
     *	consul put foo test1
     *	consul kv get -detailed foo
