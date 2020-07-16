@@ -130,6 +130,7 @@
 
 * $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
 
+  <p align="center"><img src="../images/policyCreateImage?raw=true"></p>
  
 
 9. Create consul agent token and export as given in step 5. 
@@ -150,6 +151,7 @@
     
     ` 4b06084f-a9dc-63ea-a635-8bd5c16c6c18 - agent-token`
  
+   <p align="center"><img src="../images/tokenCreateImage?raw=true"></p>
  
 * `export CONSUL_HTTP_TOKEN=6fa91881-38c2-8b75-24f2-b5ae32576da2`
  
