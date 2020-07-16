@@ -1,5 +1,5 @@
 ## Consul Install [on DevVM]
-*	wget https://releases.hashicorp.com/consul/1.8.0/consul_1.8.0_linux_amd64.zip
+*	wget https://releases.hashicorp.com/consul/1.8.0/consul_1.8.0_linux_amd64.zip (latest version is available @ https://www.consul.io/downloads)
 *	unzip consul_1.8.0_linux_amd64.zip [insatall zip unzip : yum install zip unzip -y]
 *	sudo mv consul /bin/
 *	fire 'consul' and you should be looking at consul help as shown below.
