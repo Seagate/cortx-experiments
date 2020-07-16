@@ -101,7 +101,7 @@
 
 * consul acl token create -description "Agent Token" -policy-name "agent-token" 
  
-  <p align="center"><img src="../images/tokenCreateImage.png?raw=true"></p>
+  <p align="center"><img src="../images/tokenCreateImage.PNG?raw=true"></p>
  
   * `export CONSUL_HTTP_TOKEN={SecretID}`
  
