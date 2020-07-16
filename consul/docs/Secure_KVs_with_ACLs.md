@@ -85,46 +85,9 @@
 
 7. Create agent policy (JSON and hcl format are supported) 
 
-  * JSON format
-  
-  { 
+  * hcl format example is given below.
 
-    "key_prefix": { 
-
-      "": { 
-
-        "policy": "read" 
-
-      }, 
-
-      "foo/": { 
-
-        "policy": "write" 
-
-      }, 
-
-      "foo/private/": { 
-
-        "policy": "deny" 
-
-      } 
-
-    }, 
-
-    "key": { 
-
-      "foo/bar/secret": { 
-
-        "policy": "deny" 
-
-      } 
-
-    }, 
-
-    "operator": "read" 
-
-  } 
-
+  <p align="center"><img src="../images/rulesExampleImage.JPG?raw=true"></p>
 
 
 8. Create agent policy now 
