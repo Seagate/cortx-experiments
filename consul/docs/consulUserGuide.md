@@ -9,25 +9,21 @@
 In this section we will be Running the consul as a server in a development mode to understand the default consul functionalities without extra configuration.
 *	consul agent –dev –node myMachine
 *	consul members –detailed
-*	curl localhost:8500/v1/catalog/nodes
-*	dig @127.0.0.1 -p 8600 myMachine.node.consul
 *	consul leave
 
 ## Service registration and calling the service
 * There are two ways to register a service. Via service definition or using an HTTP API.
   * Consul config directory setup
-  * mkdir {directory of your wish}/consul.d
-  * Add service definition to a file with yourServiceName.json
-  *	i.e. Web service definition would look like.
+   * mkdir {directory of your wish}/consul.d
+   * Add service definition to a file with yourServiceName.json
+    *	i.e. Web service definition would look like.
     *	‘{“service”:{“name”:”web”, “tags”: [“rails”], “port”:80}}’
-  * Paste this into file {directory chosen in first step}/consul.d/web.json
+   * Paste this into file {directory chosen in first step}/consul.d/web.json
 *	Restart the agent
   * consul agent –dev –config-dir= {directory chosen in first step}/consul.d -node=myMachine
-*	Calling the service
-  *	Dig @127.0.0.1 -p 8600 web.service.consul
-  *	Dig @127.0.0.1 -p 8600 web.service.consul SRV
-  *	Dig @127.0.0.1 -p 8600 rails.web.service.consul
+*	Quering the service
   *	Curl http://localhost:8500/v1/catalog/service/web 
+* for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
 
 ## KV store using consul kv cli
 Two ways to store key-value
