@@ -108,13 +108,13 @@
 
 8. Create agent policy now 
 
-  * $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
+* $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
 
  
 
-9. Create consul agent token 
+9. Create consul agent token and export as given in step 5. 
 
-   * consul acl token create -description "Agent Token" -policy-name "agent-token" 
+* consul acl token create -description "Agent Token" -policy-name "agent-token" 
 
  
 
