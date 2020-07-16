@@ -87,14 +87,14 @@
 
   * hcl format example is given below.
 
-  <p align="center"><img src="../images/RulesExampleImage.png?raw=true"></p>
+  <p align="center"><img src="../images/RulesExampleImage.PNG?raw=true"></p>
 
 
 8. Create agent policy now 
 
 * $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json (or agent-policy.hcl) 
 
-  <p align="center"><img src="../images/policyCreateImage.png?raw=true"></p>
+  <p align="center"><img src="../images/policyCreateImage.PNG?raw=true"></p>
  
 
 9. Create consul agent token and export as given in step 5. 
