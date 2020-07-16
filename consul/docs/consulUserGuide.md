@@ -26,33 +26,34 @@ In this section we will be Running the consul as a server in a development mode 
 * for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
 
 ## KV store using consul kv cli
-Two ways to store key-value
+* Two ways to store key-value
   * http api
   * consul kv cli
+  
 * Put 
   *	consul kv put key val
-  *	example : consul kv put foo bar
-*	Get
-  *	consul kv get -recurse
-  *	consul kv get key
-  *	consul kv get -detailed key
+  *	example : consul kv put foo bar	
+* Get
+  * consul kv get -recurse
+  * consul kv get key
+  * consul kv get -detailed key
   * example : consul kv get foo
-*	delete
-  *	consul kv delete key
-  *	consul kv delete -recurse prefix
+* delete
+  * consul kv delete key
+  * consul kv delete -recurse prefix
   * example : consul kv delete foo
-*	Update(put)
-  *	consul kv put foo bar
-  *	consul kv get foo
-  *	consul kv put foo one
-  *	consul kv get foo
-*	Check before setting a value to a key (CAS – check and set)
-  *	consul kv get -detailed key
-  *	consul kv put -cas -modify-index=27 key val
-  *	consul kv put -cas -modify-index=123 key val
-  *	for example checkout sequence of following command-
-    *	consul put foo test1
-    *	consul kv get -detailed foo
+* Update(put)
+  * consul kv put foo bar
+  * consul kv get foo
+  * consul kv put foo one
+  * consul kv get foo
+* Check before setting a value to a key (CAS – check and set)
+  * consul kv get -detailed key
+  * consul kv put -cas -modify-index=27 key val
+  * consul kv put -cas -modify-index=123 key val
+  * for example checkout sequence of following command-
+    * consul put foo test1
+    * consul kv get -detailed foo
       * Above command Shows details as
         
         `[CreateIndex      101]`
@@ -70,7 +71,7 @@ Two ways to store key-value
         `Value            test1`
         
     * Check modify-index and if found as passed as args in put command, then only let set foo key with test2
-    *	consul kv put -cas -modify-index=97 foo test2 
+    * consul kv put -cas -modify-index=97 foo test2 
   * We get an error messsage as as modify index is 101 and we our cas condition says 97 value: “Error! Did not write to foo: CAS failed”
 
 ## Locking in KV
