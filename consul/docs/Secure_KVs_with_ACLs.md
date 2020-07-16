@@ -87,7 +87,7 @@
 
   * hcl format example is given below.
 
-  <p align="center"><img src="../images/rulesExampleImage.JPG?raw=true"></p>
+  <p align="center"><img src="../images/RulesExampleImage.JPG?raw=true"></p>
 
 
 8. Create agent policy now 
