@@ -71,13 +71,13 @@ Two ways to store key-value
         
     * Check modify-index and if found as passed as args in put command, then only let set foo key with test2
     *	consul kv put -cas -modify-index=97 foo test2 
-*	Result comas as as modify index is 101 and we our cas condition says 97 value: “Error! Did not write to foo: CAS failed”
+  * We get an error messsage as as modify index is 101 and we our cas condition says 97 value: “Error! Did not write to foo: CAS failed”
 
 ## Locking in KV
-*	One can create a lock and attach process with that. As soon as one acquires that lock, process starts and if any-other process starts to acquire the same lock then it has to wait and hence have to follow serialization.
-*	Consul lock prefix child-process
-*	Prefix is a lock(or semaphore) which is writable area
-*	Child-process is something which gets invoked when locks get acquired.
+*	One can create a lock and attach process with that. As soon as one acquires that lock, process starts and if any-other process try to acquire the same lock then it has to wait and hence serialization is mandated using locking.
+*	Consul lock {options} prefix child-process
+ *	Prefix is a lock(or semaphore) which is writable area
+ *	Child-process is something which gets invoked when lock gets acquired.
   *	I.e. consul lock sem1 pwd
 
 ## Multi Node Cluster Setup
@@ -111,9 +111,9 @@ consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SE
 
 ## Create consul cluster using config file (json)
 *	Create a directory to store the configuration file for consul.
-    mkdir config_dir
+    mkdir path_to_consfigdir/config_dir
 
-*	In the config_dir , create a config.json file and add the following content to it
+*	In the config_dir , create a conf.json file and add the following content (along with your config params here) to it
 
     {
         “server” : <true for server, false for client>,
@@ -121,6 +121,12 @@ consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SE
         “node_name” : “<node name>”,
         “data_dir” : “<path to your data dir>”,
         “datacenter” : “<name of datacenter>”,
+        "acl" : {
+		         "enabled" : false,
+		         "default_policy" : "deny",
+		         "enable_token_replication" : true,
+		         "enable_token_persistence" : true
+	        },
         “retry_join” : [
             <List of addresses to connect to>
         ]
@@ -129,8 +135,9 @@ consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SE
 *	Start the consul agent (server or client) using the command 
     consul agent –config-dir=<path to your config dir>
 
-*	Define the bootstrap_expect option only in one server as only a single server can be present in bootstrap mode in a cluster.
+*	Define the bootstrap_expect option only in one server as only a single server can be present in bootstrap mode in a cluster. Never use bootstrap_expect option on multiple agents.
 
 *	Similarly start the other agents by defining the configuration file for each agent without the bootstrap_expect option.
 
 *	The agents will automatically join to form a cluster if the retry join addresses of the nodes in the cluster are defined correctly.
+ * i.e. "ssc-vm-XXXX.colo.seagate.com"
