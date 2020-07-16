@@ -83,9 +83,10 @@
 
 6. To check whether things are done properly or not, one can fire any consul command without passing token_id (in not exported as in point a.), there won’t be any action on fired consul command. Even ‘consul members’ won’t work. 
 
-7. Create agent policy 
+7. Create agent policy (JSON and hcl format are supported) 
 
-
+  * JSON format
+  
   { 
 
     "key_prefix": { 
@@ -128,30 +129,16 @@
 
 8. Create agent policy now 
 
-* $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json 
+* $ consul acl policy create -name "agent-token" -description "Agent Token Policy" -rules @agent-policy.json (or agent-policy.hcl) 
 
-  <p align="center"><img src="../images/policyCreateImage.PNG?raw=true"></p>
+  <p align="center"><img src="../images/policyCreateImage.png?raw=true"></p>
  
 
 9. Create consul agent token and export as given in step 5. 
 
 * consul acl token create -description "Agent Token" -policy-name "agent-token" 
-
-    ` AccessorID:       c39c8299-3502-2bb2-e798-6d67e9ebad98`
-    
-    ` SecretID:         6fa91881-38c2-8b75-24f2-b5ae32576da2`
-    
-    ` Description:      Agent Token`
-    
-    ` Local:            false`
-    
-    ` Create Time:      2020-07-09 22:59:16.847112371 -0600 MDT`
-    
-    ` Policies:`
-    
-    ` 4b06084f-a9dc-63ea-a635-8bd5c16c6c18 - agent-token`
  
-   <p align="center"><img src="../images/tokenCreateImage.PNG?raw=true"></p>
+  <p align="center"><img src="../images/tokenCreateImage.png?raw=true"></p>
  
-* `export CONSUL_HTTP_TOKEN=6fa91881-38c2-8b75-24f2-b5ae32576da2`
+  * `export CONSUL_HTTP_TOKEN={SecretID}`
  
