@@ -55,16 +55,16 @@
 5. Update the kafka server configuration in the config/server.properties file in the kafka directory as follows - 
 
 	1. Define a unique broker id for each kafka server.
-	__Note__ : It is possible to have multiple kafka server instances on a single node. In that case we need to define separate server.properties file for each instance.
 		```
 		broker.id=0 
 		```
+		__Note__ : It is possible to have multiple kafka server instances on a single node. In that case we need to define separate server.properties file for each instance.
 
 	2. Define a directory for storing of log files
-	__Note__ : It is possible to define a comma separated list of directories
 		```
 		log.dirs=<path for storing logs>
 		```
+		__Note__ : It is possible to define a comma separated list of directories
 
 	3. To form a cluster of 3 nodes, add a comma separated list of node and port addresses in the zookeeper.connect parameter so that if a zookeeper instance fails, the node will automatically try to connect to the next available address
     	```
@@ -184,6 +184,7 @@
     p.flush()
 	```
 	The above code will publish 10 messages to the topic __test__
+	
 	__Note__ : the topic must already be created on the broker or the flag for auto creating topics must be true
 &nbsp;
 
@@ -210,6 +211,7 @@
     c.close()
 	```
 	The above code will subscribe to the topic __test__
+	
 	__Note__ : the topic must already be created on the broker
 
 
