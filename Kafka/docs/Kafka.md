@@ -5,6 +5,7 @@
 	$ yum install java 
     $ yum install java-devel
 	```
+
 2. Download kafka (latest version 2.5.0) binary using the command 
     ```
 	$ curl “http://apache.spinellicreations.com/kafka/2.5.0/kafka_2.12-2.5.0.tgz” -o kafka.tgz  
@@ -20,7 +21,7 @@
 	$ tar –xvzf kafka.tgz --strip 1
 	```
 
-3. For zookeeper setup, you can use the zookeeper which comes along with the kafka package or you can separately download the zookeeper package. For using the zookeeper which is in the kafka package follow the below steps and repeat on every node in the cluster.
+4. For zookeeper setup, you can use the zookeeper which comes along with the kafka package or you can separately download the zookeeper package. For using the zookeeper which is in the kafka package follow the below steps and repeat on every node in the cluster.
 &nbsp;
 
 	1. Define the configuration for the zookeeper in the kafka/config/zookeeper.properties file by defining the following configuration parameters - 
@@ -40,8 +41,8 @@
 		The details for the configuration parameters can be found at https://zookeeper.apache.org/doc/current/zookeeperStarted.html.
 &nbsp;
 
-	2. In the <datadir> folder add a file myid and add the node id 1 to the file in the first node. (This must be a single integer value).
-	Similarly, for nodes 2 and 3, add their respective ids in <datadir>/myid file on the respective nodes.
+	2. In the __dataDir__ folder, add a file __myid__ and add the node id 1 to the file in the first node. (This must be a single integer value).
+	Similarly, for nodes 2 and 3, add their respective ids in __dataDir/myid__ file on the respective nodes.
 &nbsp;
 
 	3. From the kafka directory, start the zookeeper server using the config defined above 
@@ -52,71 +53,74 @@
 	4. For independent zookeeper installation and setup follow the steps listed in Zookeeper installation and setup 
 &nbsp;
 
-5. Update the kafka server configuration in the config/server.properties file in the kafka directory as follows - 
+5. Update the kafka server configuration in the __config/server.properties__ file in the kafka directory as follows
+&nbsp;
 
 	1. Define a unique broker id for each kafka server.
 		```
 		broker.id=0 
 		```
-		__Note__ : It is possible to have multiple kafka server instances on a single node. In that case we need to define separate server.properties file for each instance.
+		Note : It is possible to have multiple kafka server instances on a single node. In that case we need to define separate server.properties file for each instance.
+&nbsp;
 
 	2. Define a directory for storing of log files
 		```
 		log.dirs=<path for storing logs>
 		```
-		__Note__ : It is possible to define a comma separated list of directories
+		Note : It is possible to define a comma separated list of directories
+&nbsp;
 
 	3. To form a cluster of 3 nodes, add a comma separated list of node and port addresses in the zookeeper.connect parameter so that if a zookeeper instance fails, the node will automatically try to connect to the next available address
     	```
 		zookeeper.connect= <node 1 address>:2181,
-                                         <node 2 address>:2181,
-                                         <node 3 address>:2181
+                           <node 2 address>:2181,
+                           <node 3 address>:2181
 		```
 
 	4. Repeat the above steps for each node in the cluster.
 &nbsp;
 
 6. From the kafka directory run the kafka server on each node
-		```
-		$ ./bin/kafka-server-start.sh config/server.properties
-		```
-&nbsp;
 
-7. On one of the nodes create a topic named test
-    	```
-		$ ./bin/kafka-topics.sh --create –bootstrap-server <list of server:port> --replication-factor 3 --partitions 1 --topic <topicname>
-		```
-&nbsp;
+	```
+	$ ./bin/kafka-server-start.sh config/server.properties
+	```
 
-	__Note__: Here __list of server:port__ can be __localhost:9092__ or a comma separated list
+7. On one of the nodes create a topic named __test__
+
+	```
+	$ ./bin/kafka-topics.sh --create –bootstrap-server <list of server:port> --replication-factor 3 --partitions 1 --topic <topicname>
+	```
+
+	Note: Here __list of server:port__ can be __localhost:9092__ or a comma separated list of bootstrap servers
 	If using the older version, use __-- zookeeper__ instead of __--bootstrap-server__ .
 &nbsp;
 
-8. Verify it by 
+8. Verify that the topic has been created on the by 
     ```
 	$ ./bin/kafka-topics.sh --list –bootstrap-server <list of server:port>
 	```
 
-9. On the same node run the producer script to publish a message
+9. Now run the producer script to publish a message
     ```
 	$ ./bin/kafka-console-producer.sh --bootstrap-server <list of server:port> --topic test
       > This is a message
       > This is another message
 	```
 
-	__Note__: Here __list of server:port__ can be __localhost:9092__ or a comma separated list
+	Note: Here __list of server:port__ can be __localhost:9092__ or a comma separated list of bootstrap servers
 	If using the older version, use __–broker-list__ instead of __-- bootstrap-server__ .
 &nbsp;
 
-10. On other nodes run the consumer scripts to read the message from the beginning
+10. Run the consumer scripts to read the message from the beginning
     ```
 	$ ./bin/kafka-console-consumer.sh --bootstrap-server <list of server:port> --topic test --from-beginning
       > Test Msg1
       > Test Msg2 
 	```
 	
-	__Note__: Here __list of server:port__ can be __localhost:9092__ or a comma separated list
-
+	Note: Here __list of server:port__ can be __localhost:9092__ or a comma separated list of bootstrap servers
+&nbsp;
 
 ## Zookeeper installation and setup
 
@@ -150,7 +154,16 @@
     ```
 	$ ./bin/zkServer.sh start
 	```
+&nbsp;
 
+## Kafka Basics
+1. __Replication__ - The default values for replication configuration can be found in the __config/server.properties__ file. For deployment purposes it is recommended to have a replication factor of more than 1 to ensure availability.
+&nbsp;
+
+2. __Partitions__ - The default value for number of partitions can be found in the __config/server.properties__ file. More partitions allow greater parallelism for consumption, but this will also result in more files across the brokers. Custom partitions for a topic can also be defined while creating a topic.
+
+
+&nbsp;
 
 ## Using the python Client for kafka
 
@@ -164,7 +177,7 @@
 	$ pip3 install confluent-kafka
 	```
 
-3.	For running a producer client, run the following code snippet
+3.	For running a __producer__ client, run the following code snippet
 
     ```
 	from confluent_kafka import Producer
@@ -185,10 +198,10 @@
 	```
 	The above code will publish 10 messages to the topic __test__
 	
-	__Note__ : the topic must already be created on the broker or the flag for auto creating topics must be true
+	Note : the topic must already be created on the broker or the flag for auto creating topics must be true
 &nbsp;
 
-4.	For running a consumer client, run the following code snippet
+4.	For running a __consumer__ client, run the following code snippet
 
     ```
 	from confluent_kafka import Consumer
@@ -212,12 +225,12 @@
 	```
 	The above code will subscribe to the topic __test__
 	
-	__Note__ : the topic must already be created on the broker
-
+	Note : the topic must already be created on the broker or the flag for auto creating topics must be true
+&nbsp;
 
 ## ‘Exactly-Once’ implementation
 
-In case of producer or broker failures where the message might get duplicated due to retries at the producer end. To avoid such duplication, we can implement a transactional producer which will ensure that a message is published exactly once to a topic and thus achieve idempotency.
+In case of producer or broker failures, there is a possibility that the message might get duplicated due to retries at the producer end. To avoid such duplication, we can implement a transactional producer which will ensure that a message is published exactly once to a topic and thus achieve idempotency.
 
 1.	The following config is required for the producer
 	```
@@ -229,15 +242,17 @@ In case of producer or broker failures where the message might get duplicated du
         'enable.idempotence' : True
     } )
 	```
+
 2.	When publishing messages from the producer, use the following transaction APIs
 	```
     p.init_transactions()     # this needs to be called once before any other transactional API
     .
     .
-    p.begin_transaction()
-    p.produce(<topic>, <message>)
-    p.commit_transaction()
+	p.begin_transaction()
+	p.produce(<topic>, <message>)
+	p.commit_transaction()
 	```
+
 3.	At the consumer, the following config is needed
 	```
     c = Consumer( {
@@ -272,14 +287,149 @@ Alternatively, nmon can also log the parameters periodically in a file. This can
     ```
 	$ nmon –F <File name (node1.nmon)> -c <number of snapshots to be captured> -s <interval between snapshots in sec> -T -U
 	```
-	__Note__ : -T is used for capturing the top process statistics–U for capturing the CPU utilization statistics
+	Note : -T is used for capturing the top process statistics–U for capturing the CPU utilization statistics
 &nbsp;
 
-4.	Run 16 instances of producer_performance_test.py which will produce 64k messages of 1kb each to generate a total of 1Gb data.
+4.	Run 16 instances of producer_performance_test.py which will produce 64k messages of 1kb each to generate a total of 1Gb data. 
+The number of producers can be increased depending on the test requirements. Running very high number of producers on a single VM will result in exhaustion of resources on the VM.
 &nbsp;
 
 5.	Run multiple instances of consumer_performance_test.py to consume the messages.
 &nbsp;
 
 6.	After the test finishes, capture the disk usage to verify that all the messages have been captured.
+&nbsp;
+
+
+## Kafka-Connect
+
+Kafka connect is a tool which will allow kafka to import or export data from kafka topics to other external databases. In order to do so, Kafka provides a method to define the connector which will do the task of exporting data to external database (__sink connector__) and importing data from external database (__source connector__). The steps and configuration for connecting to the elasticsearch database is given below.
+
+1. Install and run Elasticsearch
+
+	1. Download elasticsearch using the below command
+		```
+		$ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.0-linux-x86_64.tar.gz
+		$ tar -xzf elasticsearch-7.8.0-linux-x86_64.tar.gz
+		$ cd elasticsearch
+		```
+
+	2. Update the following configurations in __/config/elasticsearch.yaml__ file.
+		```
+		path.data=<Data directory for elasticsearch>
+		path.log=<Log directory>
+		network.host: 0.0.0.0
+		http.port: 9200
+		transport.host: 9200
+		transport.tcp.port: 9300
+		``` 
+
+	3. Run the elasticsearch using the command below
+		```
+		$ ./bin/elasticsearch/
+		```
+
+2. Elasticsearch connector
+
+	1. Download and extract the confluent kafka-elasticsearch sink connector from https://www.confluent.io/hub/confluentinc/kafka-connect-elasticsearch
+&nbsp;
+
+	2. Update the configuration file at __etc/quickstart-elasticsearch.properties__ for the connector with the following configurations
+		```
+		name=elasticsearch-sink
+		connector.class=io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
+		tasks.max=1
+		topics=<topic name>
+		key.ignore=true
+		schema.ignore=true
+		connection.url=http://localhost:9200
+		type.name=_doc
+		```
+
+3. Starting the kafka-connector
+
+	1. In the kafka directory, update the configurations in the __config/connect-standalone.properties__ file as given below
+		```
+		.
+		.
+		value.converter.schemas.enable=false
+		offset.storage.file.filename=<file for storing connect offsets>
+		plugin.path=<path to the confluent kafka-elasticsearch connector folder>
+		.
+		```
+	
+	2. Run the kafka connnect and start the above connector using the below command
+		```
+		$ ./bin/connect-standalone.sh config/connect-standalone.properties <path to quickstart-elasticsearch.properties>
+		```
+
+	3. Run a producer to publish some json messages to the topic. For eg-
+		```
+		{"Key":"TestKey","Value":"TestValue"}
+		```
+
+	4. Verify the document in the elasticsearch database using the curl commands
+		```
+		$ curl -X GET localhost:9200/<topicname>/_search?pretty=true
+		```
+
+## Horizontal Scalability
+
+1. #### Add a new node
+
+	1. For adding a new node to the existing cluster, we need to have separate configurations for the new node. The configuration will include zookeeper and kafka server configuration files. Also, the entry for new node must be present in the __zookeeper.properties__ file of the existing servers.
+		```
+		server.<id for new node>=<server:port config for the node>
+		```
+
+	2. Start the zookeeper server and the kafka broker on the new node using the appropriate configuration files.
+	&nbsp;
+
+	3. We can verify that the new node is now a part of the kafka cluster by running the following command
+		```
+		$ ./bin/zookeeper-shell.sh localhost:2181 ls /broker/ids
+		```
+
+2. #### Decommission/Remove a broker/node
+	For decommissioning a broker, we first need to reassign the topic partitions on that node to some other node. In order to do so, we need to first list all the topic partitions on the node that we wish to remove. Below are the steps that can be followed to remove a broker from a cluster.
+	&nbsp;
+
+	1. On the node lits all the topics and identify the ones to be removed using the following command
+		```
+		$ ./bin/kafka-topics.sh --zookeeper localhost:2182 --describe
+		```
+
+	2. Make a json file __MoveTopics.json__ with a list of all the topics to be moved to other nodes.
+		```
+		{
+			"version":1,
+			"topics":[
+				{"topic":"<topic 1>"},
+				{"topic":"<topic 2>"},
+				{"topic":"<topic 3>"}
+			]
+		}
+		```
+
+	3. Generate a topic-partition reassignment plan using the command
+		```
+		$ ./bin/kafka-reassign-partitions.sh --generate --zookeeper localhost:2181 --topics-to-move-json-file MoveTopics.json --broker-list <list of brokers ids where we want to move the partitions. eg 1,2,3>
+		```
+		Note: This will only generate a plan and does not move the topic partitions to other nodes.
+	&nbsp;
+
+	4. The output of the above commnd shows a new plan for reassignment of the topic partitions. Either use the above plan or change the reassignment as per requirement on the brokers. Define the reassignment plan in a new json file __ReassignmentPlan.json__ .
+	&nbsp;
+
+	5. Move the topic-partions to other nodes as per the plan using the below command
+		```
+		$ ./bin/kafka-reassign-partitions.sh --execute --zookeeper localhost:2181 --reassignment-json-file ReassignmentPlan.json
+		```
+
+	6. Verify the assignment according to the plan using the below command
+		```
+		$ ./bin/kafka-reassign-partitions.sh --verify --zookeeper localhost:2181 --reassignment-json-file ReassignmentPlan.json
+		```
+		
+	7. Stop the kafka server and the zookeeper server on the node to completely remove the node from the kafka cluster
 &nbsp;
