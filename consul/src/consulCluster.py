@@ -3,8 +3,8 @@
 # Purpose of this script is to make sure that your data stays 
 
 from __future__ import print_function
-import consul_acl
-import consul_lock
+from consul_acl import *
+from consul_lock import *
 import consul
 import os
 import subprocess
