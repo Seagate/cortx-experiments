@@ -7,7 +7,7 @@ from __future__ import print_function
 import consul
 import os
 import subprocess
-#import socket
+import socket
 
 # To start a session
 def startSession():
