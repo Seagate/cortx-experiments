@@ -1,7 +1,5 @@
 # This is a file contains functions related to ACL functionalities.
 # This details will be used by consulCluster.py
-# Make sure you are running this script on a consul server which is already connected to a cluster.
-# Purpose of this script is to make sure that your data stays 
 
 from __future__ import print_function
 import consul
