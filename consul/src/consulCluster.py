@@ -1,6 +1,9 @@
 # This script is used as a consul client to query consul server.
-# Make sure you are running this script on a consul server which is already connected to a cluster.
+# Make sure you are running this script on a consul server
+# which is already connected to a cluster.
 # Purpose of this script is to make sure that your data stays 
+# other ACL and Locking using session related functions 
+# are in consul_acl.py and consul_lock.py resepectively.
 
 from __future__ import print_function
 from consul_acl import *
