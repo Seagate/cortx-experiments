@@ -7,9 +7,10 @@
  
 ## Running consul agent [server mode only]
 In this section we will be Running the consul as a server in a development mode to understand the default consul functionalities without extra configuration.
-*	consul agent –dev –node myMachine
+*	consul agent –dev –node myMachine (-dev: Enable development server mode. This is useful for quickly starting a Consul agent with all persistence options turned off.)
 *	consul members –detailed
 *	consul leave
+This -dev flag should not be used in production environment.
 
 ## Service registration and calling the service
 * There are two ways to register a service. Via service definition or using an HTTP API.
@@ -80,6 +81,7 @@ In this section we will be Running the consul as a server in a development mode 
 	* Prefix is a lock(or semaphore) which is writable area
 	* Child-process is something which gets invoked when lock gets acquired.
 	* i.e. consul lock sem1 pwd
+		* whenever anyone will try to acquire sem1 lock, then one has to wait for termination of child process (pwd in this case).
 
 ## Multi Node Cluster Setup
 * On the first node (N1) install consul and run consul with the following command- 
