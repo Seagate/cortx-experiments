@@ -16,7 +16,7 @@
         {
             "type": "keyprefix",
             "prefix": "foobar/",
-            "args": ["/usr/bin/create1k_KV.sh", "rajkumar"]
+            "args": ["/usr/bin/watcher_Handler.sh", "rajkumar"]
         }
     ],
 
