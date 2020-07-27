@@ -26,7 +26,7 @@ This -dev flag should not be used in production environment.
   * Curl http://localhost:8500/v1/catalog/service/web 
   * for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
 
-## KV operations using consul kv CLI
+## KV operations using consul kv cli
 * Two ways to store key-value
   * http api
   * consul kv cli
