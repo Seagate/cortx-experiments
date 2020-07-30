@@ -22,8 +22,6 @@ filter = {
                 }
             }
         }
-
-
     }
 }
 # make a search() request to get all docs in the index
