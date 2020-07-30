@@ -28,7 +28,7 @@ The only two required parameters for the Search API in Python are the index you 
 ```python
 elastic_client.search(index="some_index", body=any_query)
 ```
-This is a basic way to call search. The search request body may contain many [parameters.](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-scroll)
+This is a basic way to call search. The search request body may contain many [parameters.](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html)
 #### Note: 
 - *Result of search() depends on size parameter(by default 10 records)*
 - *Use of only search() may lead to loss of some desired records, If client demanding more records than limit of search().*
