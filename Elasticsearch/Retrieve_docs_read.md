@@ -28,6 +28,7 @@ The only two required parameters for the Search API in Python are the index you 
 ```python
 elastic_client.search(index="some_index", body=any_query)
 ```
+This is a basic way to call search. The search request body may contain many [parameters.](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-scroll)
 ## The helpers library’s scan() method
 
 scan() method is a part of the client’s helpers library, and it’s basically a wrapper for the aforementioned scroll() method. The **key difference** us that helpers.scan() will return a generator instead of a JSON dictionary response. 
@@ -51,7 +52,7 @@ Parameters:
 *Note:Scan will retrieve all records from elasticsearch at a time.*
 
 ## The client’s scroll() method.
-Scrolling in Elasticsearch allows you retrieve a large number of documents, in steps or iterations, similar to pagination or a “cursor” in relational databases.
+*Scrolling in Elasticsearch allows you retrieve a large number of documents, in steps or iterations, similar to pagination or a “cursor” in relational databases.*
 you can also use the client’s low-level scroll() method designed to work with Elastic’s Scroll API.
 ### Scroll
 While a search request returns a single “page” of results, the scroll API can be used to retrieve large numbers of results (or even all results) from a single search request, in much the same way as you would use a cursor on a traditional database.
@@ -91,12 +92,17 @@ A scroll returns all the documents which matched the search at the time of the i
 The scroll parameter (passed to the search request and to every scroll request) tells Elasticsearch how long it should keep the search context alive. Its value (e.g. 1m) does not need to be long enough to process all data — it just needs to be long enough to process the previous batch of results. Each scroll request (with the scroll parameter) sets a new expiry time. If a scroll request doesn’t pass in the scroll parameter, then the search context will be freed as part of that scroll request.
 
 ### Issues caused by having too many scrolls open
-- 
+
 To prevent against issues caused by having too many scrolls open, the user is not allowed to open scrolls past a certain limit. By default, the maximum number of open scrolls is 500. This limit can be updated with the search.max_open_scroll_context cluster setting.
 
-### clear-scroll API:
+### Clear-scroll API:
 
 Search context are automatically removed when the scroll timeout has been exceeded. However keeping scrolls open has a cost, as discussed so scrolls should be explicitly cleared as soon as the scroll is not being used anymore using the clear-scroll API
+
+#### Note:
+Scan() is Simple abstraction on top of the scroll() api and a simple iterator that yields all hits as returned by underlining scroll requests. *Scan and scroll method is replaced by scan and search for newer version of elasticsearch.
+
+
 
 
 
