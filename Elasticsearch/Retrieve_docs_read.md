@@ -12,8 +12,9 @@ The dictionary will be passed to the body parameter of the method. The first key
 
 
 ```python
-query_body = {
+any_query = {
   "query": {
+      "size": No_of_records,
       "match": {
           "some_field": "search_for_this"
       }
@@ -25,8 +26,33 @@ You can pass the dictionary data for the query directly to the search method at 
 The only two required parameters for the Search API in Python are the index you want to search, and the body of the Elasticsearch query:
 
 ```python
-elastic_client.search(index="some_index", body=some_query)
+elastic_client.search(index="some_index", body=any_query)
 ```
+## The helpers library’s scan() method
+
+scan() method is a part of the client’s helpers library, and it’s basically a wrapper for the aforementioned scroll() method. The **key difference** us that helpers.scan() will return a generator instead of a JSON dictionary response. 
+```python
+elasticsearch.helpers.scan(client, query=None, scroll='5m', raise_on_error=True, preserve_order=False, size=1000, request_timeout=None, clear_scroll=True, scroll_kwargs=None, **kwargs)
+```
+
+By default scan does not return results in any pre-determined order. To have a standard order in the returned documents (either by score or explicit sort definition) when scrolling, use preserve_order=True. This may be an expensive operation and will negate the performance benefits of using scan.
+
+Parameters:	
+1. client – instance of Elasticsearch to use
+2. query – body for the search() api
+3. scroll – Specify how long a consistent view of the index should be maintained for scrolled search.**Not supported in elasticsearch 7.8.X**
+4. raise_on_error – raises an exception (ScanError) if an error is encountered (some shards fail to execute). By default we raise.
+5. preserve_order – don’t set the search_type to scan - this will cause the scroll to paginate with preserving the order. Note that this can be an extremely expensive operation    and can easily lead to unpredictable results, use with caution.
+6. size – **size (per shard) of the batch send at each iteration.**  *Note:size is not no of records*
+7. request_timeout – explicit timeout for each call to scan
+8. clear_scroll – explicitly calls delete on the scroll id via the clear scroll API at the end of the method on completion or error, defaults to true.
+9. scroll_kwargs – additional kwargs to be passed to scroll()
+
+*Note:Scan will retrieve all records from elasticsearch at a time.*
+
+
+
+
 
  
  
