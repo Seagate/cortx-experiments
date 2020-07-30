@@ -29,6 +29,10 @@ The only two required parameters for the Search API in Python are the index you 
 elastic_client.search(index="some_index", body=any_query)
 ```
 This is a basic way to call search. The search request body may contain many [parameters.](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html#request-body-search-scroll)
+#### Note: 
+- *Result of search() depends on size parameter(by default 10 records)*
+- *Use of only search() may lead to loss of some desired records, If client demanding more records than limit of search().*
+- *Response of search() includes json object along with scroll-id.*
 ## The helpers library’s scan() method
 
 scan() method is a part of the client’s helpers library, and it’s basically a wrapper for the aforementioned scroll() method. The **key difference** us that helpers.scan() will return a generator instead of a JSON dictionary response. 
@@ -49,7 +53,11 @@ Parameters:
 8. clear_scroll – explicitly calls delete on the scroll id via the clear scroll API at the end of the method on completion or error, defaults to true.
 9. scroll_kwargs – additional kwargs to be passed to scroll()
 
-*Note:Scan will retrieve all records from elasticsearch at a time.*
+#### Note:
+- *Scan will retrieve all records from elasticsearch at a time.*
+- *Response of scan() should return a generator object. It may or may not include scroll_id(depend on version of elasticsearch).*
+- *Scan() is Simple abstraction on top of the scroll() api and a simple iterator that yields all hits as returned by underlining scroll requests. *Scan and scroll method is replaced by scan and search for newer version of elasticsearch.*
+
 
 ## The client’s scroll() method.
 *Scrolling in Elasticsearch allows you retrieve a large number of documents, in steps or iterations, similar to pagination or a “cursor” in relational databases.*
@@ -99,8 +107,6 @@ To prevent against issues caused by having too many scrolls open, the user is no
 
 Search context are automatically removed when the scroll timeout has been exceeded. However keeping scrolls open has a cost, as discussed so scrolls should be explicitly cleared as soon as the scroll is not being used anymore using the clear-scroll API
 
-#### Note:
-Scan() is Simple abstraction on top of the scroll() api and a simple iterator that yields all hits as returned by underlining scroll requests. *Scan and scroll method is replaced by scan and search for newer version of elasticsearch.
 
 
 
