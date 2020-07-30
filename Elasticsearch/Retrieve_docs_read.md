@@ -56,7 +56,7 @@ Parameters:
 #### Note:
 - *Scan will retrieve all records from elasticsearch at a time.*
 - *Response of scan() should return a generator object. It may or may not include scroll_id(depend on version of elasticsearch).*
-- Scan() is Simple abstraction on top of the scroll() api and a simple iterator that yields all hits as returned by underlining scroll requests. *Scan and scroll method is replaced by scan and search for newer version of elasticsearch.
+- *Scan() is Simple abstraction on top of the scroll() api and a simple iterator that yields all hits as returned by underlining scroll requests.Scan and scroll method is replaced by scan and search for newer version of elasticsearch.*
 
 
 ## The client’s scroll() method.
