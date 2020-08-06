@@ -1,7 +1,8 @@
 ## Open Queries
 
 1. what is the upper limit for consul KV watches? (can not trigger more than ~150 watches due to open fd limitations.)
-* https://discuss.hashicorp.com/t/upper-limit-for-consul-kv-watches/11803/4
+* https://discuss.hashicorp.com/t/upper-limit-for-consul-kv-watches/11803
+* https://stackoverflow.com/questions/63110641/do-consul-possess-an-upper-limit-on-number-of-consul-watches
 2. How to know which key got updated inside keyprefix is being watched? (prefix watch doesn't return particular key change when key's value gets updated)
 * https://discuss.hashicorp.com/t/how-to-know-which-key-got-updated-inside-keyprefix-is-being-watched/12066
 3. higher avaialability is not possible with watches
