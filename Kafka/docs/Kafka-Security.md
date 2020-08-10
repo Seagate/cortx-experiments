@@ -57,4 +57,26 @@
 &nbsp;
 
 	2. Follow the steps for [Token Management](https://kafka.apache.org/documentation/#security_token_management), [Creating Delegation Tokens](https://kafka.apache.org/documentation/#security_sasl_create_tokens) and [Token Authentication](https://kafka.apache.org/documentation/#security_token_authentication) for implementing this feature.
+&nbsp;
 
+5. __Authorization and ACLs__
+&nbsp;
+	1. Authorization and ACLs will help in determining who can do what on a kafka cluster. Every user can perform a certain set of actions based on his privileges. There are a few operation primitives that can be used to build up privileges. These can be matched up with certain resources to allow specific protocol calls for a given user. These are:
+		1. Read
+		2. Write
+		3. Create
+		4. Delete
+		5. Alter
+		6. Describe
+		7. ClusterAction
+		8. DescribeConfigs
+		9. AlterConfigs
+		10. IdempotentWrite
+		11. All
+&nbsp;
+
+	2. A few examples for adding/removing ACLs can be found [here](https://kafka.apache.org/documentation/#security_authz_examples).
+&nbsp;
+
+	3. Other configuration details for the out-of-box kafka authorizer can be found at [Authorization and ACLs](https://kafka.apache.org/documentation/#security_authz).
+&nbsp;
