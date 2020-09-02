@@ -34,11 +34,6 @@ Logstash requires one of these versions:
   
   Java 14 
 
-**JAVA_HOMEedit**
-
-Logstash uses the Java version set in JAVA_HOME. The JAVA_HOME environment variable must be set for Logstash to operate correctly. 
-
-On some Linux systems, you may need to have the JAVA_HOME environment exported before installing Logstash, particularly if you installed Java from a tarball. Logstash uses Java during installation to automatically detect your environment and install the correct startup method (SysV init scripts, Upstart, or systemd). If Logstash is unable to find the JAVA_HOME environment variable during package installation, you may get an error message, and Logstash will not start properly.
 ### Logstash on docker: 
 A list of all published Docker images and tags is available at www.docker.elastic.co. The source code is in GitHub. 
 
@@ -78,3 +73,30 @@ docker build –t logstash .
 This process will generate logstash image with name "logstash".
 
 **Use this “logstash” image in sidecar container** 
+## Elasticsearch
+Elasticsearch is the distributed search and analytics engine at the heart of the Elastic Stack. 
+
+Elasticsearch provides near real-time search and analytics for all types of data. Whether you have structured or unstructured text, numerical data, or geospatial data, Elasticsearch can efficiently store and index it in a way that supports fast searches. 
+
+### Install Elasticsearch from archive on Linux 
+
+Elasticsearch is as a .tar.gz archive for Linux and MacOS.
+ ```python
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-linux-x86_64.tar.gz
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.8.1-linux-x86_64.tar.gz.sha512
+shasum -a 512 -c elasticsearch-7.8.1-linux-x86_64.tar.gz.sha512 
+tar -xzf elasticsearch-7.8.1-linux-x86_64.tar.gz
+cd elasticsearch-7.8.1/ 
+```
+### Access elasticsearch from a remote location
+**elasticsearch.yml** for configuring Elasticsearch. These files are located in the config directory, whose default location depends on whether or not the installation is from an archive distribution 
+ ```python
+ http.host : "IP_OF_HOST"
+ http.port : "9200"
+```
+Add above lines to elasticsearch.yml
+
+Run Elasticsearch using command(make sure that you are in a same directory where elasticsearch is installed):
+ ```python
+ ./elasticsearch-7.8.1/bin/elasticsearch
+```
