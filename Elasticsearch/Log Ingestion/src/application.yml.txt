@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: experiment
+spec:
+  containers:
+  - name: main
+    image: nginx
+    args:
+    - /bin/sh
+    - -c
+    - >
+      while true;
+      do
+        echo "$(date)" >> /var/log/nginx/access.log;
+        sleep 1;
+      done
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log/nginx
+    - name: checkpoint-volume
+      mountPath: /checkpoint
+  - name: sidecar
+    image: logstash
+    imagePullPolicy: Never
+    volumeMounts:
+    - name: logs
+      mountPath: /var/log/nginx
+    - name: checkpoint-volume
+      mountPath: /checkpoint
+  volumes:
+  - name: logs
+    emptyDir: {}
+  - name: checkpoint-volume
+    emptyDir: {}
+
