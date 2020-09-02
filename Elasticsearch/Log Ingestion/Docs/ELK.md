@@ -72,6 +72,12 @@ docker build –t logstash .
 ```
 This process will generate logstash image with name "logstash".
 
+### Sincedb:
+Logstash has an interesting component or feature called sincedb. Logstash keeps track of where it was last reading a file before it crashed or stopped.
+
+By default, the sincedb file is placed in the data directory of Logstash with a filename based on the filename patterns being watched (i.e. the path option). Thus, changing the filename patterns will result in a new sincedb file being used and any existing current position state will be lost. If you change your patterns with any frequency it might make sense to explicitly choose a sincedb path with the sincedb_path option.
+** NOTE: Provide path to sincedb which points directory from main container so that even logstash fails it will start reading from the same place where it left.**
+
 **Use this “logstash” image in sidecar container** 
 ## Elasticsearch
 Elasticsearch is the distributed search and analytics engine at the heart of the Elastic Stack. 
@@ -108,5 +114,17 @@ Whether you’re an analyst or an admin, Kibana makes your data actionable by pr
 - An open-source analytics and visualization platform. Use Kibana to explore your Elasticsearch data, and then build beautiful visualizations and dashboards.
 - A UI for managing the Elastic Stack. Manage your security settings, assign user roles, take snapshots, roll up your data, and more — all from the convenience of a Kibana UI.
 - A centralized hub for Elastic’s solutions. From log analytics to document discovery to SIEM, Kibana is the portal for accessing these and other capabilities.
+### Install kibana
+Download and Install kibana using this [link.](https://www.elastic.co/guide/en/kibana/current/setup.html)
+
+### Access kibana from remote location:
+In kibana.yml add following lines:
+```python
+ server.host: "IP_of_host"
+```
+### Run Kibana
+```python
+ bin/kibana
+```
 
 
