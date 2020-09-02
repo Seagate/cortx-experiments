@@ -100,3 +100,13 @@ Run Elasticsearch using command(make sure that you are in a same directory where
  ```python
  ./elasticsearch-7.8.1/bin/elasticsearch
 ```
+## Kibana — your window into the Elastic Stackedit
+Visualize and analyze your data and manage all things Elastic Stack.
+
+Whether you’re an analyst or an admin, Kibana makes your data actionable by providing three key functions. Kibana is:
+
+- An open-source analytics and visualization platform. Use Kibana to explore your Elasticsearch data, and then build beautiful visualizations and dashboards.
+- A UI for managing the Elastic Stack. Manage your security settings, assign user roles, take snapshots, roll up your data, and more — all from the convenience of a Kibana UI.
+- A centralized hub for Elastic’s solutions. From log analytics to document discovery to SIEM, Kibana is the portal for accessing these and other capabilities.
+
+
