@@ -13,7 +13,7 @@ Like any other application, NGINX also records events like visitors to your site
 
 So our sidecar container named “sidecar” will fetch the access.log of main container named “main” as defined in the pod manifest “application.yml” file. 
 
-In the **application.yml** file we have definition of both containers with two shared volumes. One for access.log and other is a ‘checkpoint’. In checkpoint we have our ‘sincedb.log’ file which will have the track of the current position of monitored log files.  
+**In the application.yml file we have definition of both containers with two shared volumes. One for access.log and other is a ‘checkpoint’. In checkpoint we have our ‘sincedb.log’ file which will have the track of the current position of monitored log files.**
 
  
  Following commands will create and configure the Pod according to the manifest. 
