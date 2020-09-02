@@ -37,7 +37,7 @@ Logstash requires one of these versions:
 ### Logstash on docker: 
 A list of all published Docker images and tags is available at www.docker.elastic.co. The source code is in GitHub. 
 
-We can create our own Dockerfile with required configrations (myconfig.conf)
+We can create our own Dockerfile with required configrations (logstash_config.conf)
 #### Configuring Logstash:
 To configure Logstash, you create a config file that specifies which plugins you want to use and settings for each plugin. You can reference event fields in a configuration and use conditionals to process events when they meet certain criteria. When you run logstash, you use the -f to specify your config file. 
 
@@ -65,7 +65,7 @@ Each section contains the configuration options for one or more plugins. If you 
 
 #### Process of creating logstash image: 
    1. Create a new directory. 
-   2. Add myconfig.conf and Dockerfile for logstash 
+   2. Add [logstash_config.conf](https://github.com/Seagate/cortx-experiments/blob/master/Elasticsearch/Log%20Ingestion/src/logstash_config.conf) and [Dockerfile](https://github.com/Seagate/cortx-experiments/blob/master/Elasticsearch/Log%20Ingestion/src/Dockerfile) to the same directory.
    3. Create docker image using follwing command:
    ```python
 docker build –t logstash . 
