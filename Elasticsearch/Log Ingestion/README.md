@@ -6,6 +6,7 @@ While Kubernetes does not provide a native solution for cluster-level logging, t
    1. Use a node-level logging agent that runs on every node. 
    2. Include a dedicated sidecar container for logging in an application pod. 
    3. Push logs directly to a backend from within an application. 
+
 we are selecting second option amoung this for logging.
 ## Include a dedicated sidecar container for logging in an application pod. 
 **Ingestion** refers to the process of formatting and uploading data from external sources like applications, platforms, and servers. Log ingestion will automatically ingests log data for fast, real-time log management and analysis. 
