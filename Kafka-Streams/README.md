@@ -23,3 +23,6 @@ to some Kafka topic. (e.g. tumblingoutputtopic).
 
 
 Please refer to Kafka streams official DSL Developer guide for more information.
+
+https://kafka.apache.org/10/documentation/streams/developer-guide/
+
