@@ -1,0 +1,23 @@
+apiVersion: v1            #(version number) 
+
+kind: PersistentVolume 
+
+metadata: 
+
+    name: PV01          #(any name of PV) 
+
+spec: 
+
+    capacity: 
+
+       storage: 10Gi     #(the volume capacity in gibibytes) 
+
+    volumeMode:       #(Filesystem or Block) 
+
+    accessModes: 
+
+       -( eg: ReadWriteOnce) 
+
+Hostpath:                   #(type of PV eg: nfs, hostpath) 
+
+    Path: “/mnt/sample”    #(the path onto which the volume is to be mount)
