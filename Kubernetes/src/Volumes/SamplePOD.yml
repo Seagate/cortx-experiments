@@ -1,0 +1,35 @@
+apiVerison: v1 
+
+kind: Pod 
+
+metadata: 
+
+    name: POD01 
+
+spec: 
+
+    volumes: 
+
+       -name: StoragePV 
+
+        persistentVolumeClaim: 
+
+             claimName: PVC01 
+
+    containers: 
+
+        -name: PVcontainer 
+
+         Image: nginx 
+
+         Ports: 
+
+              -containerPort: 80 
+
+               Name: “http-server” 
+
+          volumeMounts: 
+
+               -mountPath: “/usr/share/nginx/filename” 
+
+                Name: StoragePV
