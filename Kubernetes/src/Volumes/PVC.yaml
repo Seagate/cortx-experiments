@@ -1,0 +1,19 @@
+apiVerison: v1 
+
+kind: PersistentVolumeClaim 
+
+metadata: 
+
+    name: PVC01 
+
+spec: 
+
+    accessModes: 
+
+        -ReadWriteOnce 
+
+Resources: 
+
+    Requests: 
+
+       Storage: 5Gi
