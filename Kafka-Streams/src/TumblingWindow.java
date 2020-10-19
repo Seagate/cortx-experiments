@@ -58,7 +58,7 @@ public class TumblingWindow {
 
         TgroupedStream
                 .windowedBy(TimeWindows.of(Duration.ofMinutes(5)))
-                .count(Materialized.<String, Long, WindowStore<Bytes, byte[]>>as("tumbling-windowed-count")
+                .count(Materialized.<String, Long, WindowStore<Bytes, byte[]>>as("tumbling-window-count")
                         .withValueSerde(Serdes.Long())
                         .withKeySerde(Serdes.String()))
                         .toStream()
