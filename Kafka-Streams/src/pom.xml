@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apache.kafka</groupId>
-    <artifactId>TumblingWindow</artifactId>
+    <artifactId>TumblingWindow</artifactId>     //Change the class name according to your main java class name
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -62,7 +62,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.apache.kafka.TumblingWindow</mainClass>
+                            <mainClass>org.apache.kafka.TumblingWindow</mainClass>     //Change the class name according to your main java class name
                         </manifest>
                     </archive>
                 </configuration>
