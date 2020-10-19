@@ -55,14 +55,6 @@ public class HoppingWindow {
                 .selectKey((key, word) -> key.key())
                 .to("hoppingoutputtopic", Produced.with(Serdes.String(), Serdes.Long()));
 
-        HgroupedStream
-                .windowedBy(TimeWindows.of(windowSizeMs).advanceBy(advanceMs))
-                .count(Materialized.<String, Long, WindowStore<Bytes, byte[]>>as("hopping-windowed-count")
-                        .withValueSerde(Serdes.Long())
-                        .withKeySerde(Serdes.String()))
-                .toStream()
-                .to("hoppingstatestoretopic", Produced.with(windowSerde, Serdes.Long()));
-
         KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfiguration);
         streams.start();
 
