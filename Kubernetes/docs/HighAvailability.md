@@ -6,17 +6,17 @@
 
  
 
-- How can we achieve HA in Kubernetes? 
+- Achieving High Availability in Kubernetes 
 
-Currently we have 3 node setup with 1 Master and 2 Slaves. But if the master goes down, we fail to create services and pods, etc. But this can be resolved by multiple master nodes setup. Creating a Cluster of 3 Master and 3 Nodes. Here if one Master fails, we have another 2 for backup. 
+Currently we have 3 node setup with 1 Master and 2 Slaves. But if the master goes down, we fail to create services and pods, etc. But, this can be resolved by multiple master nodes setup. Creating a Cluster of 3 Master and 3 Nodes. Here, if one Master fails; we have remaining ones for backup. 
 
-So, why 3? Why not 4 or 5 or 1000; Right. I'll get back onto it further. 
+So, why 3? Why not 4 or 5 or 1000. Discussed later in this document
 
  
 
-- Is creating multiple Masters enough? Or anything else? 
+- Is creating multiple masters enough? 
 
-So just creating master nodes isn’t sufficient. A master node comprises of components as follows: 
+So just creating master nodes isn’t sufficient. A master node comprises of following components: 
 
   1. Control Plane
 
@@ -26,9 +26,9 @@ So just creating master nodes isn’t sufficient. A master node comprises of com
 
   4. Scheduler 
 
-Each of the above-mentioned components need to be replicated on all the master nodes so if one fails other keeps the cluster up. 
+Each of the above-mentioned components need to be replicated on all the master nodes so if one of them fails fails others can keep the cluster up. 
 
-In single master setup all the above components along with etcd DB (we’ll discuss about etcd later at end here) are managed by master itself. So, if it fails, everything stops and the cluster is lost. So multi-master setup gives us High availability with improved network performance and hence protecting the cluster from wide range of failures. 
+In single master setup all the above components along with etcd DB (Discussed later about etcd later at end in this doc) are managed by master itself. So, if it fails, everything stops and the cluster is lost. So multi-master setup gives us High availability with improved network performance and hence protecting the cluster from wide range of failures. 
 
 Each Master node in multiple master setup runs own copy of all above mentioned components. (Useful for load balancing amongst them) 
 
@@ -37,20 +37,15 @@ Each Master node in multiple master setup runs own copy of all above mentioned c
 - Is Multiple Master setup and Kubernetes HA the exact? Or does setting up multiple masters guarantee HA? 
 
 According to my study on KHA; Multiple master setup is not complete HA. I'll explain with an example. Consider 3 master node setup and a single nginx instance in front load balancing. Here though we have 3 masters if nginx goes down, That’s a failure point. 
-
 HA is about eliminating that one failure point! 
-
 Kubernetes in itself is very huge and there can be any component that could fail. If any of the component fails, we are sure to experience an outage. So, we’ll need to dig deeper and analyze the key components and try to eliminate the single point of failure. 
 
-Now let’s move onto etcd. 
 
-DATA PLANE 
+- DATA PLANE 
 
 - etcd is Distributed and consistent key value store that helps reliable storage of data which can be accessed by our Kubernetes cluster (Read and write both). For Kubernetes it is the backend for service discovery and stores cluster state and configuration. It is capable of tolerating machine failure, even in leader node. It also performs graceful leader elections. 
 
 (Multiple etcd replicas are also made in respective master nodes) 
-
- 
 
 - How does achieving HA work with the components 
 
@@ -60,7 +55,6 @@ Scheduler: (Read Act Write on data) Run in an Active Passive pattern. Deciding w
 
 Control Manager: Manages replication and scheduler. 
 
- 
 
 - So, another way is using management clusters where an unmanaged cluster’s control plane manages another cluster’s control plane as pods. 
 
