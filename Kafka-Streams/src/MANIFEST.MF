@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: org.apache.kafka.TumblingWindow
+Main-Class: org.apache.kafka.TumblingWindow      //Change the main java class name as per your application. Java class here: TumblingWindow
