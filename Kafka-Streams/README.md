@@ -1,6 +1,6 @@
 # Kafka Streams Windowing applications using DSL
 
-- Some important details and chages in config
+- Some important details and chages in configuration for files in src
 
 
 The pom.xml, MANIFEST.MF, log4j.properties file are common to all the streams application, just change the main java class names in each file respectively.
