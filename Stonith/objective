@@ -1,0 +1,29 @@
+## Create two level stonith
+
+  - First level sbd and second level ipmi fencing
+  - Try sbd with self fencing and opposite fencing node.
+
+## Test
+  ```
+    pcs stonith disable stonith-c1
+    pcs stonith disable stonith-c2
+
+    # Bring down eth for srvnode-2
+    ip link set down f1
+  ```
+
+## Result:
+  - Level 1 sbd and 2 ipmi
+    - Both Running ipmi, sbd and fencing happen
+      - sbd shutdown faulty node node
+    - ipmi failed but sbd running
+      - sbd shutdown faulty node node
+    - sbd failed but ipmi running
+      - failed node will poweroff by ipmi
+    - IF sbd configure to fence other node
+      - If resource fail to stop on single node then IEM may reach to csm but node will not get fence.
+    - IF sbd configure to fence self node
+      - If resource fail to stop on single node then single node will get off.
+
+## Drawback
+  - Replace node may need to restart cluster to enable sbd
