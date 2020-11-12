@@ -1,0 +1,1730 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Dashboard for Seagate CORTX",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "iteration": 1545631457535,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 12,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Throughput of the S3_Server",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 1
+          },
+          "id": 22,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(sumSeries(#A, #B), 'Total')",
+              "targetFull": "alias(sumSeries(alias(movingAverage(perSecond($s3_server.gauges.haproxy.app-main.BACKEND.bout), '2min'), 'Write'), alias(movingAverage(perSecond($s3_server.gauges.haproxy.app-main.BACKEND.bin), '2min'), 'Read')), 'Total')"
+            },
+            {
+              "refCount": -1,
+              "refId": "B",
+              "target": "alias(movingAverage(perSecond($s3_server.gauges.haproxy.app-main.BACKEND.bin), '2min'), 'Read')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(movingAverage(perSecond($s3_server.gauges.haproxy.app-main.BACKEND.bout), '2min'), 'Write')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Throughput (bytes/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "decbytes",
+              "label": "Bytes trasferred per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Object IOPS of the S3_Server",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 10
+          },
+          "id": 16,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(sumSeries(#B, #A), 'Total')",
+              "targetFull": "alias(sumSeries(alias(sumSeries($s3_server.counters.get_object_request_count.rate, $s3_server.counters.get_multipart_parts_request_count.rate), 'Read'), alias(sumSeries($s3_server.counters.put_object_request_count.rate, $s3_server.counters.put_multipart_part_request_count.rate), 'Write')), 'Total')"
+            },
+            {
+              "refCount": -1,
+              "refId": "B",
+              "target": "alias(sumSeries($s3_server.counters.get_object_request_count.rate, $s3_server.counters.get_multipart_parts_request_count.rate), 'Read')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(sumSeries($s3_server.counters.put_object_request_count.rate, $s3_server.counters.put_multipart_part_request_count.rate), 'Write')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "IO (Ops/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ops",
+              "label": "Ops per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "S3_Server latency for different operations",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 19
+          },
+          "id": 42,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(averageSeries($s3_server.timers.create_object_success.mean, $s3_server.timers.multipart_create_object_success.mean, $s3_server.timers.chunkupload_create_object_success.mean), 'Create')"
+            },
+            {
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias($s3_server.timers.read_object_data_success.mean, 'Read')"
+            },
+            {
+              "refCount": 0,
+              "refId": "G",
+              "target": "alias($s3_server.timers.write_to_clovis_op_success.mean, 'Write')"
+            },
+            {
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias($s3_server.timers.get_keyval_success.mean, 'ReadKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "E",
+              "target": "alias($s3_server.timers.put_keyval_success.mean, 'WriteKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "F",
+              "target": "alias($s3_server.timers.delete_keyval_success.mean, 'DeleteKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "H",
+              "target": "alias(averageSeries($s3_server.timers.delete_objects_from_clovis_success.mean,$s3_server.timers.delete_object_from_clovis_success.mean), 'Delete')",
+              "textEditor": false
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Latency Object operations (ms)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ms",
+              "label": "Average lantency (in millisecond)",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Metadata operation per second.",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 28
+          },
+          "id": 18,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(sumSeries(#A, #F, #G, #H, #I, #K, #L, #M, #N, #O), 'Total')",
+              "targetFull": "alias(sumSeries(alias(sumSeries($s3_server.counters.delete_object_request_count.rate, $s3_server.counters.delete_multiobject_request_count.rate), 'Delete'), alias($s3_server.counters.get_object_acl_request_count.rate, 'Acl Get'), alias($s3_server.counters.put_object_acl_request_count.rate, 'Acl Put'), alias($s3_server.counters.post_multipart_complete_request_count.rate, 'Multipart Complete'), alias($s3_server.counters.post_multipart_initiate_request_count.rate, 'Multipart Initiate'), alias($s3_server.counters.abort_multipart_request_count.rate, 'Multipart Abort'), alias($s3_server.counters.head_object_request_count.rate, 'Head'), alias($s3_server.counters.put_object_chunkupload_request_count.rate, 'Chunkupload Put'), alias($s3_server.counters.unsupported_api_count.rate, 'Unsupprted API'), alias($s3_server.counters.get_service_request_count.rate, 'Get Service')), 'Total')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(sumSeries($s3_server.counters.delete_object_request_count.rate, $s3_server.counters.delete_multiobject_request_count.rate), 'Delete')"
+            },
+            {
+              "refCount": 1,
+              "refId": "F",
+              "target": "alias($s3_server.counters.get_object_acl_request_count.rate, 'Acl Get')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "G",
+              "target": "alias($s3_server.counters.put_object_acl_request_count.rate, 'Acl Put')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "H",
+              "target": "alias($s3_server.counters.post_multipart_complete_request_count.rate, 'Multipart Complete')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "I",
+              "target": "alias($s3_server.counters.post_multipart_initiate_request_count.rate, 'Multipart Initiate')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "K",
+              "target": "alias($s3_server.counters.abort_multipart_request_count.rate, 'Multipart Abort')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "L",
+              "target": "alias($s3_server.counters.head_object_request_count.rate, 'Head')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "M",
+              "target": "alias($s3_server.counters.put_object_chunkupload_request_count.rate, 'Chunkupload Put')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "N",
+              "target": "alias($s3_server.counters.unsupported_api_count.rate, 'Unsupprted API')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "O",
+              "target": "alias($s3_server.counters.get_service_request_count.rate, 'Get Service')",
+              "textEditor": false
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Metadata (Ops/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ops",
+              "label": "Ops per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "S3_server",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 10,
+      "panels": [
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "cacheTimeout": null,
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": "Graphite",
+          "decimals": 1,
+          "description": "Cpacity for mero cluster",
+          "fontSize": "100%",
+          "format": "decbytes",
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 2
+          },
+          "id": 24,
+          "interval": null,
+          "legend": {
+            "percentage": true,
+            "show": true,
+            "values": true
+          },
+          "legendType": "Under graph",
+          "links": [],
+          "maxDataPoints": 3,
+          "nullPointMode": "connected",
+          "pieType": "pie",
+          "strokeWidth": 1,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cluster.gauges.mero.free_space, 'Free Space')"
+            },
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cluster.gauges.mero.used_space, 'Used Space')"
+            }
+          ],
+          "title": "Capacity (bytes)",
+          "type": "grafana-piechart-panel",
+          "valueName": "current"
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Throughput of the cluster",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 12
+          },
+          "id": 8,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(sumSeries(#A, #B), 'Total')",
+              "targetFull": "alias(sumSeries(alias(movingAverage(perSecond(cluster.gauges.haproxy.app-main.BACKEND.bin), '2min'), 'Write'), alias(movingAverage(perSecond(cluster.gauges.haproxy.app-main.BACKEND.bout), '2min'), 'Read')), 'Total')"
+            },
+            {
+              "refCount": -1,
+              "refId": "B",
+              "target": "alias(movingAverage(perSecond(cluster.gauges.haproxy.app-main.BACKEND.bout), '2min'), 'Read')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(movingAverage(perSecond(cluster.gauges.haproxy.app-main.BACKEND.bin), '2min'), 'Write')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Throughput (bytes/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "decbytes",
+              "label": "Bytes trasferred per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Object IOPS of the cluster",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 21
+          },
+          "id": 4,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(sumSeries(#B, #A), 'Total')",
+              "targetFull": "alias(sumSeries(alias(sumSeries(cluster.counters.get_object_request_count.rate, cluster.counters.get_multipart_parts_request_count.rate), 'Read'), alias(sumSeries(cluster.counters.put_object_request_count.rate, cluster.counters.put_multipart_part_request_count.rate), 'Write')), 'Total')"
+            },
+            {
+              "refCount": -1,
+              "refId": "B",
+              "target": "alias(sumSeries(cluster.counters.get_object_request_count.rate, cluster.counters.get_multipart_parts_request_count.rate), 'Read')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(sumSeries(cluster.counters.put_object_request_count.rate, cluster.counters.put_multipart_part_request_count.rate), 'Write')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "IO (Ops/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ops",
+              "label": "Ops per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Cluster latency for different operations",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 30
+          },
+          "id": 2,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(averageSeries(cluster.timers.create_object_success.mean, cluster.timers.multipart_create_object_success.mean, cluster.timers.chunkupload_create_object_success.mean), 'Create')"
+            },
+            {
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cluster.timers.read_object_data_success.mean, 'Read')"
+            },
+            {
+              "refCount": 0,
+              "refId": "G",
+              "target": "alias(cluster.timers.write_to_clovis_op_success.mean, 'Write')"
+            },
+            {
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(cluster.timers.get_keyval_success.mean, 'ReadKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "E",
+              "target": "alias(cluster.timers.put_keyval_success.mean, 'WriteKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "F",
+              "target": "alias(cluster.timers.delete_keyval_success.mean, 'DeleteKV')"
+            },
+            {
+              "refCount": 0,
+              "refId": "H",
+              "target": "alias(averageSeries(cluster.timers.delete_objects_from_clovis_success.mean, cluster.timers.delete_object_from_clovis_success.mean), 'Delete')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Latency Object operations (ms)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ms",
+              "label": "Average lantency (in millisecond)",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Metadata operation per second.",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 39
+          },
+          "id": 26,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(sumSeries(#A, #F, #G, #H, #I, #K, #L, #M, #N, #O), 'Total')",
+              "targetFull": "alias(sumSeries(alias(sumSeries(cluster.counters.delete_object_request_count.rate, cluster.counters.delete_multiobject_request_count.rate), 'Delete'), alias(cluster.counters.get_object_acl_request_count.rate, 'ACL Get'), alias(cluster.counters.put_object_acl_request_count.rate, 'ACL Put'), alias(cluster.counters.post_multipart_complete_request_count.rate, 'Multipart Complete'), alias(cluster.counters.post_multipart_initiate_request_count.rate, 'Multipart Initiate'), alias(cluster.counters.abort_multipart_request_count.rate, 'Multipart Abort'), alias(cluster.counters.head_object_request_count.rate, 'Head'), alias(cluster.counters.put_object_chunkupload_request_count.rate, 'Chunkupload Put'), alias(cluster.counters.unsupported_api_count.rate, 'Unsupprted API'), alias(cluster.counters.get_service_request_count.rate, 'Get Service')), 'Total')"
+            },
+            {
+              "refCount": 1,
+              "refId": "A",
+              "target": "alias(sumSeries(cluster.counters.delete_object_request_count.rate, cluster.counters.delete_multiobject_request_count.rate), 'Delete')"
+            },
+            {
+              "refCount": 1,
+              "refId": "F",
+              "target": "alias(cluster.counters.get_object_acl_request_count.rate, 'ACL Get')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "G",
+              "target": "alias(cluster.counters.put_object_acl_request_count.rate, 'ACL Put')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "H",
+              "target": "alias(cluster.counters.post_multipart_complete_request_count.rate, 'Multipart Complete')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "I",
+              "target": "alias(cluster.counters.post_multipart_initiate_request_count.rate, 'Multipart Initiate')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "K",
+              "target": "alias(cluster.counters.abort_multipart_request_count.rate, 'Multipart Abort')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "L",
+              "target": "alias(cluster.counters.head_object_request_count.rate, 'Head')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "M",
+              "target": "alias(cluster.counters.put_object_chunkupload_request_count.rate, 'Chunkupload Put')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "N",
+              "target": "alias(cluster.counters.unsupported_api_count.rate, 'Unsupprted API')",
+              "textEditor": false
+            },
+            {
+              "refCount": 1,
+              "refId": "O",
+              "target": "alias(cluster.counters.get_service_request_count.rate, 'Get Service')",
+              "textEditor": false
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Metadata (Ops/s)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 1,
+              "format": "ops",
+              "label": "Ops per second",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "Cluster",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 28,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "S3server Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 3
+          },
+          "id": 44,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(sumSeries($s3_server.timers.create_object_failed.count, $s3_server.timers.multipart_create_object_failed.count, $s3_server.timers.chunkupload_create_object_failed.count), 'Create Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(sumSeries($s3_server.timers.delete_object_from_clovis_failed.count, $s3_server.timers.delete_objects_from_clovis_failed.count), 'Delete Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias($s3_server.timers.read_object_data_failed.count, 'Get Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias($s3_server.timers.write_to_clovis_op_failed.count, 'Put Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "E",
+              "target": "alias($s3_server.timers.create_index_op_failed.count, 'Create Index')"
+            },
+            {
+              "refCount": 0,
+              "refId": "F",
+              "target": "alias($s3_server.timers.delete_index_op_failed.count, 'Delete Index')"
+            },
+            {
+              "refCount": 0,
+              "refId": "G",
+              "target": "alias($s3_server.timers.get_keyval_failed.count, 'Get Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "H",
+              "target": "alias($s3_server.timers.put_keyval_failed.count, 'Put Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "I",
+              "target": "alias($s3_server.timers.delete_keyval_failed.count, 'Delete Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "J",
+              "target": "alias($s3_server.counters.internal_error_count.count, 'Internal Error')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "S3 Server Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Haproxy Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 12
+          },
+          "id": 38,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(derivative($s3_server.gauges.haproxy.app-main.BACKEND.hrsp_4xx), 'HTTP Client')"
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(derivative($s3_server.gauges.haproxy.app-main.BACKEND.hrsp_5xx), 'HTTP Server')"
+            },
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(derivative($s3_server.gauges.haproxy.app-main.BACKEND.econ), 'Connection')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Haproxy Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Auth Server Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 21
+          },
+          "id": 36,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias($s3_server.counters.authentication_failed_invalid_accesskey_count.count, 'Invalid Access Key')",
+              "textEditor": false
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias($s3_server.counters.authentication_failed_signature_mismatch_count.count, 'Signature Mismatch')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Auth Server Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "S3 Server Error",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 30,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "S3server Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 4
+          },
+          "id": 48,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(sumSeries(cluster.timers.create_object_failed.count, cluster.timers.multipart_create_object_failed.count, cluster.timers.chunkupload_create_object_failed.count), 'Create Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(sumSeries(cluster.timers.delete_object_from_clovis_failed.count, cluster.timers.delete_objects_from_clovis_failed.count), 'Delete Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cluster.timers.read_object_data_failed.count, 'Get Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(cluster.timers.write_to_clovis_op_failed.count, 'Put Object')"
+            },
+            {
+              "refCount": 0,
+              "refId": "E",
+              "target": "alias(cluster.timers.create_index_op_failed.count, 'Create Index')"
+            },
+            {
+              "refCount": 0,
+              "refId": "F",
+              "target": "alias(cluster.timers.delete_index_op_failed.count, 'Delete Index')"
+            },
+            {
+              "refCount": 0,
+              "refId": "G",
+              "target": "alias(cluster.timers.get_keyval_failed.count, 'Get Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "H",
+              "target": "alias(cluster.timers.put_keyval_failed.count, 'Put Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "I",
+              "target": "alias(cluster.timers.delete_keyval_failed.count, 'Delete Keyval')"
+            },
+            {
+              "refCount": 0,
+              "refId": "J",
+              "target": "alias(cluster.counters.internal_error_count.count, 'Internal Error')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "S3 Server Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Haproxy Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 13
+          },
+          "id": 50,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(derivative(cluster.gauges.haproxy.app-main.BACKEND.hrsp_4xx), 'HTTP Client')"
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(derivative(cluster.gauges.haproxy.app-main.BACKEND.hrsp_5xx), 'HTTP Server')"
+            },
+            {
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(derivative(cluster.gauges.haproxy.app-main.BACKEND.econ), 'Connection')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Haproxy Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Graphite",
+          "description": "Auth Server Error",
+          "fill": 1,
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 22
+          },
+          "id": 52,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cluster.counters.authentication_failed_invalid_accesskey_count.count, 'Invalid Access Key')",
+              "textEditor": false
+            },
+            {
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cluster.counters.authentication_failed_signature_mismatch_count.count, 'Signature Mismatch')"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Auth Server Error (count)",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "decimals": 0,
+              "format": "locale",
+              "label": "Error count",
+              "logBase": 1,
+              "max": null,
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "title": "Cluster Error",
+      "type": "row"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "datasource": "Graphite",
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "s3_server",
+        "options": [],
+        "query": "{}",
+        "refresh": 2,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "utc",
+  "title": "Seagate CORTX",
+  "uid": "mV1pQuamz",
+  "version": 5
+}
