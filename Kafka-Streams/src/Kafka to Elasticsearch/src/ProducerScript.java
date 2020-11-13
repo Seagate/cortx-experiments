@@ -13,7 +13,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-public class Prodx
+public class ProducerScript
 {
     public static void main(String[] args) throws IOException
     {
