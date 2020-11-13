@@ -15,17 +15,23 @@
           sbd                        x86_64 1.4.0-15.el7
   ```
 
+2. Assume that shared volume `/dev/disk/by-id/dm-name-mpathi` is available on LUN other than 0.
+
 3. Create Physical volume (All Nodes)
+  - Create physical volume for SBD.
   ```bash
     pvcreate /dev/disk/by-id/dm-name-mpathi
   ```
 
 4. Create sbd device on one node (/dev/disk/by-id/dm-name-mpathi)
-  - For sbd command -1 is watchdog_timeout and -4 msgwait_timeout
+  ```
+    sbd -d /dev/disk/by-id/dm-name-mpathi -4 30 -1 20 create
+  ```
+  - In above `sbd` command, -1 is watchdog_timeout and -4 msgwait_timeout
   - If using multipath then for /etc/multipath.conf the value of max_polling_interval must be less than watchdog_timeout.
   - msgwait_timeout must be grater than watchdog_timeout.
+  - Check volume status from sbd.
   ```bash
-    sbd -d /dev/disk/by-id/dm-name-mpathi -4 30 -1 20 create
     sbd -d /dev/disk/by-id/dm-name-mpathi dump
   ```
 
