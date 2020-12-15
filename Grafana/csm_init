@@ -1,0 +1,628 @@
+# CORTX-CSM: CORTX Management web and CLI interface.
+# Copyright (c) 2020 Seagate Technology LLC and/or its Affiliates
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# For any questions about this software or licensing,
+# please email opensource@seagate.com or cortx-questions@seagate.com.
+
+set -eu -o pipefail
+
+SCRIPT_NAME=$(basename $0)
+CSM_CONFIG="/etc/csm.conf"
+CSM_INITIALIZED="/var/csm/csm_initialized"
+ADMIN_USER=admin
+HOSTNAME=$(hostname)
+SYSLOG_TEMPLATE_DIR="/opt/seagate/csm/config/etc/rsyslog.d"
+SYSLOG_CONF_DIR="/etc/rsyslog.d"
+TEMP_DIR="/tmp/"
+SYSLOG_CONF_FILE="/etc/rsyslog.conf"
+LOG_DIR="/var/log/seagate/"
+STATS_CMD="/usr/sbin/csm-stats-collector"
+STATS_CMD_PATH="/opt/seagate/csm/ras/stats/csm-stats-collector.py"
+CSM_CONFIG_DIR="/opt/seagate/csm/config/"
+GRAFANA_PROVISIONING_DIR="/etc/grafana/provisioning/"
+GRAFANA_LIB_DIR="/var/lib/grafana/"
+GRAFANA_SHARE_DIR="/usr/share/grafana/public/"
+GRAPHITE_WEB_CONF="/etc/httpd/conf.d/graphite-web.conf"
+GRAPHITE_STORAGE_SCHEMAS="/etc/carbon/storage-schemas.conf"
+GRAPHITE_CARBON_AGGREGATOR="/etc/carbon/aggregation-rules.conf"
+THIRD_PARTY="/opt/seagate/csm/third_party"
+HOST_IP=$(hostname -i)
+
+usage() {
+    echo "$SCRIPT_NAME [check|config [-f] [-s] [-l]]"
+    echo "  -f    force operation. Skip initialization check"
+    echo "  -s    Stats related configuration"
+    echo "  -l    Log redirection configuration"
+    exit 1
+}
+
+error() {
+    trap 0
+    echo "error: Initialization failed. $*"
+    exit 1
+}
+trap error 0
+
+run_remote() {
+    host=$1; shift
+    cmd=$*
+    delay=5
+    retries=3
+
+    for i in {1..$retries}; do
+        ssh $host "$cmd" && return 0
+        sleep $delay
+    done
+    echo "$cmd failed." && return 1
+}
+
+run_cmd_retry() {
+    cmd=$1
+    delay=5
+    retries=3
+    for i in {1..$retries}
+    do
+        $cmd && return 0
+        sleep $delay
+    done
+    echo "$cmd failed." && return 1
+}
+
+compare_nodes_ip() {
+    # check if node ip is same as cmu node. If yes then skip configuration.
+    node1=$1
+    node2=$2
+    node1_ip=$(getent ahostsv4 $node1 | awk '/STREAM / { print $1 }' | uniq)
+    node2_ip=$(getent ahostsv4 $node2 | awk '/STREAM / { print $1 }' | uniq)
+    [ "$node1_ip" = "$node2_ip" ] && return 1
+    return 0
+}
+
+read_config() {
+    # Read various values from conf file
+    INVENTORY_FILE=$(awk -F "'" '/INVENTORY_FILE:/ { print $2 }' $CSM_CONFIG)
+    [ -z "$INVENTORY_FILE" ] && echo "error: INVENTORY_FILE not defined in $CSM_CONFIG." && exit 1
+    [ ! -f "$INVENTORY_FILE" ] && echo "error: $INVENTORY_FILE does not exist." && exit 1
+
+    CMU_NODE=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['CMU']['nodes'])")
+
+    CMU_RSYSLOG_PORT=$(awk '/RSYSLOG_PORT:/ { print $2 }' $CSM_CONFIG)
+    if [ -z $CMU_RSYSLOG_PORT ]
+    then
+        CMU_RSYSLOG_PORT=$(awk '/InputTCPServerRun/ {print $2}' $SYSLOG_CONF_FILE)
+    else
+        sed -i -e "s/.*\$UDPServerRun.*/\$UDPServerRun $CMU_RSYSLOG_PORT/g"\
+        -e "s/.*\$InputTCPServerRun.*/\$InputTCPServerRun $CMU_RSYSLOG_PORT/g" $SYSLOG_CONF_FILE
+    fi
+}
+
+config_cmu () {
+    # Write configuration to temporary file
+    csm_conf_template="${SYSLOG_TEMPLATE_DIR}/1-csmlog.conf.tmpl"
+    csmlog="${SYSLOG_CONF_DIR}/1-csmlog.conf"
+    s3_nodes=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_SERVER']['nodes'])" 2> /dev/null)
+    [ -z "$s3_nodes" ] && echo "error: No s3 server defined in $INVENTORY_FILE." && return 1
+
+    if [ ! -f $csmlog ]; then
+        for node in $s3_nodes
+        do
+            compare_nodes_ip $HOSTNAME $node || {
+                echo "Detected single node configuration. Skipping rsyslog configuration for $node."
+                continue
+            }
+            files=$(ssh root@$node "(find $LOG_DIR -type f -name *.log;
+                                     find $LOG_DIR -type l | grep INFO) | cut -d / -f5-")
+            for file in $files
+            do
+                mkdir -p "$LOG_DIR$node/$(dirname $file)" 2> /dev/null
+                file_tag=$(sed 's/:/__/g' <<< "$file")
+                touch "$LOG_DIR$node/$file" 2> /dev/null
+                sed "s|node|$node|g; s|FILENAMETAG|$file_tag|g; s|FILE|$file|g;" $csm_conf_template >> $csmlog
+            done
+        done
+        sed -i -e 's/^#$ModLoad imudp/$ModLoad imudp/'\
+               -e 's/^#$UDPServerRun/$UDPServerRun/'\
+               -e 's/^#$ModLoad imtcp/$ModLoad imtcp/'\
+               -e 's/^#$InputTCPServerRun/$InputTCPServerRun/' $SYSLOG_CONF_FILE
+        systemctl restart rsyslog
+    fi
+}
+
+config_s3log() {
+    s3logs_conf_template="${SYSLOG_TEMPLATE_DIR}/1-s3logs.conf.tmpl"
+    s3logs_tmp="${TEMP_DIR}1-s3logs.conf"
+    s3logs_conf="${SYSLOG_CONF_DIR}/1-s3logs.conf"
+    # Get the s3 hostname from configuration files.
+    s3nodes=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_SERVER']['nodes'])" 2> /dev/null)
+    [ -z "$s3nodes" ] && echo "error: No s3 server defined $INVENTORY_FILE" && exit 1
+
+    for node in $s3nodes
+    do
+        compare_nodes_ip $HOSTNAME $node || {
+            echo "Detected single node configuration. Skipping rsyslog configuration for $node."
+            continue
+        }
+
+        # check if files exists in remote server.
+        s3_conf_file=$(ssh root@$node ls $s3logs_conf 2> /dev/null) || {
+            > $s3logs_tmp
+            sed -n "1,3p" $s3logs_conf_template >> $s3logs_tmp
+
+            # Get log file list from node
+            s3_log_files=$(ssh root@$node "(find $LOG_DIR -type f -name *.log;
+                                            find $LOG_DIR -type l | grep INFO) | cut -d / -f5-")
+            [ -z "$s3_log_files" ] && echo "error: could not get the list of files from $node" && return 1
+
+            for file in $s3_log_files
+            do
+                state_file_name=$(echo $file| rev | cut -d / -f1 | rev)
+                file_tag=$(sed 's/:/__/g' <<< "$file")
+                sed -e "1,3d"\
+                -e "s|FLog|$state_file_name|g"\
+                -e "s|FILENAMETAG|$file_tag|g"\
+                -e "s|FileLogName|/var/log/seagate/$file|g"\
+                -e "s|FILE|$file|g"\
+                -e "s|cmu_port|$CMU_RSYSLOG_PORT|g"\
+                -e "s|cmu|$HOSTNAME|g" $s3logs_conf_template >> $s3logs_tmp
+            done
+            run_cmd_retry "scp $s3logs_tmp root@$node:$SYSLOG_CONF_DIR"
+            rm $s3logs_tmp
+
+            # restart syslog on remote server
+            run_cmd_retry "ssh root@$node systemctl restart rsyslog"
+        }
+    done
+}
+
+config_email() {
+    email_conf_template="${SYSLOG_TEMPLATE_DIR}/2-emailsyslog.conf.tmpl"
+    email_conf="${SYSLOG_CONF_DIR}/2-emailsyslog.conf"
+    cp $email_conf_template $email_conf || {
+        echo "error: could not copy $email_conf_template to $email_conf." && return 1
+    }
+    systemctl restart rsyslog
+}
+
+# and IEMs to CMU node.
+config_syslog() {
+    # Get S3 nodes from inventory file
+    syslog_conf="${SYSLOG_CONF_DIR}/0-syslog.conf"
+    syslog_conf_template="${SYSLOG_TEMPLATE_DIR}/0-syslog.conf.tmpl"
+    syslog_tmp="${TEMP_DIR}0-syslog.conf"
+    s3nodes=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_SERVER']['nodes'])" 2> /dev/null)
+    [ -z "$s3nodes" ] && echo "error: s3 server nodes not defined in $INVENTORY_FILE" && return 1
+    ssu_nodes=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['SSU']['nodes'])" 2> /dev/null)
+    [ -z "$ssu_nodes" ] && echo "error: ssu nodes not defined in $INVENTORY_FILE." && return 1
+    nodes="$s3nodes $ssu_nodes"
+
+    # Copy temporary file to S3 nodes and ssu nodes.
+    for node in $nodes
+    do
+        compare_nodes_ip $HOSTNAME $node || {
+            echo "Detected single node configuration. Skipping rsyslog configuration for $node."
+            continue
+        }
+
+        # Already configured then do not configure
+        syslog=$(ssh root@$node ls $syslog_conf 2> /dev/null) || {
+
+            # Write configuration to temporary file
+            sed "s/hostname/$HOSTNAME/g; s/port/$CMU_RSYSLOG_PORT/g" $syslog_conf_template > $syslog_tmp
+            run_cmd_retry "scp $syslog_tmp root@$node:$SYSLOG_CONF_DIR"
+
+            # restart rsyslog after writing cnfiguration file on remote server.
+            run_cmd_retry "ssh root@$node systemctl restart rsyslog"
+        }
+    done
+}
+
+config_csm() {
+    ans=
+
+    # check if script run as root user or not.
+    [ $(id -u) -ne 0 ] && echo "Run csm_init with root privileges!!" && exit 1
+    [ -f $CSM_CONFIG ] ||
+        { echo "Missing configuration file /etc/csm.conf.";  exit 1; }
+
+    # Script must run from CMU node
+    compare_nodes_ip $HOSTNAME $CMU_NODE && {
+        echo "Current Host is $HOSTNAME and CMU is $CMU_NODE. Run csm_init from CMU node";
+        exit 1;
+    }
+
+    if [ -f $CSM_INITIALIZED ]; then
+        [ -z "$arg_force" ] || ans="y"
+        while [ "$ans" != "y" -a "$ans" != "n" ]; do
+            echo -n "CSM is already initialized. Do you want to reinitialize? [y/n]: "
+            read ans
+        done
+        [ "$ans" != "y" ] && exit 1
+        rm -f $CSM_INITIALIZED
+    fi
+
+    # CSM user initialization
+    [ -z "$ADMIN_USER" ] && user=admin
+
+    id -u $ADMIN_USER >/dev/null 2>&1 || {
+        echo "Creating user $ADMIN_USER ...";
+        pass=$(perl -e "print crypt($ADMIN_USER, $ADMIN_USER)");
+        useradd -p $pass $ADMIN_USER;
+    }
+
+    # Permission for CSM user
+    bundle_path=$(awk '/SUPPORT_BUNDLE_ROOT/ { print $2 }' $CSM_CONFIG | sed "s/'//g")
+    [ -z "$bundle_path" ] && bundle_path="/opt/seagate/bundle"
+    mkdir -p $bundle_path
+    chown $ADMIN_USER:$ADMIN_USER $bundle_path
+    setfacl -Rdm u:$ADMIN_USER:rwX $bundle_path
+    setfacl -m u:$ADMIN_USER:rwX /var/log/messages
+    setfacl -m u:$ADMIN_USER:rwX /var/log/csm.log
+
+    SYSLOG_LOGROTATE="/etc/logrotate.d/syslog"
+    grep setfacl $SYSLOG_LOGROTATE | grep -q $ADMIN_USER || {
+        sed -i "s/postrotate$/postrotate\n\tsetfacl -m u:$ADMIN_USER:rwX \/var\/log\/messages/g" $SYSLOG_LOGROTATE
+    }
+
+    grep -qw "size" $SYSLOG_LOGROTATE || {
+        echo "*** size parameter not found in  $SYSLOG_LOGROTATE. Configuring...."
+        var_size=$(df -B 1 -P /var/ | awk '{if (NR == 2) {print $2}}')
+        size=$(expr $(expr 2 \* $var_size) / 100)
+        sed -i "/{/a \    size $size" /etc/logrotate.d/syslog
+        echo "logroatate size set to $size bytes in $SYSLOG_LOGROTATE."
+    }
+}
+
+initialize_grafana() {
+    echo "Initializing grafana configuration ..."
+    config_updated=
+
+    # Check rpm for grafana configuration
+    rpm -qa | grep -qw grafana || { echo "error: Grafana package is not installed."; return 1; }
+    rpm -q sqlite > /dev/null || { echo "error: sqlite package is not installed."; return 1; }
+    rpm -q unzip > /dev/null || { echo "error: unzip package is not installed."; return 1; }
+
+    # Configure login page of grafana
+    sed -i -e 's/<title>Grafana<\/title>/<title>Seagate CORTX<\/title>/g' \
+        -e 's/<footer/<!--footer/g' \
+        -e 's/<\/footer>/<\/footer-->/g' ${GRAFANA_SHARE_DIR}views/index.html
+    find ${GRAFANA_SHARE_DIR} -type f | xargs sed -i -e 's/heatmap_bg_test.svg/heatmap_bg_test.jpg/g' \
+        -e 's/Grafana - //g' \
+        -e 's/icon-gf-grafana_wordmark//g'
+    cp -rf ${CSM_CONFIG_DIR}${GRAFANA_SHARE_DIR}img/* ${GRAFANA_SHARE_DIR}img/
+    config_updated=1
+
+    NODES=($(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_SERVER']['nodes'])" 2> /dev/null))
+    [ -z "$NODES" ] && echo "error: s3 server nodes not defined in $INVENTORY_FILE." && return 1
+
+    grafana_dashboard="object_store_dashboard.json"
+    [ ${#NODES[@]} -gt 1 ] && {
+        # Multi Node detected
+        server_nodes=$(echo ${NODES[@]} | sed 's/ /,/g')
+        sed -i 's/"query": "{}"/"query": "{'$server_nodes'}"/g' ${CSM_CONFIG_DIR}${GRAFANA_LIB_DIR}dashboards/object_store_dashboard_multinode.json
+        grafana_dashboard="object_store_dashboard_multinode.json"
+    }
+
+    # Set timezone to UTC
+    [[ $(readlink -f /etc/localtime) -ef "/usr/share/zoneinfo/UTC" ]] || timedatectl set-timezone UTC
+
+    # Configure datasources and dashboards
+    mkdir -p /etc/grafana
+    [[ -f ${GRAFANA_PROVISIONING_DIR}dashboards/object_store_dashboard.yaml && \
+        -f ${GRAFANA_PROVISIONING_DIR}datasource/datasource.yaml ]] || {
+        cp -rf ${CSM_CONFIG_DIR}etc/grafana/* /etc/grafana/
+        chown -R grafana:grafana /etc/grafana/
+        config_updated=1
+    }
+
+    # Use the predefined dashboard
+    mkdir -p ${GRAFANA_LIB_DIR}dashboards
+    cmp -s ${CSM_CONFIG_DIR}${GRAFANA_LIB_DIR}dashboards/${grafana_dashboard} \
+        ${GRAFANA_LIB_DIR}dashboards/object_store_dashboard.json &> /dev/null || {
+        cp ${CSM_CONFIG_DIR}${GRAFANA_LIB_DIR}dashboards/${grafana_dashboard} \
+            ${GRAFANA_LIB_DIR}dashboards/object_store_dashboard.json
+        chown -R grafana:grafana ${GRAFANA_LIB_DIR}
+        config_updated=1
+    }
+
+    # Check if Grafana is configured on port 80
+    grep -q "^http_port = 80" /etc/grafana/grafana.ini || {
+        sed -i 's/.*http_port *=.*/http_port = 80/g' /etc/grafana/grafana.ini
+        setcap 'cap_net_bind_service=+ep' /usr/sbin/grafana-server
+        config_updated=1
+    }
+
+    # Check if grafana theme is light
+    grep -q "^default_theme = light" /etc/grafana/grafana.ini || {
+        sed -i 's/.*default_theme *=.*/default_theme = light/g' /etc/grafana/grafana.ini
+        config_updated=1
+    }
+
+    # Add pie-chart plugin to grafana
+    mkdir -p ${GRAFANA_LIB_DIR}plugins/grafana-piechart-panel/
+    unzip -nq ${THIRD_PARTY}/plugins/grafana-piechart-panel-5f249d5.zip \
+        -d ${GRAFANA_LIB_DIR}plugins/grafana-piechart-panel/
+
+    # Set default dashboard as home dashboard of grafana
+    cmp -s ${GRAFANA_LIB_DIR}dashboards/object_store_dashboard.json \
+        ${GRAFANA_SHARE_DIR}dashboards/home.json &> /dev/null || {
+        cp -f ${GRAFANA_LIB_DIR}dashboards/object_store_dashboard.json \
+            ${GRAFANA_SHARE_DIR}dashboards/home.json
+        config_updated=1
+    }
+
+    # Start garafana server
+    [[ -z "$config_updated" ]] || {
+        run_cmd_retry "systemctl enable grafana-server"
+        run_cmd_retry "systemctl restart grafana-server"
+    }
+
+    # Update user table of grafana.db
+    for ((i=0; i<5; i++)); do
+        sqlite3 ${GRAFANA_LIB_DIR}grafana.db "update user set help_flags1 = 1 where login = 'admin';" \
+             2> /dev/null && break
+        sleep 1
+    done
+}
+
+initialize_mero_server_configs() {
+    echo "Initializing mero server configurations ..."
+
+    # Configure statsd on all the mero server nodes
+    SSU=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['SSU']['nodes'])" 2> /dev/null)
+    [ -z "$SSU" ] && echo "error: ssu server nodes not defined in $INVENTORY_FILE." && return 1
+
+    # Check python-statsd is install on all SSU node
+    for node in $SSU
+    do
+        run_remote $node "rpm -qa | grep -qw python2-statsd" || \
+            { echo "error: python-statsd package is not installedon $node."; return 1;}
+    done
+
+    # Add cron job to mero server
+    cron_cmd="*/2 * * * * ${STATS_CMD} mero"
+
+    for node in $SSU
+    do
+        statsd_config_needs_update=
+
+        # Copy file to mero server
+        ssh root@$node ls ${STATS_CMD} &> /dev/null || {
+            echo "Copying mero-statsd file on node $node ..."
+            run_cmd_retry "scp ${STATS_CMD_PATH} root@$node:${STATS_CMD}"
+            statsd_config_needs_update=1
+        }
+
+        cp ${CSM_CONFIG_DIR}etc/statsd/config.js.tmpl /tmp/config.js
+        sed -i "s/sample_hostname/${node}/g" /tmp/config.js
+        sed -i "s/sample_cmu_hostname/${CMU}/g" /tmp/config.js
+        scp root@$node:/etc/statsd/config.js /tmp/serv_config.js &> /dev/null || {
+            # Possibly file does not exist on remote node, needs update
+            statsd_config_needs_update=1
+        }
+
+        [ -z "$statsd_config_needs_update" ] && {
+            cmp -s /tmp/config.js /tmp/serv_config.js || statsd_config_needs_update=1
+        }
+
+        [ -z "$statsd_config_needs_update" ] || {
+            echo "Updating statsd configuration on node $node ..."
+            scp /tmp/config.js root@$node:/etc/statsd/config.js > /dev/null || {
+                echo "error: can not configure stats on node $node"
+                return 1
+            }
+        }
+        set -f
+        run_remote $node "
+            set -e;
+            crontab -l | grep -qF '${STATS_CMD} mero' && exit 0;
+            (crontab -l 2>/dev/null; echo \"$cron_cmd\") | crontab -;
+            systemctl enable statsd;
+            systemctl restart statsd;
+            "
+        set +f
+    done
+    rm /tmp/config.js
+}
+
+initialize_s3_server_configs() {
+    echo "Initializing S3 server configurations ..."
+
+    # Configure statsd on all the S3 server nodes
+    NODES=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_SERVER']['nodes'])" 2> /dev/null)
+    [ -z "$NODES" ] && echo "error: s3 server nodes not defined in $INVENTORY_FILE." && return 1
+
+    CMU=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['CMU']['nodes'])" 2> /dev/null)
+    [ -z "$CMU" ] && echo "error: cmu nodes not defined in $INVENTORY_FILE." && return 1
+
+    LOAD_BALANCERS=$(python -c "import yaml; print ' '.join(yaml.load(open(\"$INVENTORY_FILE\").read())['S3_LOAD_BALANCER']['nodes'])" 2> /dev/null)
+    [ -z "$LOAD_BALANCERS" ] && echo "error: load balancer nodes are not defined in $INVENTORY_FILE." && return 1
+
+    for node in $NODES
+    do
+        statsd_config_needs_update=
+        cp ${CSM_CONFIG_DIR}etc/statsd/config.js.tmpl /tmp/config.js
+        sed -i "s/sample_hostname/${node}/g" /tmp/config.js
+        sed -i "s/sample_cmu_hostname/${CMU}/g" /tmp/config.js
+        scp root@$node:/etc/statsd/config.js /tmp/serv_config.js &> /dev/null || {
+            # Possibly file does not exist on remote node, needs update
+            statsd_config_needs_update=1
+        }
+        [ -z "$statsd_config_needs_update" ] && cmp -s /tmp/config.js /tmp/serv_config.js || {
+            # Remote file needs update
+            statsd_config_needs_update=1
+        }
+        [ -z "$statsd_config_needs_update" ] || {
+            echo "Updating statsd configuration on node $node ..."
+            scp /tmp/config.js root@$node:/etc/statsd/config.js > /dev/null || {
+                echo "error: can not configure stats on node $node"
+                return 1
+            }
+            set -f
+            run_cmd_retry "ssh root@$node systemctl enable statsd && systemctl restart statsd"
+            set +f
+        }
+    done
+    rm /tmp/config.js
+
+    load_balancer_node_count=$(echo ${LOAD_BALANCERS} | wc -w)
+    cron_cmd=
+    # Add cron job to Haproxy Node
+    if [ $load_balancer_node_count -eq 1 ]; then
+        cron_cmd="*/2 * * * * ${STATS_CMD} haproxy singlenode"
+    elif [ $load_balancer_node_count -gt 1 ]; then
+        cron_cmd="*/2 * * * * ${STATS_CMD} haproxy multinode"
+    else
+        echo "Haproxy stats configuration not required"
+    fi
+
+    for load_balancer in $LOAD_BALANCERS
+    do
+        if [ $load_balancer_node_count -eq 1 ]; then
+            run_cmd_retry "cp ${STATS_CMD_PATH} ${STATS_CMD}"
+        else
+            # Adding haproxy-statsd.py to s3 server
+            ssh root@$load_balancer ls ${STATS_CMD} &> /dev/null || {
+                echo "Copying haproxy statsd file on node $load_balancer ..."
+                run_cmd_retry "scp ${STATS_CMD_PATH} root@$load_balancer:${STATS_CMD}"
+            }
+        fi
+
+        # Add a cronjob running every 2 min which sends haproxy stats to statsd
+        echo "Updating cronjob configuration on node $load_balancer ..."
+
+        # Disable pathname expansion for $cron_cmd
+        set -f
+
+        # TODO - Add cron entry as non-root user
+        command="
+            crontab -l | grep -qF '${STATS_CMD} haproxy' && exit 0;
+            ( crontab -l 2>/dev/null; echo \"$cron_cmd\" ) | crontab - || {
+                echo \"error: unable to add cron entry on node $load_balancer\";
+                exit 1;
+            };
+        "
+        run_cmd_retry "ssh root@$load_balancer $command"
+        set +f
+    done
+}
+
+initialize_graphite() {
+    echo "Initializing graphite configuration ..."
+    httpd_config_updated=
+
+    # Check if Graphite is installed
+    rpm -qa | grep -qw graphite || {  echo "error: Graphite package is not installed."; return 1; }
+
+    # Configure carbon
+    mkdir -p /opt/graphite/conf/
+    cmp -s ${CSM_CONFIG_DIR}${GRAPHITE_STORAGE_SCHEMAS} \
+        ${GRAPHITE_STORAGE_SCHEMAS} &> /dev/null || {
+        cp ${CSM_CONFIG_DIR}${GRAPHITE_STORAGE_SCHEMAS} \
+            ${GRAPHITE_STORAGE_SCHEMAS}
+        systemctl enable carbon-cache > /dev/null;
+        systemctl restart carbon-cache > /dev/null;
+    }
+    PYTHONPATH=/usr/share/graphite/webapp django-admin syncdb --settings=graphite.settings --noinput &> /dev/null
+
+    # Configure Apache for Graphite
+    echo > /etc/httpd/conf.d/welcome.conf
+    cmp -s ${CSM_CONFIG_DIR}${GRAPHITE_WEB_CONF} \
+        ${GRAPHITE_WEB_CONF} &> /dev/null || {
+        cp -rf ${CSM_CONFIG_DIR}${GRAPHITE_WEB_CONF} ${GRAPHITE_WEB_CONF}
+        chown apache:apache /var/lib/graphite-web/graphite.db
+        touch /var/lib/graphite-web/index
+        httpd_config_updated=1
+    }
+
+    grep -q "Listen 8008" /etc/httpd/conf/httpd.conf || {
+        sed -ir 's/^Listen [0-9]*$/Listen 8008/g' /etc/httpd/conf/httpd.conf
+        httpd_config_updated=1
+    }
+
+    # Start httpd service
+    [[ -z "$httpd_config_updated" ]] || { systemctl restart httpd > /dev/null; systemctl enable httpd > /dev/null; }
+
+    # Configure carbon-aggregator
+    grep -q "FORWARD_ALL = False" /etc/carbon/carbon.conf && {
+        sed -i "s/FORWARD_ALL = False/FORWARD_ALL = True/g" /etc/carbon/carbon.conf
+    }
+
+    cmp -s ${CSM_CONFIG_DIR}${GRAPHITE_CARBON_AGGREGATOR} \
+        ${GRAPHITE_CARBON_AGGREGATOR} &> /dev/null || {
+        cp -rf ${CSM_CONFIG_DIR}${GRAPHITE_CARBON_AGGREGATOR} \
+            ${GRAPHITE_CARBON_AGGREGATOR}
+        run_cmd_retry "systemctl enable carbon-aggregator"
+        run_cmd_retry "systemctl restart carbon-aggregator"
+    }
+}
+
+cmd="config"
+arg_force=
+arg_stats=
+arg_logs=
+
+# if script run without any parameters, only basic configuration is done.
+# and script sucessfully exits.
+# To configure graphite, Graphana and statsd one should run script with
+# -s parameter.
+# To configure syslog/IEM configuration one should run script with -l parameter.
+[ $# -ge 1 ] && cmd=$1 && shift 1
+case $cmd in
+    check )
+        [ -f $CSM_INITIALIZED ]  && exit 0
+        logger -i -p local3.err "CSM not initialized. Run /opt/seagate/csm/csm_init"
+        exit 1
+        ;;
+
+    config )
+        while [ $# -gt 0 ]; do
+            case $1 in
+                -f ) arg_force=1;;
+                -s ) arg_stats=1;;
+                -l ) arg_logs=1;;
+                 * ) usage;;
+            esac
+            shift 1
+        done
+
+        # read csm config file
+        read_config
+
+        # basic configuration
+        config_csm
+
+        [ -z "$arg_stats" ] || {
+            # Initialize Graphite, Grafana and Statsd
+            initialize_graphite
+            initialize_s3_server_configs
+            initialize_mero_server_configs
+            initialize_grafana
+        }
+
+        [ -z "$arg_logs" ] || {
+            # syslog and IEM redirection
+            config_syslog
+            # config s3 logs
+            config_cmu
+            config_s3log
+            config_email
+        }
+        touch $CSM_INITIALIZED
+        echo "Initialization completed successfully !!!"
+        ;;
+
+    * )
+        usage
+        ;;
+esac
+
+trap 0
