@@ -1,0 +1,306 @@
+The corosync could be configured to redundant network interfaces by using Redundant Ring Protocol (RRP).
+The RRP is a communication protocol where corosync can use two separate network interfaces for connection among cluster nodes.
+When one of the networks fails, communication can continue over the other network.
+
+Redundant Ring configuration options:
+none: RRP is disabled.
+active: Both network rings will be active and in use.
+passive: Only one network ring will be in use, if this ring fails then the other ring will be used.
+
+Experiments using 3 VMs:
+
+Node-1 IPs:
+-bash-4.2$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:00:97 brd ff:ff:ff:ff:ff:ff
+inet 10.230.245.36/20 brd 10.230.255.255 scope global noprefixroute dynamic eth0
+valid_lft 431829sec preferred_lft 431829sec
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:00:98 brd ff:ff:ff:ff:ff:ff
+inet 192.168.7.82/20 brd 192.168.15.255 scope global noprefixroute dynamic eth1
+valid_lft 43029sec preferred_lft 43029sec
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:00:9a brd ff:ff:ff:ff:ff:ff
+inet 192.168.23.145/20 brd 192.168.31.255 scope global noprefixroute dynamic eth2
+valid_lft 43029sec preferred_lft 43029sec
+
+Node-2 IPs:
+-bash-4.2$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:07:8b brd ff:ff:ff:ff:ff:ff
+inet 10.230.249.67/20 brd 10.230.255.255 scope global noprefixroute dynamic eth0
+valid_lft 431691sec preferred_lft 431691sec
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:07:93 brd ff:ff:ff:ff:ff:ff
+inet 192.168.15.63/20 brd 192.168.15.255 scope global noprefixroute dynamic eth1
+valid_lft 42891sec preferred_lft 42891sec
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:07:94 brd ff:ff:ff:ff:ff:ff
+inet 192.168.31.87/20 brd 192.168.31.255 scope global noprefixroute dynamic eth2
+valid_lft 42891sec preferred_lft 42891sec
+
+Node-3 IPs:
+-bash-4.2$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:01:6f brd ff:ff:ff:ff:ff:ff
+inet 10.230.243.170/20 brd 10.230.255.255 scope global noprefixroute dynamic eth0
+valid_lft 431683sec preferred_lft 431683sec
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:01:71 brd ff:ff:ff:ff:ff:ff
+inet 192.168.8.72/20 brd 192.168.15.255 scope global noprefixroute dynamic eth1
+valid_lft 42883sec preferred_lft 42883sec
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+link/ether 56:6f:20:19:01:74 brd ff:ff:ff:ff:ff:ff
+inet 192.168.24.146/20 brd 192.168.31.255 scope global noprefixroute dynamic eth2
+valid_lft 42883sec preferred_lft 42883sec
+
+ 
+Configured two network rings (RRP) using eth0 and eth1 from each of the nodes above:
+/etc/hosts file updated to include:
+10.230.245.36 node1
+10.230.249.67 node2
+10.230.243.170 node3
+192.168.7.82 node1_2
+192.168.15.63 node2_2
+192.168.8.72 node3_2
+
+Updated corosync config file:
+totem {
+    version: 2
+    cluster_name: my_cluster
+    secauth: off
+    transport: udpu
+    rrp_mode: active
+}
+
+nodelist {
+    node {
+        ring0_addr: node1_2
+        ring1_addr: node1
+        nodeid: 1
+    }
+
+    node {
+        ring0_addr: node2_2
+        ring1_addr: node2
+        nodeid: 2
+    }
+
+    node {
+        ring0_addr: node3_2
+        ring1_addr: node3
+        nodeid: 3
+    }
+}
+
+quorum {
+    provider: corosync_votequorum
+}
+
+logging {
+    to_logfile: yes
+    logfile: /var/log/cluster/corosync.log
+    to_syslog: yes
+}
+
+Quorum and ring status when cluster in healthy state:
+-bash-4.2$ sudo corosync-quorumtool
+Quorum information
+------------------
+Date: Tue Dec 8 02:37:41 2020
+Quorum provider: corosync_votequorum
+Nodes: 3
+Node ID: 1
+Ring ID: 1/6036
+Quorate: Yes
+
+Votequorum information
+----------------------
+Expected votes: 3
+Highest expected: 3
+Total votes: 3
+Quorum: 2
+Flags: Quorate
+
+Membership information
+----------------------
+Nodeid Votes Name
+1 1 node1_2 (local)
+3 1 node3_2
+2 1 node2_2
+-bash-4.2$ sudo corosync-cfgtool -s
+Printing ring status.
+Local node ID 1
+RING ID 0
+id = 192.168.7.82
+status = ring 0 active with no faults
+RING ID 1
+id = 10.230.245.36
+status = ring 1 active with no faults
+
+Experiment #1:
+
+Step-1: Quorum and ring status after node-3 ring-0 network interface was made down:
+-bash-4.2$ sudo corosync-quorumtool
+Quorum information
+------------------
+Date: Tue Dec 8 02:42:28 2020
+Quorum provider: corosync_votequorum
+Nodes: 3
+Node ID: 1
+Ring ID: 1/6036
+Quorate: Yes
+
+Votequorum information
+----------------------
+Expected votes: 3
+Highest expected: 3
+Total votes: 3
+Quorum: 2
+Flags: Quorate
+
+Membership information
+----------------------
+Nodeid Votes Name
+1 1 node1_2 (local)
+3 1 node3_2
+2 1 node2_2
+-bash-4.2$ sudo corosync-cfgtool -s
+Printing ring status.
+Local node ID 1
+RING ID 0
+id = 192.168.7.82
+status = Marking seqid 11288 ringid 0 interface 192.168.7.82 FAULTY
+RING ID 1
+id = 10.230.245.36
+status = ring 1 active with no faults
+
+As it can be seen in above, the quorum is still there since ring 1 still healthy and active while ring 0 has been marked faulty.
+
+Step-2: Quorum and ring status after node-3 ring-0 and ring-1 interfaces were made down in addition to the Step-1 above:
+-bash-4.2$ sudo corosync-quorumtool
+Quorum information
+------------------
+Date: Tue Dec 8 02:45:03 2020
+Quorum provider: corosync_votequorum
+Nodes: 2
+Node ID: 1
+Ring ID: 1/6040
+Quorate: Yes
+
+Votequorum information
+----------------------
+Expected votes: 3
+Highest expected: 3
+Total votes: 2
+Quorum: 2
+Flags: Quorate
+
+Membership information
+----------------------
+Nodeid Votes Name
+1 1 node1_2 (local)
+2 1 node2_2
+-bash-4.2$ sudo corosync-cfgtool -s
+Printing ring status.
+Local node ID 1
+RING ID 0
+id = 192.168.7.82
+status = ring 0 active with no faults
+RING ID 1
+id = 10.230.245.36
+status = ring 1 active with no faults
+
+At this point the corosync cluster lost one node i.e. node-3 (Total votes-2) and both RRP rings are active with two resultant nodes i.e. node-1 and node-2 since
+both of their network interfaces are healthy.
+
+Restored the setup back into healthy state so that all three nodes both network interfaces were in healthy state.
+
+Experiment #2:
+
+Step-1: Quorum and ring status after node-3 ring-1 interface was made down:
+-bash-4.2$ sudo corosync-quorumtool
+Quorum information
+------------------
+Date: Tue Dec 8 03:41:34 2020
+Quorum provider: corosync_votequorum
+Nodes: 3
+Node ID: 1
+Ring ID: 1/6136
+Quorate: Yes
+
+Votequorum information
+----------------------
+Expected votes: 3
+Highest expected: 3
+Total votes: 3
+Quorum: 2
+Flags: Quorate
+
+Membership information
+----------------------
+Nodeid Votes Name
+1 1 node1_2 (local)
+3 1 node3_2
+2 1 node2_2
+
+-bash-4.2$ sudo corosync-cfgtool -s
+Printing ring status.
+Local node ID 1
+RING ID 0
+id = 192.168.7.82
+status = ring 0 active with no faults
+RING ID 1
+id = 10.230.245.36
+status = Marking seqid 9200 ringid 1 interface 10.230.245.36 FAULTY
+
+As expected the RRP ring-1 was marked faulty.
+
+Step-2: Quorum and ring status after node-2 ring-0 interface was made down in addition to the Step-1 above:
+-bash-4.2$ sudo corosync-quorumtool
+Quorum information
+------------------
+Date: Tue Dec 8 03:45:03 2020
+Quorum provider: corosync_votequorum
+Nodes: 2
+Node ID: 1
+Ring ID: 1/6140
+Quorate: Yes
+
+Votequorum information
+----------------------
+Expected votes: 3
+Highest expected: 3
+Total votes: 2
+Quorum: 2
+Flags: Quorate
+
+Membership information
+----------------------
+Nodeid Votes Name
+1 1 node1_2 (local)
+3 1 node3_2
+
+-bash-4.2$ sudo corosync-cfgtool -s
+Printing ring status.
+Local node ID 1
+RING ID 0
+id = 192.168.7.82
+status = ring 0 active with no faults
+RING ID 1
+id = 10.230.245.36
+status = Marking seqid 9200 ringid 1 interface 10.230.245.36 FAULTY
+
+The node-2 got dropped from the corosync cluster with RRP ring-0 still being healthy.
