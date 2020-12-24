@@ -4,10 +4,12 @@
 
 	1. For adding a new node (Kafka broker) to the existing cluster, install Kafka on new node.
 	2. Configure Kafka broker by assigning a new unique id to it in server.properties.
+	
 	        ```
 		broker.id=<new unique broker id>
 	        ```
 	3. In server.properties, assign following property to existing zookeeper.
+	
 	        ```
 		zookeeper.connect=<Existing ZK server>
 		```
