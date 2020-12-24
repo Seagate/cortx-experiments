@@ -59,7 +59,7 @@
 	4. Execute following commands to move the partitions -
 	```
 		$ bin/kafka-reassign-partitions.sh --bootstrap-server <brokers> --reassignment-json-file new_partitions.json --execute
-		```
+	```
 	5. The following command is used for verifying whether the movement is complete or not-
 	```
 	$ bin/kafka-reassign-partitions.sh --bootstrap-server <brokers> --reassignment-json-file new_partitions.json --verify
