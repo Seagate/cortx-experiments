@@ -1,0 +1,162 @@
+#!/bin/sh
+
+# Copyright (c) 2019 Seagate Technology PLC, Andriy Tkachuk
+#                    All Rights Reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of version 2 of the GNU General Public License as
+# published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it would be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# Further, this software is distributed without any warranty that it is
+# free of the rightful claim of any third person regarding infringement
+# or the like.  Any license provided herein, whether implied or
+# otherwise, applies only to this software file.  Patent licenses, if
+# any, provided herein do not apply to combinations of this program with
+# other software, or any other product whatsoever.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write the Free Software Foundation,
+# Inc., 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+
+
+#	Lustre LNet OCF RA. Configures NID over TCP.
+
+#######################################################################
+# Initialization:
+
+: ${OCF_FUNCTIONS_DIR=${OCF_ROOT}/lib/heartbeat}
+. ${OCF_FUNCTIONS_DIR}/ocf-shellfuncs
+
+# Defaults
+OCF_RESKEY_unique_clone_default=false
+
+: ${OCF_RESKEY_unique_clone=${OCF_RESKEY_unique_clone_default}}
+
+#######################################################################
+
+meta_data() {
+	cat <<END
+<?xml version="1.0"?>
+<!DOCTYPE resource-agent SYSTEM "ra-api-1.dtd">
+<resource-agent name="s3server">
+<version>1.0</version>
+
+<longdesc lang="en">
+This is LNet Resource Agent. It configures NID over TCP.
+</longdesc>
+<shortdesc lang="en">LNet over TCP resource agent</shortdesc>
+
+<parameters>
+<parameter name="service" unique="1" required="1">
+<longdesc lang="en">
+.
+</longdesc>
+<shortdesc lang="en">IPv4 or IPv6 address</shortdesc>
+<content type="string" default="" />
+</parameter>
+
+<parameter name="unique_clone">
+<longdesc lang="en">
+If true, add the clone ID to the supplied value of IP to create
+a unique address to manage
+</longdesc>
+<shortdesc lang="en">Create a unique address for cloned instances</shortdesc>
+<content type="boolean" default="${OCF_RESKEY_unique_clone_default}"/>
+</parameter>
+</parameters>
+
+<actions>
+<action name="start"        timeout="20s" />
+<action name="stop"         timeout="20s" />
+<action name="monitor"      timeout="20s" interval="10s" depth="0" />
+<action name="reload"       timeout="20s" />
+<action name="migrate_to"   timeout="20s" />
+<action name="migrate_from" timeout="20s" />
+<action name="meta-data"    timeout="5s" />
+<action name="validate-all"   timeout="20s" />
+</actions>
+</resource-agent>
+END
+}
+
+#######################################################################
+
+lnet_usage() {
+	cat <<END
+usage: $0 {start|stop|monitor|migrate_to|migrate_from|validate-all|meta-data}
+
+Expects to have a fully populated OCF RA-compliant environment set.
+END
+}
+
+lnet_start() {
+	systemctl start $service_name
+	return $OCF_SUCCESS
+}
+
+lnet_stop() {
+	systemctl stop $service_name
+	return $OCF_SUCCESS
+}
+
+lnet_monitor() {
+	# Monitor _MUST!_ differentiate correctly between running
+	# (SUCCESS), failed (ERROR) or _cleanly_ stopped (NOT RUNNING).
+	# That is THREE states, not just yes/no.
+	echo "$service_name"
+	if systemctl is-active --quiet $service_name; then
+	    return $OCF_SUCCESS
+	fi
+	if false ; then
+		return $OCF_ERR_GENERIC
+	fi
+
+	if ! ocf_is_probe && [ "$__OCF_ACTION" = "monitor" ]; then
+		# set exit string only when NOT_RUNNING occurs during an actual monitor operation.
+		if ! systemctl is-active --quiet $service_name; then
+			ocf_exit_reason "LNet is not started"
+		fi
+	fi
+	return $OCF_NOT_RUNNING
+}
+
+lnet_validate() {
+    return $OCF_SUCCESS
+}
+
+if ocf_is_true "$OCF_RESKEY_unique_clone"; then
+	service_name="${OCF_RESKEY_service}@${OCF_RESKEY_CRM_meta_clone:-0}"
+else
+	service_name="${OCF_RESKEY_service}"
+fi
+
+case $__OCF_ACTION in
+meta-data)	meta_data
+		exit $OCF_SUCCESS
+		;;
+start)		lnet_start;;
+stop)		lnet_stop;;
+monitor)	lnet_monitor;;
+migrate_to)	ocf_log info "Migrating ${OCF_RESOURCE_INSTANCE} to ${OCF_RESKEY_CRM_meta_migrate_target}."
+	        lnet_stop
+		;;
+migrate_from)	ocf_log info "Migrating ${OCF_RESOURCE_INSTANCE} from ${OCF_RESKEY_CRM_meta_migrate_source}."
+	        lnet_start
+		;;
+reload)		ocf_log info "Reloading ${OCF_RESOURCE_INSTANCE} ..."
+		;;
+validate-all)	lnet_validate;;
+usage|help)	lnet_usage
+		exit $OCF_SUCCESS
+		;;
+*)		lnet_usage
+		exit $OCF_ERR_UNIMPLEMENTED
+		;;
+esac
+rc=$?
+ocf_log debug "${OCF_RESOURCE_INSTANCE} $__OCF_ACTION : $rc"
+exit $rc

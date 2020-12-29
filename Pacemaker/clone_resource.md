@@ -30,13 +30,31 @@
     - prefers, avoid for normal case like allow/not allow resource on current node even if other node not available.
     - complex: `constraint location csm-kibana rule score=-INFINITY '#uname' eq $lnode and consul-c1-running eq 0`
     - Use resource-discovery=never if we don't want resource to run anywhere in system.
+      - always: default, discover on this node.
+      - never: never find on this node.
+      - exclusive: only find on this node and exclude other node. If run with multiple node name then it maintain set of active node.
     ```
       [root@ssc-vm-c-1628 ~]# pcs constraint
       colocation  location    order       ref         remove      rule        ticket
 
-    # Fast performance use resource-discovery
-      $ pcs constraint location kibana-vip avoids srvnode-3
-      $ pcs constraint location add location-kibana-vip-srvnode-3-INFINITY kibana-vip srvnode-3 -INFINITY resource-discovery=never
+      # Fast performance use resource-discovery
+      $ pcs constraint location add http_ban_2 http srvnode-1 -INFINITY resource-discovery=never
+
+        ref: Resource: http
+          Disabled on: srvnode-1 (score:-INFINITY) (resource-discovery=never)
+          Disabled on: srvnode-3 (score:-INFINITY) (resource-discovery=never)
+
+        ref: Resource: http
+          http_ban_2
+          http_ban_3
+
+      #
+      $ pcs constraint location add http_allow_1 http-clone srvnode-1 INFINITY resource-discovery=exclusive
+      $ pcs constraint location add http_allow_2 http-clone srvnode-2 INFINITY resource-discovery=exclusive
+
+      Clone Set: http-clone [http]
+        Started: [ srvnode-1 srvnode-2 ]
+        Stopped: [ srvnode-3 ]
     ```
 
 - colocation
@@ -66,6 +84,10 @@
 pcs resource create http systemd:httpd clone clone-max=3 clone-node-max=1 clone-min=2 globally-unique=true interleave=true
 
 # Test case
+
+```
+pcs resource create stats systemd:s3server clone clone-max=33 clone-node-max=11 globally-unique=true
+```
 
 1. colocation of clone and unclone resource
   - if clone fail then unclone resource will switch over to other node
@@ -143,3 +165,129 @@ pcs resource create http systemd:httpd clone clone-max=3 clone-node-max=1 clone-
   pcs resource ban statsd-clone srvnode-3
   pcs resource clear statsd-clone
   ```
+
+=======================================================================
+
+# multiple clone on node
+
+- Try running multiple resource running on multiple node.
+- Here for every clone resource count start from 0.
+- From clone-max=33 clone-node-max=11, we can consider no. of clone per node.
+- Removing node will not remove extra clone.
+- Adding node will also not create extra clone.
+
+### Approach 1: all clone on all node
+
+- Here all clones running equally divided on nodes.
+- after adding and removing node may run different clone on that node
+- Approach good if clone not bind to node.
+
+```
+pcs resource create s3server ocf:seagate:s3server service=s3server unique_clone=true clone clone-max=33 clone-node-max=11 globally-unique=true
+
+pcs resource create motr ocf:seagate:s3server service=motr unique_clone=true clone clone-max=6 clone-node-max=2 globally-unique=true
+
+pcs constraint colocation add s3server-clone with http-clone
+
+  Clone Set: s3server-clone [s3server] (unique)
+     s3server:0 (ocf::seagate:s3server):        Started srvnode-3
+     s3server:1 (ocf::seagate:s3server):        Started srvnode-1
+     s3server:2 (ocf::seagate:s3server):        Started srvnode-2
+     s3server:3 (ocf::seagate:s3server):        Started srvnode-3
+     s3server:4 (ocf::seagate:s3server):        Started srvnode-1
+     s3server:5 (ocf::seagate:s3server):        Started srvnode-2
+     s3server:6 (ocf::seagate:s3server):        Started srvnode-3
+     s3server:7 (ocf::seagate:s3server):        Started srvnode-1
+     s3server:8 (ocf::seagate:s3server):        Started srvnode-2
+     s3server:9 (ocf::seagate:s3server):        Started srvnode-3
+     s3server:10        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:11        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:12        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:13        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:14        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:15        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:16        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:17        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:18        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:19        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:20        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:21        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:22        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:23        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:24        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:25        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:26        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:27        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:28        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:29        (ocf::seagate:s3server):        Started srvnode-2
+     s3server:30        (ocf::seagate:s3server):        Started srvnode-3
+     s3server:31        (ocf::seagate:s3server):        Started srvnode-1
+     s3server:32        (ocf::seagate:s3server):        Started srvnode-2
+```
+
+### Approach 2: all clone on one node
+
+```
+cib_file=cib_cortx_cluster.xml
+
+pcs cluster cib $cib_file
+
+pcs -f $cib_file resource create s3server-1 ocf:seagate:s3server num=1 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
+
+pcs -f $cib_file constraint location add s3server_srvnode-1 s3server-1-clone srvnode-1 INFINITY resource-discovery=exclusive
+
+pcs -f $cib_file constraint colocation add s3server-1-clone with http-clone
+
+###
+pcs -f $cib_file resource create s3server-2 ocf:seagate:s3server num=2 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
+
+pcs -f $cib_file constraint location add s3server_srvnode-2 s3server-2-clone srvnode-2 INFINITY resource-discovery=exclusive
+
+pcs -f $cib_file constraint colocation add s3server-2-clone with http-clone
+
+###
+pcs -f $cib_file resource create s3server-3 ocf:seagate:s3server num=3 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
+
+pcs -f $cib_file constraint location add s3server_srvnode-3 s3server-3-clone srvnode-3 INFINITY resource-discovery=exclusive
+
+pcs -f $cib_file constraint colocation add s3server-3-clone with http-clone
+
+pcs cluster cib-push $cib_file
+
+  Clone Set: s3server-1-clone [s3server-1] (unique)
+     s3server-1:0       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:1       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:2       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:3       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:4       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:5       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:6       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:7       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:8       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:9       (ocf::seagate:s3server):        Started srvnode-1
+     s3server-1:10      (ocf::seagate:s3server):        Started srvnode-1
+ Clone Set: s3server-2-clone [s3server-2] (unique)
+     s3server-2:0       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:1       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:2       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:3       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:4       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:5       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:6       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:7       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:8       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:9       (ocf::seagate:s3server):        Started srvnode-2
+     s3server-2:10      (ocf::seagate:s3server):        Started srvnode-2
+ Clone Set: s3server-3-clone [s3server-3] (unique)
+     s3server-3:0       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:1       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:2       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:3       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:4       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:5       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:6       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:7       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:8       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:9       (ocf::seagate:s3server):        Started srvnode-3
+     s3server-3:10      (ocf::seagate:s3server):        Started srvnode-3
+```
