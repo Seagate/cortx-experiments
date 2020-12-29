@@ -25,9 +25,6 @@ sudo systemctl start pcsd
 sudo mkdir -p --mode=0750 /etc/pacemaker
 sudo chgrp haclient /etc/pacemaker
 
-# Note: Copy same authkey from the remote node or other cluster node
-# created earlier
-
 # create the cluster
 sudo passwd hacluster
 
