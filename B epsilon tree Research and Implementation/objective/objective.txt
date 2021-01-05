@@ -1,0 +1,2 @@
+﻿LDR currently uses B tree data structure to organized the object storage  which has  logB N (where B is block size and N is number of nodes ) time complexity for insertion and querying. As, to provide more efficiency sand better performance of LDR to customer, it is required to adapt better data structure which can provide enhancement over  B tree. So, Bε-tree is a write-optimized data structure which can reduce the cost of B tree. The objective of this  task is to compare B tree and Bε-tree and check the feasibility and performance with LDR.
+
