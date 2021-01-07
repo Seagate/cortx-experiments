@@ -17,7 +17,7 @@
 		```
 		$ ./bin/zookeeper-shell.sh localhost:2181 ls /broker/ids
 		```
-        6. Note that the partitions of existing topics will not be moved to new node automatically. It needs to be done manually as described in next section.
+### Note that the partitions of existing topics will not be moved to new node automatically. It needs to be done manually as described in next section.
 	
 2. #### Re-distributing partitions to new node
 
