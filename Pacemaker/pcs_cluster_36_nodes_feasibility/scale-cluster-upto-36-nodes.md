@@ -1,6 +1,6 @@
 # 36 Node pacemaker cluster experiments
 
-Tunning Summary:
+Cluster stability Summary:
 - Increases open file limit.
 ```
 # login
@@ -11,11 +11,13 @@ $systemctl daemon-reload
 $ ulimit -a | grep "open files"
 open files                      (-n) 1048576
 ```
+
 - Increases Pacemaker Buffer
 ```
 # Update /etc/sysconfig/pacemaker before starting cluster
 PCMK_ipc_buffer=19725604
 ```
+
 - standby/unstandby: Move 3 nodes to standby/unstandby at a time once those are done with no active resources then move to the next 3 nodes.
 
 - cluster-ipc-limit
@@ -26,13 +28,64 @@ PCMK_ipc_buffer=19725604
 pcs property set cluster-ipc-limit=10000
 ```
 
+- interleave
+  - It is clone property used in cloning useful for order.
+  - If we want to limit order of resources to same node use this.
+```
+pcs resource create hax clone interleave=true
+```
+
+- Scaling/Adding resources
+  - Best way is to create resource with minimum node. And then scale nodes.
+  - when we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
+  - **How to create/start resources in cluster:**
+  ```
+  # Create cib file
+  $ pcs cluster cib cortx-pcs.xml
+
+  # Put one node in standby
+  $ pcs -f cortx-pcs.xml cluster standby srvnode-1
+
+  # Add resources
+  $ pcs -f cortx-pcs.xml resource create myres ocf:heartbeat:Dummy
+
+  # Add nodes but not start them
+  $ pcs -f cortx-pcs.xml cluster node add srvnode-2 --enable
+  $ pcs -f cortx-pcs.xml cluster node add srvnode-3 --enable
+
+  # Now unstandby and start nodes
+  $ pcs -f cortx-pcs.xml cluster unstandby srvnode-1
+  $ pcs -f cortx-pcs.xml cluster start srvnode-2
+  $ pcs -f cortx-pcs.xml cluster start srvnode-3
+
+  # Verify and push file
+  $ pcs cluster verify -V cortx-pcs.xml
+  $ pcs cluster cib-push cortx-pcs.xml
+  ```
+
+- System Utilization (ram/cpu/network)
+  - DC node will use high utilization as it will act as leader and responsible for action.
+  - Utilization depend on no. node and resource going to affect.
+  - Standby 3 node will have less utilization but standby all node will have high utilization.
+
+- s3 and motr like service.
+  - use generic resource to create multiple clone on same node.
+  - we can modify clone size while scaling cluster.
+    ```
+    # Example
+    $ pcs resource create motr ocf:seagate:s3server service=motr unique_clone=true clone clone-max=10 clone-node-max=2 globally-unique=true
+
+    # After scaling change clone size
+    $ pcs resource update motr-clone meta clone-max=20 clone-node-max=2
+    ```
+
 Outcome:
 
 ## 1. Add nodes up to 36 verify corosync limit
 - Able to create 36 nodes cluster with 32 normal nodes and 4 remote nodes.
 - We created scripts to create 36 nodes cluster and already shared in the scripts dir.
 
-## 2. Configure the dummy resources with the dependency 
+## 2. Configure the dummy resources with the dependency
 - Configured around 618 resources with the dependecy in the cluster and observed that pcs cluster became unstable.
 - We observed from corosync logs, PCMK_ipc_buffer has exceeded buffer limit and also saw some bad file descriptor related errors.
 - We tunned some parameters to make cluster stable. Please find details in tunning section.
@@ -48,13 +101,13 @@ Below issue observed after scaling cluster and configuring resources
 **Tunning performed**
 1. IPC buffer limit
 - Increased IPC buffer limit (PCMK_ipc_buffer=19725604)
-- IPC buffer is the size of message used to corosync for heartbeat communication. 
+- IPC buffer is the size of message used to corosync for heartbeat communication.
 
 2. Open file limit
 - Increased open file limit to 1048575 (ulimit -n 1048575)
 - We observed bad file descriptor erros in the corosync logs and did above change to fix issue.
 
-3. Batch-limit 
+3. Batch-limit
 - Batch-limit is the maximum number of actions that the cluster may execute in parallel across all nodes. The "correct" value will depend on the speed and load of your network and cluster nodes. If zero, the cluster will impose a dynamically calculated limit only when any node has high load.
 - We tried 25 fixed batch-limit instead of dynamic limit and observed that network increased upto 345 Mbits/s and due to high CPU usage DC node got also changes. We also observed that some resources got time-out during unstandby nodes operation.
 - We reverted batch-limit to zero and network load back to normal. So, We concluded batch-limit zero is suitable for large cluster.
@@ -74,7 +127,7 @@ $ pcs resource # Returns the resource status of the cluster. It took around 1-2 
 ```
 
 
- ## 5. Nodes standby/Unstandby operation 
+ ## 5. Nodes standby/Unstandby operation
 
 i. pcs cluster standby/unstandby --all
 - We observed pretty much high traffic max 90 Mbits/s on the network when we performed the standby/unstandby for all the nodes of the cluster.
@@ -89,7 +142,7 @@ scripts/unstandby.sh
 
 ## 6. Network traffic
 
-i. Normal traffic after tunning 
+i. Normal traffic after tunning
 - Avg 16-17 kbits/s
 - Max 1-2 Mbits/s
 
