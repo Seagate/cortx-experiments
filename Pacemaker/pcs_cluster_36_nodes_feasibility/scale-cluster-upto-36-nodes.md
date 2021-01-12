@@ -38,8 +38,8 @@ pcs resource create hax clone interleave=true
 ```
 
 - Scaling/Adding resources
-  - Best way is to create resource with minimum node. And then scale nodes.
-  - when we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
+  - Best way is to create resource with minimum node then add nodes to scale the cluster.
+  - When we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
   - **How to create/start resources in cluster:**
   ```
   # Create cib file
@@ -49,25 +49,25 @@ pcs resource create hax clone interleave=true
   $ pcs -f cortx-pcs.xml cluster standby srvnode-1
 
   # Add resources
-  $ pcs -f cortx-pcs.xml resource create myres ocf:heartbeat:Dummy
+  $ pcs -f cortx-pcs.xml resource create myres ocf:heartbeat:Dummy clone
 
-  # Add nodes but not start them
+  # Add nodes but do not start them
   $ pcs -f cortx-pcs.xml cluster node add srvnode-2 --enable
   $ pcs -f cortx-pcs.xml cluster node add srvnode-3 --enable
-
-  # Now unstandby and start nodes
-  $ pcs -f cortx-pcs.xml cluster unstandby srvnode-1
-  $ pcs -f cortx-pcs.xml cluster start srvnode-2
-  $ pcs -f cortx-pcs.xml cluster start srvnode-3
 
   # Verify and push file
   $ pcs cluster verify -V cortx-pcs.xml
   $ pcs cluster cib-push cortx-pcs.xml
+
+  # Now unstandby srvnode-1 and start other newly added nodes in a group
+  $ pcs cluster unstandby srvnode-1
+  $ pcs cluster start srvnode-2
+  $ pcs cluster start srvnode-3
   ```
 
 - System Utilization (ram/cpu/network)
   - DC node will use high utilization as it will act as leader and responsible for action.
-  - "Resource utilization depends on number of nodes and resources".
+  - Resource utilization depends on number of nodes and resources.
   - Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
 
 - Update clone size dynamically while scaling the cluster
