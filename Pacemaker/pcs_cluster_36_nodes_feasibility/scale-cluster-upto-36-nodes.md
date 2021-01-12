@@ -21,7 +21,7 @@ PCMK_ipc_buffer=19725604
 - standby/unstandby: Move 3 nodes to standby/unstandby at a time once those are done with no active resources then move to the next 3 nodes.
 
 - cluster-ipc-limit
-  - Default value of the cluster-ipc-limit is 500 and recommanded is nodes * resources
+  - Default value of the cluster-ipc-limit is 500 and recommanded is the number of resources in the cluster multiplied by the number of nodes.
   - We tried cluster-ipc-limit 10000 when cluster has 36 nodes and 600 resources
 
 ```
@@ -31,6 +31,8 @@ pcs property set cluster-ipc-limit=10000
 - interleave
   - It is clone property used in cloning useful for order.
   - If we want to limit order of resources to same node use this.
+  - Please refer below link for the more information
+  [Clone options link](https://clusterlabs.org/pacemaker/doc/en-US/Pacemaker/1.1/html/Pacemaker_Explained/_clone_options.html)
 ```
 pcs resource create hax clone interleave=true
 ```
@@ -65,17 +67,18 @@ pcs resource create hax clone interleave=true
 
 - System Utilization (ram/cpu/network)
   - DC node will use high utilization as it will act as leader and responsible for action.
-  - Utilization depend on no. node and resource going to affect.
-  - Standby 3 node will have less utilization but standby all node will have high utilization.
+  - "Resource utilization depends on number of nodes and resources".
+  - Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
 
-- s3 and motr like service.
-  - use generic resource to create multiple clone on same node.
-  - we can modify clone size while scaling cluster.
+- Update clone size dynamically while scaling the cluster
+  - Dynamically change in the clone size is allowed in the pcs cluster and this is needed while scaling the cluster for services like motr and s3.
+  - We performed experiment mentioned in the example and able to modify clone-max and clone-node-max count.
     ```
     # Example
+    # Create resource with clone-max=10 and clone-node-max=2
     $ pcs resource create motr ocf:seagate:s3server service=motr unique_clone=true clone clone-max=10 clone-node-max=2 globally-unique=true
 
-    # After scaling change clone size
+    # Modify clone-max number later after scaling the cluster
     $ pcs resource update motr-clone meta clone-max=20 clone-node-max=2
     ```
 
@@ -101,11 +104,11 @@ Below issue observed after scaling cluster and configuring resources
 **Tunning performed**
 1. IPC buffer limit
 - Increased IPC buffer limit (PCMK_ipc_buffer=19725604)
-- IPC buffer is the size of message used to corosync for heartbeat communication.
+- IPC buffer is the size of message used by corosync for heartbeat communication.
 
 2. Open file limit
 - Increased open file limit to 1048575 (ulimit -n 1048575)
-- We observed bad file descriptor erros in the corosync logs and did above change to fix issue.
+- We observed bad file descriptor errors in the corosync logs and did above change to fix the issue.
 
 3. Batch-limit
 - Batch-limit is the maximum number of actions that the cluster may execute in parallel across all nodes. The "correct" value will depend on the speed and load of your network and cluster nodes. If zero, the cluster will impose a dynamically calculated limit only when any node has high load.
@@ -117,6 +120,7 @@ Below issue observed after scaling cluster and configuring resources
 - We tried 10000 cluster-ipc-limit but not seen much improvement in the cluster.
 - As per corosync guide this cluster property is useful for large sized cluster and recommanded value is ( Number of Nodes * Resources count )
 
+[All cluster option link](https://clusterlabs.org/pacemaker/doc/en-US/Pacemaker/1.1/html/Pacemaker_Explained/s-cluster-options.html)
 ## 4. Cluster status alternative
 - We observed that "pcs status" command is taking bit more time around 10 sec to 13 sec for the execution.
 - We figured out some other alternatives to get nodes and resources status which are much faster than "pcs status".

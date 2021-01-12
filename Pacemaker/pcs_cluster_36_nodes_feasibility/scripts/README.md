@@ -35,7 +35,7 @@
 
 ## `unstandby.sh`
 - Put all node in unstandby.
-- It put 3 node in standby at time.
+- It put 3 node in unstandby at a time.
 - Consider 1 to 32 are normal and 33 to 36 are remote node.
 ```
 ./unstandby.sh
