@@ -80,7 +80,7 @@ Use --skip-broken option if necessary.
     ```mkdir /var/run/daos_agent```
     ```chmod 0755 /var/run/daos_agent```
     
-## Create mount point for tmpfs
+## Create mount point
 
 DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulky storage. Right now for testing purpose we are going to emulate SCM with tmpfs only.
 
@@ -138,4 +138,4 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
       Make sure provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
      
      
-      You should be able to create a posix container using above source build method. Now one can create posix object (I.e., typical files) inside the container.
+      You should be able to create a posix container using above source build method.
