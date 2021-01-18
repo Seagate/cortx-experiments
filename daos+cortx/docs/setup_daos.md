@@ -7,7 +7,7 @@ There are three ways to install daos server and client on your machine.
 - DOCKER
 - Source build method
 
-Source based method is discussed below.
+Source based method is discussed below. Please note, that Provided commands are run as a root user.
 
 # DAOS single-node server setup
 
@@ -59,7 +59,7 @@ Use --skip-broken option if necessary.
 
 ```scons --config=force --build-deps=yes install```
 
-    ending logs would be as below --
+    Terminal's ending logs --
 
     mpicc -o build/release/gcc/src/tests/simple_obj.o -c -Werror -g -Wshadow -Wall -Wno-missing-braces -fpic -D_GNU_SOURCE -DD_LOG_V2 -DDAOS_VERSION=\"1.1.2.1\" -DAPI_VERSION=\"0.9.0\" -DCMOCKA_FILTER_SUPPORTED=0 -DDAOS_BUILD_RELEASE -O2 -D_FORTIFY_SOURCE=2 -Wframe-larger-than=4096 -fno-strict-overflow -fno-delete-null-pointer-checks -fwrapv -fstack-protector-strong -fstack-clash-protection -DCART_VERSION=\"4.9.0\" -DDAOS_HAS_VALGRIND -Isrc/include/daos -Isrc/include -Isrc/cart/test/utest -Isrc/cart -Isrc/cart/include -Isrc/gurt -Iinstall/prereq/release/pmdk/include -Iinstall/prereq/release/isal/include -Iinstall/prereq/release/isal_crypto/include -Isrc/tests/suite -Iinstall/prereq/release/argobots/include -Iinstall/prereq/release/protobufc/include src/tests/simple_obj.c
     mpicc -o build/release/gcc/src/tests/simple_obj -Wl,-rpath-link=build/release/gcc/src/gurt -Wl,-rpath-link=build/release/gcc/src/cart -Wl,--enable-new-dtags -Wl,-rpath-link=/root/daos_src/daos/build/release/gcc/src/gurt -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/pmdk/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/isal/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/isal_crypto/lib -Wl,-rpath-link=/root/daos_src/daos/install/lib64/daos_srv -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/argobots/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/protobufc/lib -Wl,-rpath-link=/root/daos_src/daos/install/lib64 -Wl,-rpath=/usr/lib -Wl,-rpath=\$ORIGIN/../../build/release/gcc/src/gurt -Wl,-rpath=\$ORIGIN/../prereq/release/pmdk/lib -Wl,-rpath=\$ORIGIN/../prereq/release/isal/lib -Wl,-rpath=\$ORIGIN/../prereq/release/isal_crypto/lib -Wl,-rpath=\$ORIGIN/../lib64/daos_srv -Wl,-rpath=\$ORIGIN/../prereq/release/argobots/lib -Wl,-rpath=\$ORIGIN/../prereq/release/protobufc/lib -Wl,-rpath=\$ORIGIN/../lib64 build/release/gcc/src/tests/simple_obj.o -Lbuild/release/gcc/src/gurt -Lbuild/release/gcc/src/cart/swim -Lbuild/release/gcc/src/cart -Lbuild/release/gcc/src/common -Linstall/prereq/release/pmdk/lib -Linstall/prereq/release/isal/lib -Linstall/prereq/release/isal_crypto/lib -Lbuild/release/gcc/src/bio -Lbuild/release/gcc/src/bio/smd -Lbuild/release/gcc/src/vea -Lbuild/release/gcc/src/vos -Lbuild/release/gcc/src/mgmt -Lbuild/release/gcc/src/pool -Lbuild/release/gcc/src/container -Lbuild/release/gcc/src/placement -Lbuild/release/gcc/src/dtx -Lbuild/release/gcc/src/object -Lbuild/release/gcc/src/rebuild -Lbuild/release/gcc/src/security -Lbuild/release/gcc/src/client/api -Lbuild/release/gcc/src/control -Linstall/prereq/release/argobots/lib -Linstall/prereq/release/protobufc/lib -ldaos -ldaos_common -lgurt -lcart -luuid -lcmocka -ldaos_tests
@@ -103,7 +103,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
     ```mkdir /mnt/daos```
     
-    One may use other mount-    point or directory creation as well.
+    One may use other mount-point or directory as well.
   
     ```mount -t tmpfs -o size=XXG tmpfs /mnt/daos```
 
@@ -111,9 +111,9 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 * Use 'df' command to verify mounting status.
 
-* Use this [server config file](../daos_server.yml) which is having minimum settings to up and running single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
+* Use this [server config file](daos_server.yml) which is having minimum settings to up and running single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
 
-        Files with default settings are at following locations : 
+        Server's default configuration files are located at following locations : 
 
         /root/daos_src/daos/install/etc/daos_server.yml
         /root/daos_src/daos/utils/config/daos_server.yml
@@ -125,11 +125,11 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 ## Start daos server
 
-* Starting a server process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
+* Starting a server process in new terminal can be done using following command. Please do understand that it is okay to run this process in background.
 
    ```daos_server start -o /etc/daos/daos_server.yml```
    
-        Console log --
+        Terminal log --
         
         [root@ssc-vm-2051 daos]# daos_server start -o /etc/daos/daos_server.yml
         DAOS Server config loaded from /etc/daos/daos_server.yml
@@ -140,9 +140,15 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 ## Start agent
 
-* Starting an agnet process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
+* Starting an agnet process in new terminal can be done using following command. Please do understand that it is okay to run this process in background.
 
    ```daos_agent -i```
+   
+        Agent's default configuration files are located at following locations : 
+
+        /root/daos_src/daos/install/etc/daos_agent.yml
+        /root/daos_src/daos/utils/config/daos_agent.yml
+
    
 ## Container creation
 
@@ -151,11 +157,11 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
    ```export CRT_PHY_ADDR_STR="ofi+sockets"; export OFI_INTERFACE="lo"```
 
 
-* On the first time of server process starting mounted storage space is supposed to be formatted before usage. for this purpose use below command
+* On the first time of server process starting mounted storage space is supposed to be formatted before usage. For this purpose use below command
 
   ```dmg -i storage format –reformat```
   
-        Console log --
+        Terminal log --
   
         [root@ssc-vm-2051 daos]# dmg -i storage format --reformat
         Format Summary:
@@ -168,9 +174,10 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
   ```dmg -i pool create -s 1G```
   
-      Here pool of only 1GB space is getting created. one may use other value as well, but that should be within range of allocated storage.
+  Here pool of only 1GB space is getting created. one may use other value as well, but that should be within range of allocated storage.
       
-      Console log --
+      
+      Terminal log --
         [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
         Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
         Pool created with 100.00% SCM/NVMe ratio
@@ -188,24 +195,26 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
   
         i.e. export PUUID=c7b0c9e2-028d-4dde-b016-a68743dba49a
       
-* list pool
+* List pool
 
   ```dmg -i system list-pools```
   
-        console log --
+        Terminal log --
         [root@ssc-vm-2051 daos]# dmg -i system list-pools
         Pool UUID                            Svc Replicas
         ---------                            ------------
         c7b0c9e2-028d-4dde-b016-a68743dba49a 0
 
   
-* create POSIX container
+* Create POSIX container
 
   ```daos container create --pool=$PUUID --path=/path/to/some/non-existing/location --type=POSIX```
-  
-      Make sure provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
+        
+  Make sure provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
       
-      Console log --
+      
+        Terminal log --
+      
         [root@ssc-vm-2051 daos]# daos container create --pool=$PUUID --path=/tmp/cont1 --type=POSIX
         fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
         fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
