@@ -1,5 +1,3 @@
-# System requirements
-
 # DAOS installation methods
 
 There are three ways to install daos server and client on your machine.
