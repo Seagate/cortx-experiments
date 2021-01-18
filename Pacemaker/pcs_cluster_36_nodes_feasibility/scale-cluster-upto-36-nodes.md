@@ -21,19 +21,18 @@ PCMK_ipc_buffer=19725604
 ```
 
 -   standby/unstandby: Move 3 nodes to standby/unstandby at a time once those are done with no active resources then move to the next 3 nodes.
-
 -   cluster-ipc-limit
-  -   Default value of the cluster-ipc-limit is 500 and recommanded is the number of resources in the cluster multiplied by the number of nodes.
-  -   We tried cluster-ipc-limit 10000 when cluster has 36 nodes and 600 resources
+  *   Default value of the cluster-ipc-limit is 500 and recommanded is the number of resources in the cluster multiplied by the number of nodes.
+  *   We tried cluster-ipc-limit 10000 when cluster has 36 nodes and 600 resources
 
-```bash
-pcs property set cluster-ipc-limit=10000
-```
+  ```bash
+  pcs property set cluster-ipc-limit=10000
+  ```
 
 -   interleave
-  -   It is clone property used in cloning useful for order.
-  -   If we want to limit order of resources to same node use this.
-  -   Please refer below link for the more information
+  *   It is clone property used in cloning useful for order.
+  *   If we want to limit order of resources to same node use this.
+  *   Please refer below link for the more information
   [Clone options link](https://clusterlabs.org/pacemaker/doc/en-US/Pacemaker/1.1/html/Pacemaker_Explained/_clone_options.html)
 
 ```bash
@@ -41,9 +40,9 @@ pcs resource create hax clone interleave=true
 ```
 
 -   Scaling/Adding resources
-  -   Best way is to create resource with minimum node then add nodes to scale the cluster.
-  -   When we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
-  -   **How to create/start resources in cluster:**
+  *   Best way is to create resource with minimum node then add nodes to scale the cluster.
+  *   When we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
+  **How to create/start resources in cluster:**
 
   ```bash
   # Create cib file
@@ -70,13 +69,13 @@ pcs resource create hax clone interleave=true
   ```
 
 -   System Utilization (ram/cpu/network)
-  -   DC node will use high utilization as it will act as leader and responsible for action.
-  -   Resource utilization depends on number of nodes and resources.
-  -   Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
+  *   DC node will use high utilization as it will act as leader and responsible for action.
+  *   Resource utilization depends on number of nodes and resources.
+  *   Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
 
 -   Update clone size dynamically while scaling the cluster
-  -   Dynamically change in the clone size is allowed in the pcs cluster and this is needed while scaling the cluster for services like motr and s3.
-  -   We performed experiment mentioned in the example and able to modify clone-max and clone-node-max count.
+  *   Dynamically change in the clone size is allowed in the pcs cluster and this is needed while scaling the cluster for services like motr and s3.
+  *   We performed experiment mentioned in the example and able to modify clone-max and clone-node-max count.
 
   ```bash
   # Example
@@ -106,20 +105,20 @@ Below issue observed after scaling cluster and configuring resources
 -   Bad file descriptor related errors
 
 **Tunning performed**
-1. IPC buffer limit
+1.  IPC buffer limit
 -   Increased IPC buffer limit (PCMK_ipc_buffer=19725604)
 -   IPC buffer is the size of message used by corosync for heartbeat communication.
 
-2. Open file limit
+2.  Open file limit
 -   Increased open file limit to 1048575 (ulimit -n 1048575)
 -   We observed bad file descriptor errors in the corosync logs and did above change to fix the issue.
 
-3. Batch-limit
+3.  Batch-limit
 -   Batch-limit is the maximum number of actions that the cluster may execute in parallel across all nodes. The "correct" value will depend on the speed and load of your network and cluster nodes. If zero, the cluster will impose a dynamically calculated limit only when any node has high load.
 -   We tried 25 fixed batch-limit instead of dynamic limit and observed that network increased upto 345 Mbits/s and due to high CPU usage DC node got also changes. We also observed that some resources got time-out during unstandby nodes operation.
 -   We reverted batch-limit to zero and network load back to normal. So, We concluded batch-limit zero is suitable for large cluster.
 
-4. cluster-ipc-limit
+4.  cluster-ipc-limit
 -   CLuster-ipc-limit is the maximum IPC message backlog before one cluster daemon will disconnect another. This is of use in large clusters, for which a good value is the number of resources in the cluster multiplied by the number of nodes. The default of 500 is also the minimum. Raise this if you see "Evicting client" messages for cluster daemon PIDs in the logs.
 -   We tried 10000 cluster-ipc-limit but not seen much improvement in the cluster.
 -   As per corosync guide this cluster property is useful for large sized cluster and recommanded value is ( Number of Nodes * Resources count )
@@ -137,7 +136,7 @@ $ pcs resource # Returns the resource status of the cluster. It took around 1-2 
 
 ## 5. Nodes standby/Unstandby operation
 
-1. pcs cluster standby/unstandby --all
+1.  pcs cluster standby/unstandby --all
 -   We observed pretty much high traffic max 90 Mbits/s on the network when we performed the standby/unstandby for all the nodes of the cluster.
 -   Also observed that some services failed due to timeout.
 
@@ -153,14 +152,14 @@ scripts/unstandby.sh
 
 ## 6. Network traffic
 
-1. Normal traffic after tunning
+1.  Normal traffic after tunning
 -   Avg 16-17 kbits/s
 -   Max 1-2 Mbits/s
 
-2. Standby/Unstandby after tunning with all nodes at once
+2.  Standby/Unstandby after tunning with all nodes at once
 -   Avg 3-4 Mbits/s
 -   Max 92 Mbits/s
 
-3. Standby/Unstandby after tunning with group of 3 nodes
+3.  Standby/Unstandby after tunning with group of 3 nodes
 -   Avg 1-3 Mbits/s
 -   Max 7-12 Mbits/s
