@@ -2,7 +2,7 @@
 
 ## `config.sh`
 -   It is to setup and scale cluster.
-```
+```bash
 # setup first node in cluster
 ./config.sh setup init <srvnode-id>
 # Add normal node
@@ -14,14 +14,14 @@
 ## `s3_motr_setup.sh`
 -   It copy s3server, motr service and configure s3 and motr resource.
 -   Make sure /etc/hosts and password less ssh set properly.
-```
+```bash
 ./s3_motr_setup.sh
 ```
 
 ## `add_node_resource.sh`
 -   Add resources.
 -   Try to run on minimum node and then scale node.
-```
+```bash
 ./add_node_resource.sh
 ```
 
@@ -29,7 +29,7 @@
 -   Put all node in Standby
 -   Here in 36 node we can not put all node in standby so we need to put node in some set.
 -   Here this script put 3 node in standby at a time.
-```
+```bash
 ./standby.sh
 ```
 
@@ -37,6 +37,6 @@
 -   Put all node in unstandby.
 -   It put 3 node in unstandby at a time.
 -   Consider 1 to 32 are normal and 33 to 36 are remote node.
-```
+```bash
 ./unstandby.sh
 ```

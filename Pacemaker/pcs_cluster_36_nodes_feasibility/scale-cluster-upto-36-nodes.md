@@ -130,8 +130,11 @@ Below issue observed after scaling cluster and configuring resources
 -   We figured out some other alternatives to get nodes and resources status which are much faster than "pcs status".
 
 ```bash
-$ pcs status nodes # Returns the status of all the nodes including remote nodes which are present in the cluster. It took around 1-2 secs for the execution.
-$ pcs resource # Returns the resource status of the cluster. It took around 1-2 secs for the execution.
+  # Alternative commands to get node status
+  $ pcs status nodes # Returns the status of all the nodes including remote nodes which are present in the cluster. It took around 1-2 secs for the execution.
+
+  # Alternative command to get resource status
+  $ pcs resource # Returns the resource status of the cluster. It took around 1-2 secs for the execution.
 ```
 
 ## 5. Nodes standby/Unstandby operation
@@ -145,7 +148,7 @@ Solution:
 -   We divided all the nodes in the gorup of three and moved 3 nodes to standby/unstandby at a time once those are done with no active resources then move to the next 3 nodes. These solution went well and all the services stopped and started succesfully
 -   We used below scripts to automate above operations
 
-```
+```bash 
 scripts/standby.sh
 scripts/unstandby.sh
 ```
