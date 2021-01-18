@@ -11,7 +11,7 @@ Source based method is discussed below. Please note, that Provided commands are 
 
 Source based setup method: (follow -- https://daos-stack.github.io/admin/installation/#daos-from-scratch)
 
-## Install dependencies // Specific to CentOS / RHEL
+## Install dependencies (Specific to CentOS 7.8 / RHEL 7.7 )
 
     yum -y install epel-release; \
     yum -y install \
