@@ -111,7 +111,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 * Use 'df' command to verify mounting status.
 
-* Use following [server config file](server config file) which is having minimum settings to up and running single node server. Add this .yml file to /etc/daos/daos_server.yml
+* Use this [server config file](../daos_server.yml) which is having minimum settings to up and running single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
 
         Files with default settings are at following locations : 
 
@@ -129,11 +129,20 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
    ```daos_server start -o /etc/daos/daos_server.yml```
    
+        Console log --
+        
+        [root@ssc-vm-2051 daos]# daos_server start -o /etc/daos/daos_server.yml
+        DAOS Server config loaded from /etc/daos/daos_server.yml
+        daos_server logging to file /tmp/daos_control.log
+        DAOS Control Server v1.1.2.1 (pid 510) listening on 0.0.0.0:10001
+        Checking DAOS I/O Server instance 0 storage ...
+        Metadata format required on instance 0
+
 ## Start agent
 
 * Starting an agnet process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
 
-   ```daos_agent -i -o /etc/daos/daos_agent.yml```
+   ```daos_agent -i```
    
 ## Container creation
 
@@ -145,6 +154,15 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 * On the first time of server process starting mounted storage space is supposed to be formatted before usage. for this purpose use below command
 
   ```dmg -i storage format –reformat```
+  
+        Console log --
+  
+        [root@ssc-vm-2051 daos]# dmg -i storage format --reformat
+        Format Summary:
+        Hosts     SCM Devices NVMe Devices
+        -----     ----------- ------------
+        localhost 1           0
+
 
 * Pool creation
 
@@ -152,17 +170,62 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
   
       Here pool of only 1GB space is getting created. one may use other value as well, but that should be within range of allocated storage.
       
-  ```export pool=VALUE_OF_RETURNED_UUID_IN_POOL_CREATE_COMMAND```
+      Console log --
+        [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
+        Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
+        Pool created with 100.00% SCM/NVMe ratio
+        -----------------------------------------
+          UUID          : c7b0c9e2-028d-4dde-b016-a68743dba49a
+          Service Ranks : 0
+          Storage Ranks : 0
+          Total Size    : 1.0 GB
+          SCM           : 1.0 GB (1.0 GB / rank)
+          NVMe          : 0 B (0 B / rank)
+
+
+      
+  ```export PUUID=VALUE_OF_RETURNED_UUID_IN_POOL_CREATE_COMMAND```
+  
+        i.e. export PUUID=c7b0c9e2-028d-4dde-b016-a68743dba49a
       
 * list pool
 
   ```dmg -i system list-pools```
+  
+        console log --
+        [root@ssc-vm-2051 daos]# dmg -i system list-pools
+        Pool UUID                            Svc Replicas
+        ---------                            ------------
+        c7b0c9e2-028d-4dde-b016-a68743dba49a 0
+
   
 * create POSIX container
 
   ```daos container create --pool=$PUUID --path=/path/to/some/non-existing/location --type=POSIX```
   
       Make sure provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
+      
+      Console log --
+        [root@ssc-vm-2051 daos]# daos container create --pool=$PUUID --path=/tmp/cont1 --type=POSIX
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+        daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+        daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-1664
+        mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+        crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+        client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
+        client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
+        client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
+        client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
+        client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
+        client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont1, type=POSIX, oclass=UNKNOWN, chunk_size=0
+        client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
+        client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
+        Successfully created container 226b4ee3-c972-4fea-8619-82f30e5bec4b type POSIX
+        fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+        fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
      
      
-      You should be able to create a posix container using above source build method.
+You should be able to create a posix container using above source build method.
