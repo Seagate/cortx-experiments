@@ -7,7 +7,7 @@ There are three ways to install daos server and client on your machine.
 - DOCKER
 - Source build method
 
-source based method is discussed below.
+Source based method is discussed below.
 
 # DAOS single-node server setup
 
@@ -43,7 +43,7 @@ Source based setup method: (follow -- https://daos-stack.github.io/admin/install
 
 Use --skip-broken option if necessary.
 
-## clone repo
+## Clone repo
 
 * For the current development version,
 
@@ -53,7 +53,7 @@ Use --skip-broken option if necessary.
 
   ```git clone --recurse-submodules -b v1.0.1 https://github.com/daos-stack/daos.git```
   
-## build daos
+## Build daos
 
 ```cd daos```
 
@@ -69,7 +69,7 @@ Use --skip-broken option if necessary.
 
 [ Note -- By default, DAOS and its dependencies are installed under ${daospath}/install. The installation path can be modified by adding the PREFIX= option to the above command line (e.g., PREFIX=/usr/local).]
 
-## set environment
+## Set environment
 
 * Export following paths to your .bashrc
 
@@ -85,7 +85,7 @@ Use --skip-broken option if necessary.
     
     ```source ~/.bashrc```
     
-* required directory setup
+* Required directory setup
 
     ```mkdir /var/run/daos_server```
     
@@ -99,27 +99,39 @@ Use --skip-broken option if necessary.
 
 DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulky storage. Right now for testing purpose we are going to emulate SCM with tmpfs only.
 
-* mount tmpfs
+* Mount tmpfs
+
+    ```mkdir /mnt/daos```
+    
+    One may use other mount-    point or directory creation as well.
   
     ```mount -t tmpfs -o size=XXG tmpfs /mnt/daos```
 
-       (make sure /mnt/daos is created and not in use.) 
+    XX could be number of GB storage one is willing to allocate while mounting tmpfs. 
 
-* use 'df' command to verify mounting status.
+* Use 'df' command to verify mounting status.
+
+* Use following [server config file](server config file) which is having minimum settings to up and running single node server. Add this .yml file to /etc/daos/daos_server.yml
+
+        Files with default settings are at following locations : 
+
+        /root/daos_src/daos/install/etc/daos_server.yml
+        /root/daos_src/daos/utils/config/daos_server.yml
+
 
 * /mnt/daos is the default location specified under /etc/daos/daos_server.yml file
 
 * Space XX GB should also be specified inside daos_server.yml file
 
-## start daos server
+## Start daos server
 
-* starting a server process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
+* Starting a server process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
 
    ```daos_server start -o /etc/daos/daos_server.yml```
    
-## start agent
+## Start agent
 
-* starting an agnet process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
+* Starting an agnet process in new terminal can be done using following command. please do understand that it is okay to run this process in background.
 
    ```daos_agent -i -o /etc/daos/daos_agent.yml```
    
