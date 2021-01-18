@@ -57,7 +57,15 @@ Use --skip-broken option if necessary.
 
 ```cd daos```
 
-```cd scons --config=force --build-deps=yes install```
+```scons --config=force --build-deps=yes install```
+
+    ending logs would be as below --
+
+    mpicc -o build/release/gcc/src/tests/simple_obj.o -c -Werror -g -Wshadow -Wall -Wno-missing-braces -fpic -D_GNU_SOURCE -DD_LOG_V2 -DDAOS_VERSION=\"1.1.2.1\" -DAPI_VERSION=\"0.9.0\" -DCMOCKA_FILTER_SUPPORTED=0 -DDAOS_BUILD_RELEASE -O2 -D_FORTIFY_SOURCE=2 -Wframe-larger-than=4096 -fno-strict-overflow -fno-delete-null-pointer-checks -fwrapv -fstack-protector-strong -fstack-clash-protection -DCART_VERSION=\"4.9.0\" -DDAOS_HAS_VALGRIND -Isrc/include/daos -Isrc/include -Isrc/cart/test/utest -Isrc/cart -Isrc/cart/include -Isrc/gurt -Iinstall/prereq/release/pmdk/include -Iinstall/prereq/release/isal/include -Iinstall/prereq/release/isal_crypto/include -Isrc/tests/suite -Iinstall/prereq/release/argobots/include -Iinstall/prereq/release/protobufc/include src/tests/simple_obj.c
+    mpicc -o build/release/gcc/src/tests/simple_obj -Wl,-rpath-link=build/release/gcc/src/gurt -Wl,-rpath-link=build/release/gcc/src/cart -Wl,--enable-new-dtags -Wl,-rpath-link=/root/daos_src/daos/build/release/gcc/src/gurt -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/pmdk/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/isal/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/isal_crypto/lib -Wl,-rpath-link=/root/daos_src/daos/install/lib64/daos_srv -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/argobots/lib -Wl,-rpath-link=/root/daos_src/daos/install/prereq/release/protobufc/lib -Wl,-rpath-link=/root/daos_src/daos/install/lib64 -Wl,-rpath=/usr/lib -Wl,-rpath=\$ORIGIN/../../build/release/gcc/src/gurt -Wl,-rpath=\$ORIGIN/../prereq/release/pmdk/lib -Wl,-rpath=\$ORIGIN/../prereq/release/isal/lib -Wl,-rpath=\$ORIGIN/../prereq/release/isal_crypto/lib -Wl,-rpath=\$ORIGIN/../lib64/daos_srv -Wl,-rpath=\$ORIGIN/../prereq/release/argobots/lib -Wl,-rpath=\$ORIGIN/../prereq/release/protobufc/lib -Wl,-rpath=\$ORIGIN/../lib64 build/release/gcc/src/tests/simple_obj.o -Lbuild/release/gcc/src/gurt -Lbuild/release/gcc/src/cart/swim -Lbuild/release/gcc/src/cart -Lbuild/release/gcc/src/common -Linstall/prereq/release/pmdk/lib -Linstall/prereq/release/isal/lib -Linstall/prereq/release/isal_crypto/lib -Lbuild/release/gcc/src/bio -Lbuild/release/gcc/src/bio/smd -Lbuild/release/gcc/src/vea -Lbuild/release/gcc/src/vos -Lbuild/release/gcc/src/mgmt -Lbuild/release/gcc/src/pool -Lbuild/release/gcc/src/container -Lbuild/release/gcc/src/placement -Lbuild/release/gcc/src/dtx -Lbuild/release/gcc/src/object -Lbuild/release/gcc/src/rebuild -Lbuild/release/gcc/src/security -Lbuild/release/gcc/src/client/api -Lbuild/release/gcc/src/control -Linstall/prereq/release/argobots/lib -Linstall/prereq/release/protobufc/lib -ldaos -ldaos_common -lgurt -lcart -luuid -lcmocka -ldaos_tests
+    scons: done building targets.
+[root@ssc-vm-2051 daos]#
+
 
 [ Note -- By default, DAOS and its dependencies are installed under ${daospath}/install. The installation path can be modified by adding the PREFIX= option to the above command line (e.g., PREFIX=/usr/local).]
 
@@ -65,19 +73,26 @@ Use --skip-broken option if necessary.
 
 * Export following paths to your .bashrc
 
+    ```~/.bashrc```
+    
     ```export daospath=/path/to/your/daos/main/directory``` 
 
     ```CPATH=${daospath}/install/include/:$CPATH```
 
     ```PATH=${daospath}/install/bin/:${daospath}/install/sbin:$PATH```
 
-    ```export CPATH PATH``` 
+    ```export CPATH PATH```
+    
+    ```source ~/.bashrc```
     
 * required directory setup
 
     ```mkdir /var/run/daos_server```
+    
     ```chmod 0755 /var/run/daos_server```
+    
     ```mkdir /var/run/daos_agent```
+    
     ```chmod 0755 /var/run/daos_agent```
     
 ## Create mount point
