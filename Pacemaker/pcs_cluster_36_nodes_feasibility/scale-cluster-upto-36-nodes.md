@@ -22,17 +22,17 @@ PCMK_ipc_buffer=19725604
 
 -   standby/unstandby: Move 3 nodes to standby/unstandby at a time once those are done with no active resources then move to the next 3 nodes.
 -   cluster-ipc-limit
-  *   Default value of the cluster-ipc-limit is 500 and recommanded is the number of resources in the cluster multiplied by the number of nodes.
-  *   We tried cluster-ipc-limit 10000 when cluster has 36 nodes and 600 resources
+    *   Default value of the cluster-ipc-limit is 500 and recommanded is the number of resources in the cluster multiplied by the number of nodes.
+    *   We tried cluster-ipc-limit 10000 when cluster has 36 nodes and 600 resources
 
   ```bash
   pcs property set cluster-ipc-limit=10000
   ```
 
 -   interleave
-  *   It is clone property used in cloning useful for order.
-  *   If we want to limit order of resources to same node use this.
-  *   Please refer below link for the more information
+    *   It is clone property used in cloning useful for order.
+    *   If we want to limit order of resources to same node use this.
+    *   Please refer below link for the more information
   [Clone options link](https://clusterlabs.org/pacemaker/doc/en-US/Pacemaker/1.1/html/Pacemaker_Explained/_clone_options.html)
 
 ```bash
@@ -40,8 +40,8 @@ pcs resource create hax clone interleave=true
 ```
 
 -   Scaling/Adding resources
-  *   Best way is to create resource with minimum node then add nodes to scale the cluster.
-  *   When we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
+    *   Best way is to create resource with minimum node then add nodes to scale the cluster.
+    *   When we create resource with 36 node then network traffics/cpu usage increases quickly. To avoid this problem use below step.
   **How to create/start resources in cluster:**
 
   ```bash
@@ -69,13 +69,13 @@ pcs resource create hax clone interleave=true
   ```
 
 -   System Utilization (ram/cpu/network)
-  *   DC node will use high utilization as it will act as leader and responsible for action.
-  *   Resource utilization depends on number of nodes and resources.
-  *   Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
+    *   DC node will use high utilization as it will act as leader and responsible for action.
+    *   Resource utilization depends on number of nodes and resources.
+    *   Standby 3 nodes will have less utilization but standby all nodes will have high utilization.
 
 -   Update clone size dynamically while scaling the cluster
-  *   Dynamically change in the clone size is allowed in the pcs cluster and this is needed while scaling the cluster for services like motr and s3.
-  *   We performed experiment mentioned in the example and able to modify clone-max and clone-node-max count.
+    *   Dynamically change in the clone size is allowed in the pcs cluster and this is needed while scaling the cluster for services like motr and s3.
+    *   We performed experiment mentioned in the example and able to modify clone-max and clone-node-max count.
 
   ```bash
   # Example
