@@ -75,11 +75,11 @@
 
     ```touch build_deps.sh```
     
-    - To get the latest contents for buuld script, kindly checkout mpifileutil's github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
+    - To get the latest contents for build script, kindly checkout mpifileutil's [github-repo](https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst#build-everything-directly)
     
     - Copy contents from above locations to build scripts.
     
-            Sample build scripts is presented here[../src/samples/build_deps.sh]
+            Sample build scripts is presented [here](../src/samples/build_deps.sh)
 
 *  Run build script
 
@@ -109,14 +109,14 @@
 
 # Build mpifileutils source
 
-* Make sure daos setup and building is already done using these steps[setup_daos.md].
+* Make sure daos setup and building is already done using these [steps](setup_daos.md).
 
 * build latest mpiFileUtils from the master branch with DAOS Support
     
 
     ```git clone --depth 1 https://github.com/hpc/mpifileutils```
     
-    - Commands are also availble inside command at github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
+    - Commands are also availble inside command at [github-repo](https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst)
     
             Terminal logs -
     
@@ -253,7 +253,7 @@
 
 # Object copy using mpifileutils
 
-* Create two empty POSIX containers using these steps[https://github.com/Seagate/cortx-experiments/blob/main/daos%2Bcortx/docs/setup_daos.md#start-agent]
+* Create two empty POSIX containers using these [steps](https://github.com/Seagate/cortx-experiments/blob/main/daos%2Bcortx/docs/setup_daos.md#start-agent)
 
     - Pool creation & export
     
@@ -277,14 +277,14 @@
             ---------                            ------------
             c7b0c9e2-028d-4dde-b016-a68743dba49a 0
 
-            [root@ssc-vm-2051 daos]# export pool1=c7b0c9e2-028d-4dde-b016-a68743dba49a
+            [root@ssc-vm-2051 daos]# export pool_id=c7b0c9e2-028d-4dde-b016-a68743dba49a
 
 
     - Container 1 creation & export
         
         Terminal logs -
 
-            [root@ssc-vm-2051 daos]# daos container create --pool=$pool1 --path=/tmp/cont1 --type=POSIX
+            [root@ssc-vm-2051 daos]# daos container create --pool=$pool_id --path=/tmp/s_container --type=POSIX
             fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
             fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
             daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
@@ -298,7 +298,7 @@
             client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
             client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
             client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
-            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont1, type=POSIX, oclass=UNKNOWN, chunk_size=0
+            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/s_container, type=POSIX, oclass=UNKNOWN, chunk_size=0
             client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
             client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
             Successfully created container 226b4ee3-c972-4fea-8619-82f30e5bec4b type POSIX
@@ -306,13 +306,13 @@
             fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
             [root@ssc-vm-2051 daos]#
 
-            [root@ssc-vm-2051 daos]# export cont1=226b4ee3-c972-4fea-8619-82f30e5bec4b
+            [root@ssc-vm-2051 daos]# export src_container_id=226b4ee3-c972-4fea-8619-82f30e5bec4b
 
     - Container 2 creation & export
     
             Terminal logs -
 
-            [root@ssc-vm-2051 daos]# daos container create --pool=$pool1 --path=/tmp/cont2 --type=POSIX
+            [root@ssc-vm-2051 daos]# daos container create --pool=$pool_id --path=/tmp/d_container --type=POSIX
             fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
             fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
             daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
@@ -326,7 +326,7 @@
             client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
             client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
             client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
-            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont2, type=POSIX, oclass=UNKNOWN, chunk_size=0
+            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/d_container, type=POSIX, oclass=UNKNOWN, chunk_size=0
             client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
             client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
             Successfully created container bcd454f5-fef6-4705-8495-77d2b918c5da type POSIX
@@ -334,22 +334,22 @@
             fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
             [root@ssc-vm-2051 daos]#
             
-            [root@ssc-vm-2051 daos]# export cont2=bcd454f5-fef6-4705-8495-77d2b918c5da
+            [root@ssc-vm-2051 daos]# export dest_container_id=bcd454f5-fef6-4705-8495-77d2b918c5da
 
 
-# Mount cotainer using dfuse
+# Mount container using dfuse
 
 * Create new directories to mount containers
 
-    ```mkdir /mnt/rajkumar/cont1```
+    ```mkdir /mnt/rajkumar/dfuse_s_container```
     
-    ```mkdir /mnt/rajkumar/cont2```
+    ```mkdir /mnt/rajkumar/dfuse_d_container```
 
 * Mount containers
 
-    ```dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1```
+    ```dfuse -m /mnt/rajkumar/dfuse_s_container --pool $pool_id --cont $src_container_id```
 
-        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1
+        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/dfuse_s_container --pool $pool_id --cont $src_container_id
         fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
         fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
         daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
@@ -362,9 +362,9 @@
         dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0x824000) duns_resolve_path() returned 61 No data available
         dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
 
-    ```dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2```
+    ```dfuse -m /mnt/rajkumar/dfuse_d_container --pool $pool_id --cont $dest_container_id```
 
-        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2
+        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/dfuse_d_container --pool $pool_id --cont $dest_container_id
         fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
         fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
         daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
@@ -377,28 +377,28 @@
         dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0xa98000) duns_resolve_path() returned 61 No data available
         dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
 
-* craete objects (files) inside container
+* Create objects (files) inside container
 
 
-    ```cd /mnt/rajkumar/cont1```
+    ```cd /mnt/rajkumar/dfuse_s_container```
         
     ```touch fileA fileB```
         
      Checking contents of both container -
         
-        [root@ssc-vm-2051 cont1]# ls
+        [root@ssc-vm-2051 dfuse_s_container]# ls
         fileA  fileB
         
-        [root@ssc-vm-2051 cont1]# cd /mnt/rajkumar/cont2
-        [root@ssc-vm-2051 cont2]# ls
-        [root@ssc-vm-2051 cont2]#
+        [root@ssc-vm-2051 dfuse_s_container]# cd /mnt/rajkumar/dfuse_d_container
+        [root@ssc-vm-2051 dfuse_d_container]# ls
+        [root@ssc-vm-2051 dfuse_d_container]#
 
 
 * Object copy
 
     For object copy within a pool and between containers dcp command is used to showcase the operation.
 
-    ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool1 --daos-src-cont $cont1 --daos-dst-pool $pool1 --daos-dst-cont $cont2```
+    ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool_id --daos-src-cont $src_container_id --daos-dst-pool $pool_id --daos-dst-cont $dest_container_id```
 
     make sure openmpi commands (mpicc, mpirun) are already added in path and eccessible.
     
@@ -406,7 +406,7 @@
 
         Terminal logs -
         
-        [root@ssc-vm-2051 cont2]# mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool --daos-src-cont $cont1 --daos-dst-pool $pool --daos-dst-cont $cont2
+        [root@ssc-vm-2051 dfuse_d_container]# mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool_id --daos-src-cont $src_container_id --daos-dst-pool $pool_id --daos-dst-cont $dest_container_id
         01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
         01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
         01/19-00:49:06.64 ssc-vm-2051 DAOS[7782/7782] daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
@@ -418,13 +418,13 @@
         [2021-01-19T00:49:09] Successfully copied to DAOS Destination Container.
         01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
         01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-        [root@ssc-vm-2051 cont2]#
+        [root@ssc-vm-2051 dfuse_d_container]#
 
     To verify -
         
-        [root@ssc-vm-2051 cont2]# cd /mnt/rajkumar/cont2
-        [root@ssc-vm-2051 cont2]# ls
+        [root@ssc-vm-2051 dfuse_d_container]# cd /mnt/rajkumar/dfuse_d_container
+        [root@ssc-vm-2051 dfuse_d_container]# ls
         fileA  fileB
-        [root@ssc-vm-2051 cont2]#
+        [root@ssc-vm-2051 dfuse_d_container]#
 
-This clearly demonstrate that 2 file objects which were part of POSIX type container 1 (source) are copied to POSIX type container 2(destinaltion) using mpifileutils and that too within a single pool.
+This demonstrates that 2 file objects which were part of POSIX type container 1 (source) are copied to POSIX type container 2(destination) using mpifileutils and that too within a single pool.
