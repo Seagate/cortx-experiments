@@ -1,4 +1,3 @@
-
 #!/bin/bash
 mkdir install
 installdir=`pwd`/install
