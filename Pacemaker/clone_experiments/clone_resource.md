@@ -34,10 +34,10 @@
   - location:
     - prefers, avoid for normal case like allow/not allow resource on current node even if other node not available.
     - complex: `constraint location csm-kibana rule score=-INFINITY '#uname' eq $lnode and consul-c1-running eq 0`
-    - Use **resource-discovery**=never if we don't want resource to run anywhere in system.
-      - always: default, discover on this node.
-      - never: never find on this node.
-      - exclusive: only find on this node and exclude other node. If run with multiple node name then it maintain set of active node.
+    - Below are options for **resource-discovery**:
+      - always: default, discover resource on this node.
+      - never: never find resource on this node.
+      - exclusive: only find resource on this node and exclude other node. If run with multiple node name then it maintain set of active node.
     ```bash
       # Fast performance use resource-discovery
       $ pcs constraint location add http_ban_1 http srvnode-1 -INFINITY resource-discovery=never
