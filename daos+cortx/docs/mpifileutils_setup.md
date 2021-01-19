@@ -2,114 +2,162 @@
 
 * cmake version 3.1 or more required.
 
-    Terminal logs --
-    [root@ssc-vm-2051 daos]# cmake3 --version
-    cmake3 version 3.17.5
+    ```yum install cmake3```
+        
+        To Verify -
+        
+        ```cmake3 --version```
+        
+        Terminal logs -
+        
+        [root@ssc-vm-2051 daos]# cmake3 --version
+        cmake3 version 3.17.5
 
-    CMake suite maintained and supported by Kitware (kitware.com/cmake).
+        CMake suite maintained and supported by Kitware (kitware.com/cmake).
 
-yum install openmpi
+* Install openmpi
 
-Downloading packages:
-openmpi-1.10.7-5.el7.x86_64.rpm                                                                                                       | 3.1 MB  00:00:00
-Running transaction check
-Running transaction test
-Transaction test succeeded
-Running transaction
-  Installing : openmpi-1.10.7-5.el7.x86_64                                                                                                               1/1
-Loaded plugins: fastestmirror, product-id, subscription-manager
-  Verifying  : openmpi-1.10.7-5.el7.x86_64                                                                                                               1/1
+    ```yum install openmpi```
 
-Installed:
-  openmpi.x86_64 0:1.10.7-5.el7
+        Terminal's ending logs -
+        
+        Downloading packages:
+        openmpi-1.10.7-5.el7.x86_64.rpm                                                                                                       | 3.1 MB  00:00:00
+        Running transaction check
+        Running transaction test
+        Transaction test succeeded
+        Running transaction
+          Installing : openmpi-1.10.7-5.el7.x86_64                                                                                                               1/1
+        Loaded plugins: fastestmirror, product-id, subscription-manager
+          Verifying  : openmpi-1.10.7-5.el7.x86_64                                                                                                               1/1
 
-Complete!
+        Installed:
+          openmpi.x86_64 0:1.10.7-5.el7
 
-[root@ssc-vm-2051 daos]# ls /usr/lib64/openmpi3/bin/
-aggregate_profile.pl  mpif77                ompi_info             orte-clean            orte-server           oshfort               shmemcc
-mpic++                mpif90                ompi-ps               orted                 orte-top              oshmem_info           shmemCC
-mpicc                 mpifort               ompi-server           orte-dvm              oshc++                oshrun                shmemcxx
-mpiCC                 mpirun                ompi-top              orte-info             oshcc                 profile2mat.pl        shmemfort
-mpicxx                ompi-clean            opal_wrapper          orte-ps               oshCC                 prun                  shmemrun
-mpiexec               ompi-dvm              ortecc                orterun               oshcxx                shmemc++
-[root@ssc-vm-2051 daos]# PATH=/usr/lib64/openmpi3/bin/:$PATH
-[root@ssc-vm-2051 daos]# mpicc
-gcc: fatal error: no input files
-
-
-
-[root@ssc-vm-2051 daos]# which mpicc
-/usr/lib64/openmpi3/bin/mpicc
-
-# mkdir ./mpifileutils_src
-cd mpifileutils_src
-
-vim build_deps.sh
-add contents
-run it
-
-libtool: install: /bin/install -c .libs/libdtcmp.so /root/mpifileutils_src/install/lib/libdtcmp.so
-libtool: install: /bin/install -c .libs/libdtcmp.lai /root/mpifileutils_src/install/lib/libdtcmp.la
-libtool: install: /bin/install -c .libs/libdtcmp.a /root/mpifileutils_src/install/lib/libdtcmp.a
-libtool: install: chmod 644 /root/mpifileutils_src/install/lib/libdtcmp.a
-libtool: install: ranlib /root/mpifileutils_src/install/lib/libdtcmp.a
-libtool: finish: PATH="/usr/lib64/openmpi3/bin/:/root/daos_src/daos/install/bin/:/root/daos_src/daos/install/sbin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/root/bin:/sbin" ldconfig -n /root/mpifileutils_src/install/lib
-----------------------------------------------------------------------
-Libraries have been installed in:
-   /root/mpifileutils_src/install/lib
-
-If you ever happen to want to link against installed libraries
-in a given directory, LIBDIR, you must either use libtool, and
-specify the full pathname of the library, or use the `-LLIBDIR'
-flag during linking and do at least one of the following:
-   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
-     during execution
-   - add LIBDIR to the `LD_RUN_PATH' environment variable
-     during linking
-   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
-   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
-
-See any operating system documentation about shared libraries for
-more information, such as the ld(1) and ld.so(8) manual pages.
-----------------------------------------------------------------------
- /bin/mkdir -p '/root/mpifileutils_src/install/include'
- /bin/install -c -m 644 dtcmp.h '/root/mpifileutils_src/install/include'
-make[2]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0/src'
-make[1]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0/src'
-make[1]: Entering directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
-make[2]: Entering directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
-make[2]: Nothing to be done for `install-exec-am'.
- /bin/mkdir -p '/root/mpifileutils_src/install/share/dtcmp'
- /bin/install -c -m 644 README LICENSE.TXT '/root/mpifileutils_src/install/share/dtcmp'
- /bin/mkdir -p '/root/mpifileutils_src/install/lib/pkgconfig'
- /bin/install -c -m 644 libdtcmp.pc '/root/mpifileutils_src/install/lib/pkgconfig'
-make[2]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
-make[1]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
+        Complete!
 
 
-git clone https://github.com/hpc/mpifileutils
+        To verify -
+        
+        ```ls /usr/lib64/openmpi3/bin/```
+        
+        Terminal's log -
+        
+        [root@ssc-vm-2051 daos]# ls /usr/lib64/openmpi3/bin/
+    
+        aggregate_profile.pl  mpif77                ompi_info             orte-clean            orte-server           oshfort               shmemcc
+        mpic++                mpif90                ompi-ps               orted                 orte-top              oshmem_info           shmemCC
+        mpicc                 mpifort               ompi-server           orte-dvm              oshc++                oshrun                shmemcxx
+        mpiCC                 mpirun                ompi-top              orte-info             oshcc                 profile2mat.pl        shmemfort
+        mpicxx                ompi-clean            opal_wrapper          orte-ps               oshCC                 prun                  shmemrun
+        mpiexec               ompi-dvm              ortecc                orterun               oshcxx                shmemc++
 
-mkdir build
+* Add path
 
-cd build
+     ```export PATH=/usr/lib64/openmpi3/bin/:$PATH```
 
-cmake3 ../mpifileutils -DWITH_DTCMP_PREFIX=../install -DWITH_LibCircle_PREFIX=../install -DWITH_CART_PREFIX=/root/src_daos/daos/install -DWITH_DAOS_PREFIX=/root/src_daos/daos/install -DCMAKE_INSTALL_PREFIX=../install -DENABLE_DAOS=ON
+        To verify --
+        
+        ``` mpicc``` 7 ```which mpicc```
+        
+        Terminal logs -
+        
+        [root@ssc-vm-2051 daos]# mpicc
+        gcc: fatal error: no input files
 
--- MPI Executable:       /usr/lib64/openmpi3/bin/mpiexec
--- MPI Num Proc Flag:    -n
--- Found DTCMP: /root/mpifileutils_src/install/lib/libdtcmp.so
-CMake Error at /usr/share/cmake3/Modules/FindPackageHandleStandardArgs.cmake:164 (message):
-  Could NOT find LibArchive (missing: LibArchive_LIBRARIES
-  LibArchive_INCLUDE_DIRS) (Required is at least version "3.5.0")
-Call Stack (most recent call first):
-  /usr/share/cmake3/Modules/FindPackageHandleStandardArgs.cmake:445 (_FPHSA_FAILURE_MESSAGE)
-  cmake/FindLibArchive.cmake:22 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-  CMakeLists.txt:87 (FIND_PACKAGE)
+        [root@ssc-vm-2051 daos]# which mpicc
+        /usr/lib64/openmpi3/bin/mpicc
+
+# Install dependencies
+
+* Make a directory for your setup
+
+    ```mkdir mpifileutils_src```
+
+* Create a build script
+
+    ```touch build_deps.sh```
+    
+    - To get the latest contents for buuld script, kindly checkout mpifileutil's github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
+    
+    - Copy contents from above locations to build scripts.
+    
+            Sample build scripts is presented here[] //TODO
+
+*  Run build script
+
+    ```sh build_deps.sh```
+
+        Terminal logs -
+        
+        libtool: install: /bin/install -c .libs/libdtcmp.so /root/mpifileutils_src/install/lib/libdtcmp.so
+        libtool: install: /bin/install -c .libs/libdtcmp.lai /root/mpifileutils_src/install/lib/libdtcmp.la
+        libtool: install: /bin/install -c .libs/libdtcmp.a /root/mpifileutils_src/install/lib/libdtcmp.a
+        libtool: install: chmod 644 /root/mpifileutils_src/install/lib/libdtcmp.a
+        libtool: install: ranlib /root/mpifileutils_src/install/lib/libdtcmp.a
+        libtool: finish: PATH="/usr/lib64/openmpi3/bin/:/root/daos_src/daos/install/bin/:/root/daos_src/daos/install/sbin:/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/root/bin:/sbin" ldconfig -n /root/mpifileutils_src/install/lib
+        ----------------------------------------------------------------------
+        Libraries have been installed in:
+           /root/mpifileutils_src/install/lib
+
+        If you ever happen to want to link against installed libraries
+        in a given directory, LIBDIR, you must either use libtool, and
+        specify the full pathname of the library, or use the `-LLIBDIR'
+        flag during linking and do at least one of the following:
+           - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+             during execution
+           - add LIBDIR to the `LD_RUN_PATH' environment variable
+             during linking
+           - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+           - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+        See any operating system documentation about shared libraries for
+        more information, such as the ld(1) and ld.so(8) manual pages.
+        ----------------------------------------------------------------------
+         /bin/mkdir -p '/root/mpifileutils_src/install/include'
+         /bin/install -c -m 644 dtcmp.h '/root/mpifileutils_src/install/include'
+        make[2]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0/src'
+        make[1]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0/src'
+        make[1]: Entering directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
+        make[2]: Entering directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
+        make[2]: Nothing to be done for `install-exec-am'.
+         /bin/mkdir -p '/root/mpifileutils_src/install/share/dtcmp'
+         /bin/install -c -m 644 README LICENSE.TXT '/root/mpifileutils_src/install/share/dtcmp'
+         /bin/mkdir -p '/root/mpifileutils_src/install/lib/pkgconfig'
+         /bin/install -c -m 644 libdtcmp.pc '/root/mpifileutils_src/install/lib/pkgconfig'
+        make[2]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
+        make[1]: Leaving directory `/root/mpifileutils_src/deps/dtcmp-1.1.0'
 
 
--- Configuring incomplete, errors occurred!
-See also "/root/mpifileutils_src/build/CMakeFiles/CMakeOutput.log".
-[root@ssc-vm-2051 build]#
+# Clone source
+
+    build latest mpiFileUtils from the master branch with DAOS Support
+
+    ```git clone https://github.com/hpc/mpifileutils```
+
+    ```mkdir build```
+
+    ```cd build```
+
+    ```cmake3 ../mpifileutils -DWITH_DTCMP_PREFIX=../install -DWITH_LibCircle_PREFIX=../install -DWITH_CART_PREFIX=/root/src_daos/daos/install -DWITH_DAOS_PREFIX=/root/src_daos/daos/install -DCMAKE_INSTALL_PREFIX=../install -DENABLE_DAOS=ON```
+
+        Terminal logs -
+        
+        -- MPI Executable:       /usr/lib64/openmpi3/bin/mpiexec
+        -- MPI Num Proc Flag:    -n
+        -- Found DTCMP: /root/mpifileutils_src/install/lib/libdtcmp.so
+        CMake Error at /usr/share/cmake3/Modules/FindPackageHandleStandardArgs.cmake:164 (message):
+          Could NOT find LibArchive (missing: LibArchive_LIBRARIES
+          LibArchive_INCLUDE_DIRS) (Required is at least version "3.5.0")
+        Call Stack (most recent call first):
+          /usr/share/cmake3/Modules/FindPackageHandleStandardArgs.cmake:445 (_FPHSA_FAILURE_MESSAGE)
+          cmake/FindLibArchive.cmake:22 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+          CMakeLists.txt:87 (FIND_PACKAGE)
+
+
+        -- Configuring incomplete, errors occurred!
+        See also "/root/mpifileutils_src/build/CMakeFiles/CMakeOutput.log".
+        [root@ssc-vm-2051 build]#
 
 
 PATH=/home/737530/integration/cmake-3.6.2/Utilities/cmlibarchive/libarchive:$PATH
