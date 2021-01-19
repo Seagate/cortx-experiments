@@ -17,7 +17,7 @@
 
 * Install openmpi
 
-    ```yum install openmpi```
+    ```yum -y install openmpi3-devel```
 
         Terminal's ending logs -
         
@@ -172,7 +172,7 @@
 
         Terminal logs -
         
-                [root@ssc-vm-2051 build]#  cmake3 ../mpifileutils -DWITH_DTCMP_PREFIX=../install -DWITH_LibCircle_PREFIX=../install -DWITH_CART_PREFIX=/root/daos_src/daos/install -D
+        [root@ssc-vm-2051 build]#  cmake3 ../mpifileutils -DWITH_DTCMP_PREFIX=../install -DWITH_LibCircle_PREFIX=../install -DWITH_CART_PREFIX=/root/daos_src/daos/install -D
         WITH_DAOS_PREFIX=/root/daos_src/daos/install -DCMAKE_INSTALL_PREFIX=../install -DENABLE_DAOS=ON
         -- The C compiler identification is GNU 4.8.5
         -- The CXX compiler identification is GNU 4.8.5
@@ -253,115 +253,174 @@
 
 # Object copy using mpifileutils
 
+* Create two empty POSIX containers using these steps[https://github.com/Seagate/cortx-experiments/blob/main/daos%2Bcortx/docs/setup_daos.md#start-agent]
+
+    - Pool creation & export
+    
+            Terminal log -
+            
+            [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
+            Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
+            Pool created with 100.00% SCM/NVMe ratio
+            -----------------------------------------
+              UUID          : c7b0c9e2-028d-4dde-b016-a68743dba49a
+              Service Ranks : 0
+              Storage Ranks : 0
+              Total Size    : 1.0 GB
+              SCM           : 1.0 GB (1.0 GB / rank)
+              NVMe          : 0 B (0 B / rank)
+
+            [root@ssc-vm-2051 daos]#
+            [root@ssc-vm-2051 daos]#
+            [root@ssc-vm-2051 daos]# dmg -i system list-pools
+            Pool UUID                            Svc Replicas
+            ---------                            ------------
+            c7b0c9e2-028d-4dde-b016-a68743dba49a 0
+            
+            [root@ssc-vm-2051 daos]# export pool1=c7b0c9e2-028d-4dde-b016-a68743dba49a
 
 
-[root@ssc-vm-2051 daos]#
-[root@ssc-vm-2051 daos]# daos container create --pool=$pool --path=/tmp/cont2 --type=POSIX
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
-daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
-daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-6666
-mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
-crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
-client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
-client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
-client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
-client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
-client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
-client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont2, type=POSIX, oclass=UNKNOWN, chunk_size=0
-client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
-client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
-Successfully created container bcd454f5-fef6-4705-8495-77d2b918c5da type POSIX
-fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-[root@ssc-vm-2051 daos]#
-[root@ssc-vm-2051 daos]#
+    - Container 1 creation & export
+        
+            Terminal logs -
+
+            [root@ssc-vm-2051 daos]# daos container create --pool=$pool1 --path=/tmp/cont1 --type=POSIX
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+            daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+            daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-1664
+            mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+            crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+            client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
+            client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
+            client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
+            client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
+            client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
+            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont1, type=POSIX, oclass=UNKNOWN, chunk_size=0
+            client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
+            client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
+            Successfully created container 226b4ee3-c972-4fea-8619-82f30e5bec4b type POSIX
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            [root@ssc-vm-2051 daos]#
+
+            [root@ssc-vm-2051 daos]# export cont1=226b4ee3-c972-4fea-8619-82f30e5bec4b
+
+    - Container 2 creation & export
+    
+            Terminal logs -
+
+            [root@ssc-vm-2051 daos]# daos container create --pool=$pool1 --path=/tmp/cont2 --type=POSIX
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+            daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+            daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-6666
+            mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+            crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+            client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
+            client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
+            client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
+            client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
+            client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
+            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont2, type=POSIX, oclass=UNKNOWN, chunk_size=0
+            client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
+            client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
+            Successfully created container bcd454f5-fef6-4705-8495-77d2b918c5da type POSIX
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            [root@ssc-vm-2051 daos]#
+            
+            [root@ssc-vm-2051 daos]# export cont2=bcd454f5-fef6-4705-8495-77d2b918c5da
 
 
-/tmp/cont1 226b4ee3-c972-4fea-8619-82f30e5bec4b
-/tmp/cont2 bcd454f5-fef6-4705-8495-77d2b918c5da
-pool c7b0c9e2-028d-4dde-b016-a68743dba49a
+# Mount cotainser using dfuse
+
+* Create new directories to mount containers
+
+    ```mkdir /mnt/rajkumar/cont1```
+    
+    ```mkdir /mnt/rajkumar/cont2```
+
+* Mount containers
+
+    ```dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1```
+
+        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+        daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+        daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7259
+        mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+        crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+        duns INFO src/client/dfs/duns.c:393 duns_resolve_path() Path does not represent a DAOS link
+        dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0x824000) duns_resolve_path() returned 61 No data available
+        dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
+
+    ```dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2```
+
+        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+        daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+        daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7284
+        mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+        crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+        duns INFO src/client/dfs/duns.c:393 duns_resolve_path() Path does not represent a DAOS link
+        dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0xa98000) duns_resolve_path() returned 61 No data available
+        dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
+
+* craete objects (files) inside container
 
 
-export cont1 cont2 pool
+    ```cd /mnt/rajkumar/cont1```
+        
+    ```touch fileA fileB```
+        
+     Verify contents of both container -
+        
+        [root@ssc-vm-2051 cont1]# ls
+        fileA  fileB
+        
+        [root@ssc-vm-2051 cont1]# cd /mnt/rajkumar/cont2
+        [root@ssc-vm-2051 cont2]# ls
+        [root@ssc-vm-2051 cont2]#
 
 
-mkdir /mnt/rajkumar/cont1
-mkdir /mnt/rajkumar/cont2
+* Object copy
 
-dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1
+    ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool1 --daos-src-cont $cont1 --daos-dst-pool $pool1 --daos-dst-cont $cont2```
 
-[root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont1 --pool $pool --cont $cont1
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
-daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
-daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7259
-mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
-crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
-duns INFO src/client/dfs/duns.c:393 duns_resolve_path() Path does not represent a DAOS link
-dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0x824000) duns_resolve_path() returned 61 No data available
-dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
+    make sure openmpi commands (mpicc, mpirun) are already added in path and eccessible.
+    
+    In this example mpifileutils' source is in /root/mpifileutils_src/ directory. One should use <path/to/mpifileutils/source>/install/bin/dcp.
 
-dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2
+        Terminal logs -
+        
+        [root@ssc-vm-2051 cont2]# mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool --daos-src-cont $cont1 --daos-dst-pool $pool --daos-dst-cont $cont2
+        01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+        01/19-00:49:06.64 ssc-vm-2051 DAOS[7782/7782] daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+        01/19-00:49:06.64 ssc-vm-2051 DAOS[7782/7782] daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7782
+        01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+        01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+        01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+        [2021-01-19T00:49:09] Successfully copied to DAOS Destination Container.
+        01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+        01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+        [root@ssc-vm-2051 cont2]#
 
-[root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/cont2 --pool $pool --cont $cont2
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
-daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
-daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7284
-mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
-crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
-fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
-duns INFO src/client/dfs/duns.c:393 duns_resolve_path() Path does not represent a DAOS link
-dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0xa98000) duns_resolve_path() returned 61 No data available
-dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
-
-
-[root@ssc-vm-2051 daos]# cd /mnt/rajkumar/cont1
-[root@ssc-vm-2051 cont1]# ls
-[root@ssc-vm-2051 cont1]#
-[root@ssc-vm-2051 cont1]# touch fileA fileB
-[root@ssc-vm-2051 cont1]# ls
-fileA  fileB
-[root@ssc-vm-2051 cont1]# cd /mnt/rajkumar/cont2
-[root@ssc-vm-2051 cont2]# ls
-[root@ssc-vm-2051 cont2]#
-
-
-mpirun -np 3 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool --daos-src-cont $cont1 --daos-dst-pool $pool --daos-dst-cont $cont2
-
-[root@ssc-vm-2051 cont2]# PATH=/usr/lib64/openmpi3/bin/:$PATH
-
-[root@ssc-vm-2051 cont2]# mpirun -np 3 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool --daos-src-cont $cont1 --daos-dst-pool $pool --daos-dst-cont $cont2
---------------------------------------------------------------------------
-There are not enough slots available in the system to satisfy the 3 slots
-that were requested by the application:
-  /root/mpifileutils_src/install/bin/dcp
-
-Either request fewer slots for your application, or make more slots available
-for use.
---------------------------------------------------------------------------
-[root@ssc-vm-2051 cont2]# mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool --daos-src-cont $cont1 --daos-dst-pool $pool --daos-dst-cont $cont2
-01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-01/19-00:49:06.63 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
-01/19-00:49:06.64 ssc-vm-2051 DAOS[7782/7782] daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
-01/19-00:49:06.64 ssc-vm-2051 DAOS[7782/7782] daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7782
-01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
-01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
-01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-01/19-00:49:06.65 ssc-vm-2051 DAOS[7782/7782] crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
-[2021-01-19T00:49:09] Successfully copied to DAOS Destination Container.
-01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-[root@ssc-vm-2051 cont2]#
-
-
-[root@ssc-vm-2051 cont2]# cd /mnt/rajkumar/cont2
-[root@ssc-vm-2051 cont2]# ls
-fileA  fileB
-[root@ssc-vm-2051 cont2]#
+        Verify copy -
+        
+        [root@ssc-vm-2051 cont2]# cd /mnt/rajkumar/cont2
+        [root@ssc-vm-2051 cont2]# ls
+        fileA  fileB
+        [root@ssc-vm-2051 cont2]#
