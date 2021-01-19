@@ -1,0 +1,12 @@
+[Unit]
+Description=Motr-S3 Core instance Server
+
+[Service]
+Type=simple
+ExecStart=/root/s3server-service %i
+TimeoutStopSec=7sec
+
+[Install]
+WantedBy=multi-user.target
+
+
