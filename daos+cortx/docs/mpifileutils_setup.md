@@ -4,7 +4,7 @@
 
     ```yum install cmake3```
         
-    To Verify -
+    To verify -
         
     ```cmake3 --version```
         
@@ -116,9 +116,9 @@
 
     ```git clone --depth 1 https://github.com/hpc/mpifileutils```
     
-    - Verify command at github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
+    - Commands are also availble inside command at github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
     
-        Terminal logs -
+            Terminal logs -
     
             [root@ssc-vm-2051 mpifileutils_src]# git clone --depth 1 https://github.com/hpc/mpifileutils
             Cloning into 'mpifileutils'...
@@ -384,7 +384,7 @@
         
     ```touch fileA fileB```
         
-     Verify contents of both container -
+     Checking contents of both container -
         
         [root@ssc-vm-2051 cont1]# ls
         fileA  fileB
@@ -420,9 +420,11 @@
         01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
         [root@ssc-vm-2051 cont2]#
 
-    Verify copy -
+    To verify -
         
         [root@ssc-vm-2051 cont2]# cd /mnt/rajkumar/cont2
         [root@ssc-vm-2051 cont2]# ls
         fileA  fileB
         [root@ssc-vm-2051 cont2]#
+
+This clearly demonstrate that 2 file objects which were part of POSIX type container 1 (source) are copied to POSIX type container 2(destinaltion) using mpifileutils and that too within a single pool.
