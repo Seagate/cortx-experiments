@@ -79,7 +79,7 @@
     
     - Copy contents from above locations to build scripts.
     
-            Sample build scripts is presented [here](../src/samples/build_deps.sh)
+     Sample build scripts is presented [here](../src/samples/build_deps.sh).
 
 *  Run build script
 
