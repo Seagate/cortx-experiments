@@ -29,6 +29,7 @@
     ```
   - We can use clone group property for io-stack and management stack.
   - resource-discovery can be used to reduce network traffic in large cluster.
+  - Resource group clone is best solution and will be going to used for s3server and motr like resources.
 
 # constraint
   - location:
