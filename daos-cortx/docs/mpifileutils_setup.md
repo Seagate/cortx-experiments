@@ -337,7 +337,7 @@
             [root@ssc-vm-2051 daos]# export cont2=bcd454f5-fef6-4705-8495-77d2b918c5da
 
 
-# Mount cotainser using dfuse
+# Mount cotainer using dfuse
 
 * Create new directories to mount containers
 
