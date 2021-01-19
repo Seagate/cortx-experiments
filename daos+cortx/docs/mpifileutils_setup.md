@@ -4,7 +4,7 @@
 
     ```yum install cmake3```
         
-        To Verify -
+    To Verify -
         
     ```cmake3 --version```
         
@@ -37,7 +37,7 @@
         Complete!
 
 
-        To verify -
+   To verify -
         
     ```ls /usr/lib64/openmpi3/bin/```
         
@@ -56,7 +56,7 @@
 
      ```export PATH=/usr/lib64/openmpi3/bin/:$PATH```
 
-        To verify -
+    To verify -
         
      ```which mpicc```
         
@@ -79,13 +79,13 @@
     
     - Copy contents from above locations to build scripts.
     
-            Sample build scripts is presented here[] //TODO
+            Sample build scripts is presented here[../src/samples/build_deps.sh]
 
 *  Run build script
 
     ```sh build_deps.sh```
 
-        Terminal logs -
+    Terminal logs -
         
          /bin/mkdir -p '/root/mpifileutils_src/install/bin'
           /bin/sh ./libtool   --mode=install /bin/install -c bsdtar bsdcpio bsdcat '/root/mpifileutils_src/install/bin'
@@ -107,7 +107,7 @@
         [root@ssc-vm-2051 mpifileutils_src]#
 
 
-# Clone mpifileutils source
+# Build mpifileutils source
 
 * Make sure daos setup and building is already done using these steps[setup_daos.md].
 
@@ -118,7 +118,7 @@
     
     - Verify command at github-repo[https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst]
     
-            Terminal logs -
+        Terminal logs -
     
             [root@ssc-vm-2051 mpifileutils_src]# git clone --depth 1 https://github.com/hpc/mpifileutils
             Cloning into 'mpifileutils'...
@@ -223,7 +223,7 @@
 
     ```make install```
     
-    Terminal logs -
+        Terminal logs -
 
         :/root/daos_src/daos/install/lib64"
         -- Installing: /root/mpifileutils_src/install/bin/dreln
@@ -257,7 +257,7 @@
 
     - Pool creation & export
     
-            Terminal log -
+        Terminal log -
             
             [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
             Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
@@ -276,13 +276,13 @@
             Pool UUID                            Svc Replicas
             ---------                            ------------
             c7b0c9e2-028d-4dde-b016-a68743dba49a 0
-            
+
             [root@ssc-vm-2051 daos]# export pool1=c7b0c9e2-028d-4dde-b016-a68743dba49a
 
 
     - Container 1 creation & export
         
-            Terminal logs -
+        Terminal logs -
 
             [root@ssc-vm-2051 daos]# daos container create --pool=$pool1 --path=/tmp/cont1 --type=POSIX
             fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
@@ -396,6 +396,8 @@
 
 * Object copy
 
+    For object copy within a pool and between containers dcp command is used to showcase the operation.
+
     ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool1 --daos-src-cont $cont1 --daos-dst-pool $pool1 --daos-dst-cont $cont2```
 
     make sure openmpi commands (mpicc, mpirun) are already added in path and eccessible.
@@ -418,7 +420,7 @@
         01/19-00:49:09.93 ssc-vm-2051 DAOS[7782/7782] fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
         [root@ssc-vm-2051 cont2]#
 
-        Verify copy -
+    Verify copy -
         
         [root@ssc-vm-2051 cont2]# cd /mnt/rajkumar/cont2
         [root@ssc-vm-2051 cont2]# ls
