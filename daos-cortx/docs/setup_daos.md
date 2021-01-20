@@ -46,10 +46,14 @@ Use --skip-broken option if necessary.
 * For the current development version,
 
   ```git clone --recurse-submodules https://github.com/daos-stack/daos.git```
+  
+  - This is a master branch, which contains lates change. For object movment operation using mpifileutils one should use this source.
 
 * To checkout the latest stable version,
 
   ```git clone --recurse-submodules -b v1.0.1 https://github.com/daos-stack/daos.git```
+  
+  - This contains recent TAG release and ensures stablity. latest tag can be found [here](https://daos-stack.github.io/admin/installation/#daos-source-code)
   
 ## Build daos
 
