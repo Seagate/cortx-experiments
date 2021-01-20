@@ -75,11 +75,7 @@
 
     ```touch build_deps.sh```
     
-    - To get the latest contents for build script, kindly checkout mpifileutil's [github-repo](https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst#build-everything-directly)
-    
-    - Copy contents from above locations to build scripts.
-    
-     Sample build scripts is presented [here](../src/samples/build_deps.sh).
+    - Kindly check-out [scripts contents](https://github.com/hpc/mpifileutils/blob/master/doc/rst/build.rst#build-everything-directly)at mpifileutil's github-repo and copy this script's contents to build_desps.sh
 
 *  Run build script
 
