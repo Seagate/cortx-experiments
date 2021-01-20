@@ -249,7 +249,7 @@
 
 # Object copy using mpifileutils
 
-* Create two empty POSIX containers using these [steps](https://github.com/Seagate/cortx-experiments/blob/main/daos%2Bcortx/docs/setup_daos.md#start-agent)
+* Create two empty POSIX containers using these [steps](https://github.com/Seagate/cortx-experiments/blob/main/daos%2Bcortx/docs/setup_daos.md#start-daos-server)
 
     - Pool creation & export
     
