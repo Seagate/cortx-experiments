@@ -1,6 +1,6 @@
 # DAOS installation methods
 
-There are three ways to install daos server and client on your machine.
+There are three ways to install a daos server and client on your machine.
 - RPM based
 - DOCKER
 - Source build method
@@ -95,21 +95,21 @@ Use --skip-broken option if necessary.
     
 ## Create mount point
 
-DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulky storage. Right now for testing purpose we are going to emulate SCM with tmpfs only.
+DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bulky storage. Right now for testing purpose we are going to emulate SCM with tmpfs only.
 
 * Mount tmpfs
 
     ```mkdir /mnt/daos```
     
-    One may use other mount-point or directory as well.
+    One may use another mount-point or directory as well.
   
     ```mount -t tmpfs -o size=XXG tmpfs /mnt/daos```
 
     XX could be number of GB storage one is willing to allocate while mounting tmpfs. 
 
-* Use 'df' command to verify mounting status.
+* Use the 'df' command to verify mounting status.
 
-* Use this [server config file](daos_server.yml) which is having minimum settings to up and running single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
+* Use this [server config file](daos_server.yml) which is having minimum settings to up and running a single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
 
         Server's default configuration files are located at following locations : 
 
@@ -123,7 +123,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 ## Start daos server
 
-* Starting a server process in new terminal can be done using following command. Please do understand that it is okay to run this process in background.
+* Starting a server process in a new terminal can be done using the following command. Please understand that it is okay to run this process in the background.
 
    ```daos_server start -o /etc/daos/daos_server.yml```
    
@@ -138,7 +138,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
 ## Start agent
 
-* Starting an agnet process in new terminal can be done using following command. Please do understand that it is okay to run this process in background.
+* Starting an agent process in a new terminal can be done using the following command. Please understand that it is okay to run this process in the background.
 
    ```daos_agent -i```
    
@@ -155,7 +155,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
    ```export CRT_PHY_ADDR_STR="ofi+sockets"; export OFI_INTERFACE="lo"```
 
 
-* On the first time of server process starting mounted storage space is supposed to be formatted before usage. For this purpose use below command
+* On the first time a server process starts, mounted storage space is supposed to be formatted before usage. For this purpose use below command
 
   ```dmg -i storage format –reformat```
   
@@ -172,7 +172,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
   ```dmg -i pool create -s 1G```
   
-  Here pool of only 1GB space is getting created. one may use other value as well, but that should be within range of allocated storage.
+  Here the pool of only 1GB space is getting created. one may use other value as well, but that should be within the range of allocated storage.
       
       
       Terminal log --
@@ -208,7 +208,7 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
 
   ```daos container create --pool=$PUUID --path=/path/to/some/non-existing/location --type=POSIX```
         
-  Make sure provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
+  Make sure the provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
       
       
         Terminal log --
@@ -235,4 +235,119 @@ DAOS demands 2 kind of storage. 1 for SCM storage for metadata and NVMe for bulk
         fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
      
      
-You should be able to create a posix container using above source build method.
+You should be able to create a posix container using the above source build method.
+
+# CRUD operations on POSIX object
+
+* Steps for creating a posix object, reading, updating and deleting the same is demonstrated below. This activity demands creation of a pool, container and mounting of a container to dfuse for storing an object in the container and modify it just as a normal posix file object.
+
+    - Pool creation & export
+    
+        Terminal log -
+            
+            [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
+            Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
+            Pool created with 100.00% SCM/NVMe ratio
+            -----------------------------------------
+              UUID          : c7b0c9e2-028d-4dde-b016-a68743dba49a
+              Service Ranks : 0
+              Storage Ranks : 0
+              Total Size    : 1.0 GB
+              SCM           : 1.0 GB (1.0 GB / rank)
+              NVMe          : 0 B (0 B / rank)
+
+            [root@ssc-vm-2051 daos]#
+            [root@ssc-vm-2051 daos]#
+            [root@ssc-vm-2051 daos]# dmg -i system list-pools
+            Pool UUID                            Svc Replicas
+            ---------                            ------------
+            c7b0c9e2-028d-4dde-b016-a68743dba49a 0
+
+            [root@ssc-vm-2051 daos]# export pool_id=c7b0c9e2-028d-4dde-b016-a68743dba49a
+
+
+    - Container creation & export
+        
+        Terminal logs -
+
+            [root@ssc-vm-2051 daos]# daos container create --pool=$pool_id --path=/tmp/test_container --type=POSIX
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+            daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+            daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-1664
+            mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+            crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+            fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+            crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+            client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
+            client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
+            client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
+            client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
+            client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
+            client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/test_container, type=POSIX, oclass=UNKNOWN, chunk_size=0
+            client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
+            client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
+            Successfully created container 226b4ee3-c972-4fea-8619-82f30e5bec4b type POSIX
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
+            [root@ssc-vm-2051 daos]#
+
+            [root@ssc-vm-2051 daos]# export container_id=226b4ee3-c972-4fea-8619-82f30e5bec4b
+
+# Mount container using dfuse
+
+* Create new directory to mount a container
+
+    ```mkdir /mnt/rajkumar/dfuse_t_container```
+
+* Mount containers
+
+    ```dfuse -m /mnt/rajkumar/dfuse_t_container --pool $pool_id --cont $container_id```
+
+        [root@ssc-vm-2051 daos]# dfuse -m /mnt/rajkumar/dfuse_t_container --pool $pool_id --cont $container_id
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
+        daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
+        daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-7259
+        mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
+        crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
+        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
+        crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
+        duns INFO src/client/dfs/duns.c:393 duns_resolve_path() Path does not represent a DAOS link
+        dfuse INFO src/client/dfuse/dfuse_main.c:457 main(0x824000) duns_resolve_path() returned 61 No data available
+        dfuse INFO src/client/dfuse/dfuse_main.c:60 dfuse_send_to_fg() Sending 0 to fg
+
+* Create objects (files) inside container
+
+    ```cd /mnt/rajkumar/dfuse_t_container```
+        
+    ```touch fileA fileB```
+        
+     Checking directory and populating contents of posix objects (files) -
+        
+        [root@ssc-vm-2051 dfuse_t_container]# ls
+        fileA  fileB
+        [root@ssc-vm-2051 dfuse_t_container]# echo "hello world!" > fileA
+        [root@ssc-vm-2051 dfuse_t_container]# echo "hello universe!" > fileB
+        
+* Read object
+
+        [root@ssc-vm-2051 dfuse_t_container]# cat fileA
+        hello world!
+        [root@ssc-vm-2051 dfuse_t_container]# cat fileB
+        hello universe!
+        
+* Update object
+
+        [root@ssc-vm-2051 dfuse_t_container]# echo "new line added to the world!" >> fileA
+        [root@ssc-vm-2051 dfuse_t_container]# cat fileA
+        hello world!
+        new line added to the world!
+    
+* Delete object
+
+        [root@ssc-vm-2051 dfuse_t_container]# rm fileA
+        [root@ssc-vm-2051 dfuse_t_container]# ls
+        fileB
+
+This is how we create a pool, create a container and after mounting the same to dfuse, we can create, read, update and delete POSIX objects.
