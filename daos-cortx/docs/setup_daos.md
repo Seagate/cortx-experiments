@@ -136,7 +136,7 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
         Checking DAOS I/O Server instance 0 storage ...
         Metadata format required on instance 0
 
-## Start agent
+## Start daos agent
 
 * Starting an agent process in a new terminal can be done using the following command. Please understand that it is okay to run this process in the background.
 
