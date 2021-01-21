@@ -392,11 +392,19 @@
 
 * Object copy
 
-    For object copy within a pool and between containers dcp command is used to showcase the operation.
+    For object copy within a pool and between containers dcp command is used to showcase the operation. There are two command forms are available.
+    
+    first is -     
+    
+    ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v daos://$pool/$src_container_id daos://$pool/$dest_container_id```
+    
+    and second is - 
 
     ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool_id --daos-src-cont $src_container_id --daos-dst-pool $pool_id --daos-dst-cont $dest_container_id```
+    
+    Here, for demonstration purpose the second form is used to show the object copy operation of containers.
 
-    make sure openmpi commands (mpicc, mpirun) are already added in path and eccessible.
+    make sure openmpi commands (mpicc, mpirun) are already added in path and accessible.
     
     In this example mpifileutils' source is in /root/mpifileutils_src/ directory. One should use <path/to/mpifileutils/source>/install/bin/dcp.
 
