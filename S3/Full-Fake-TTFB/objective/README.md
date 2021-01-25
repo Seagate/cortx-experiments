@@ -49,42 +49,42 @@ configuration
 Results
 =======
 
-| cfg                 | operation | RPS         | ttfb_99th-ile |
-| ------------------- | ---------- | ----------- | -------------- |
-| 1c_10ko_1kb.json    | "Read"    | 24.19132858 | 0.080861       |
-| 5c_10ko_1kb.json    | "Read"    | 135.228867  | 0.100477       |
-| 10c_10ko_1kb.json   | "Read"    | 219.8465361 | 0.118401       |
-| 15c_10ko_1kb.json   | "Read"    | 273.6464761 | 0.127889       |
-| 20c_10ko_1kb.json   | "Read"    | 311.7694657 | 0.147809       |
-| 1c_10ko_16kb.json   | "Read"    | 19.76697137 | 0.026783       |
-| 5c_10ko_16kb.json   | "Read"    | 81.33928715 | 0.091277       |
-| 10c_10ko_16kb.json  | "Read"    | 139.2336469 | 0.110527       |
-| 15c_10ko_16kb.json  | "Read"    | 196.5243026 | 0.120351       |
-| 20c_10ko_16kb.json  | "Read"    | 244.1802924 | 0.128844       |
-| 1c_10ko_256kb.json  | "Read"    | 20.86561339 | 0.061578       |
-| 5c_10ko_256kb.json  | "Read"    | 93.49564102 | 0.086804       |
-| 10c_10ko_256kb.json | "Read"    | 144.967583  | 0.107002       |
-| 15c_10ko_256kb.json | "Read"    | 187.7360628 | 0.121507       |
-| 20c_10ko_256kb.json | "Read"    | 221.8320541 | 0.135124       |
-| 1c_10ko_1mb.json    | "Read"    | 32.94456159 | 0.025136       |
-| 5c_10ko_1mb.json    | "Read"    | 84.73036046 | 0.101992       |
-| 10c_10ko_1mb.json   | "Read"    | 131.9877098 | 0.107683       |
-| 15c_10ko_1mb.json   | "Read"    | 156.4146998 | 0.130315       |
-| 20c_10ko_1mb.json   | "Read"    | 188.3133914 | 0.135969       |
-| 1c_10ko_16mb.json   | "Read"    | 13.25416407 | 0.074284       |
-| 5c_10ko_16mb.json   | "Read"    | 32.87285271 | 0.152974       |
-| 10c_10ko_16mb.json  | "Read"    | 46.11623163 | 0.218248       |
-| 15c_10ko_16mb.json  | "Read"    | 52.61389486 | 0.287651       |
-| 20c_10ko_16mb.json  | "Read"    | 58.75192188 | 0.357711       |
-| 1c_10ko_256mb.json  | "Read"    | 1.646463799 | 0.323005       |
-| 5c_10ko_256mb.json  | "Read"    | 4.352237094 | 0.638872       |
-| 10c_10ko_256mb.json | "Read"    | 6.133868307 | 0.434314       |
-| 15c_10ko_256mb.json | "Read"    | 6.163512601 | 0.393876       |
-| 20c_10ko_256mb.json | "Read"    | 6.031244871 | 0.395326       |
-| 1c_5o_50gb.json     | "Read"    | 0.010054164 | 36.197109      |
+| cfg                 | operation | RPS      | ttfb_avg | ttfb_99th-ile |
+| ------------------- | ---------- | -------- | --------- | -------------- |
+| 1c_10ko_1kb.json    | "Read"    | 24.19133 | 0.041307  | 0.080861       |
+| 5c_10ko_1kb.json    | "Read"    | 135.2289 | 0.036919  | 0.100477       |
+| 10c_10ko_1kb.json   | "Read"    | 219.8465 | 0.045367  | 0.118401       |
+| 15c_10ko_1kb.json   | "Read"    | 273.6465 | 0.05468   | 0.127889       |
+| 20c_10ko_1kb.json   | "Read"    | 311.7695 | 0.063945  | 0.147809       |
+| 1c_10ko_16kb.json   | "Read"    | 19.76697 | 0.011209  | 0.026783       |
+| 5c_10ko_16kb.json   | "Read"    | 81.33929 | 0.022432  | 0.091277       |
+| 10c_10ko_16kb.json  | "Read"    | 139.2336 | 0.040001  | 0.110527       |
+| 15c_10ko_16kb.json  | "Read"    | 196.5243 | 0.047497  | 0.120351       |
+| 20c_10ko_16kb.json  | "Read"    | 244.1803 | 0.0548    | 0.128844       |
+| 1c_10ko_256kb.json  | "Read"    | 20.86561 | 0.03137   | 0.061578       |
+| 5c_10ko_256kb.json  | "Read"    | 93.49564 | 0.026964  | 0.086804       |
+| 10c_10ko_256kb.json | "Read"    | 144.9676 | 0.03708   | 0.107002       |
+| 15c_10ko_256kb.json | "Read"    | 187.7361 | 0.04459   | 0.121507       |
+| 20c_10ko_256kb.json | "Read"    | 221.8321 | 0.052823  | 0.135124       |
+| 1c_10ko_1mb.json    | "Read"    | 32.94456 | 0.011099  | 0.025136       |
+| 5c_10ko_1mb.json    | "Read"    | 84.73036 | 0.028872  | 0.101992       |
+| 10c_10ko_1mb.json   | "Read"    | 131.9877 | 0.039249  | 0.107683       |
+| 15c_10ko_1mb.json   | "Read"    | 156.4147 | 0.051416  | 0.130315       |
+| 20c_10ko_1mb.json   | "Read"    | 188.3134 | 0.056371  | 0.135969       |
+| 1c_10ko_16mb.json   | "Read"    | 13.25416 | 0.031001  | 0.074284       |
+| 5c_10ko_16mb.json   | "Read"    | 32.87285 | 0.050936  | 0.152974       |
+| 10c_10ko_16mb.json  | "Read"    | 46.11623 | 0.070138  | 0.218248       |
+| 15c_10ko_16mb.json  | "Read"    | 52.61389 | 0.087271  | 0.287651       |
+| 20c_10ko_16mb.json  | "Read"    | 58.75192 | 0.091361  | 0.357711       |
+| 1c_10ko_256mb.json  | "Read"    | 1.646464 | 0.179798  | 0.323005       |
+| 5c_10ko_256mb.json  | "Read"    | 4.352237 | 0.121715  | 0.638872       |
+| 10c_10ko_256mb.json | "Read"    | 6.133868 | 0.094621  | 0.434314       |
+| 15c_10ko_256mb.json | "Read"    | 6.163513 | 0.095059  | 0.393876       |
+| 20c_10ko_256mb.json | "Read"    | 6.031245 | 0.097139  | 0.395326       |
+| 1c_5o_50gb.json     | "Read"    | 0.010054 | 33.9326   | 36.19711       |
 
 
 Detailed results could be found in [report](../doc/report.csv) and
-[histogram](../doc/m0db_tests_hist.png).
+[histogram for all tests together](../doc/m0db_tests_hist.png).
 
 Shared [excel report](https://seagatetechnology.sharepoint.com/:x:/r/sites/gteamdrv1/tdrive1224/_layouts/15/doc2.aspx?sourcedoc=%7B9896f554-9380-4505-be06-a7f0cf0bade5%7D&action=edit&wdPreviousSession=e899fdec-292b-42d9-8f14-02f46a81336c&cid=850b7e27-b3d8-46ee-8523-feae709b83ce)
