@@ -103,8 +103,8 @@
     - Changes the behavior of ordering constraints (between clones/masters) so that copies of the first clone can start or stop as soon as the copy on the same node of the second clone has started or stopped (rather than waiting until every instance of the second clone has started or stopped). Allowed values: false, true. The default value is false.
 
 ### Test case for constrain and clone options.
-  1. colocation of clone and unclone resource
-    - if clone fail then unclone resource will switch over to other node
+  1. colocation of clone and active_passive(single clone resource) resource
+    - if clone fail then active_passive resource will switch over to other node
   ```bash
   pcs constraint colocation add http with statsd-clone score=INFINITY
 
@@ -172,6 +172,8 @@
   ```
 
   4. Stop start clone on particular node
+    - ban property add `-INFINITY` constrain to resource to avoids it to move on that node. Thus resource can be stop on this node.
+    - clear will remove constraints created by move and/or ban on the specified resource. Due to this resource can start on node if it was banned.
   ```
   pcs resource ban statsd-clone srvnode-3
   pcs resource clear statsd-clone
@@ -229,8 +231,11 @@ Output:
 ```
 
 ### Approach 2: Create resource per node with max clone size per node.
-  - Here each node have s3server resource having 11 clone.
-  - Approach good if clone if node less and clone can not move across node.
+  - Consider some resource like s3server which need 11 instance on each node.
+  - Step to create resource (Consider we have 3 node)
+    - Create s3server-1, s3server-2, s3server-3 resource with clone-max=11 clone-node-max=11.
+    - Use resource-discovery=exclusive for s3server-1 to only start on srvnode-1 and s3server-2 to only start on srvnode-2 and s3server-3 to only start on srvnode-3.
+  - Approach good if node count is less and clone can not move across node.
 
 ```
 $ pcs resource create s3server-1 ocf:seagate:s3server num=1 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
@@ -238,6 +243,13 @@ $ pcs resource create s3server-1 ocf:seagate:s3server num=1 unique_clone=true cl
 $ pcs resource create s3server-2 ocf:seagate:s3server num=2 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
 
 $ pcs resource create s3server-3 ocf:seagate:s3server num=3 unique_clone=true clone clone-max=11 clone-node-max=11 globally-unique=true
+
+$ pcs constraint location add s3server-1_allow s3server-1-clone srvnode-1 INFINITY resource-discovery=exclusive
+
+$ pcs constraint location add s3server-2_allow s3server-1-clone srvnode-2 INFINITY resource-discovery=exclusive
+
+$ pcs constraint location add s3server-3_allow s3server-1-clone srvnode-3 INFINITY resource-discovery=exclusive
+
 
   Clone Set: s3server-1-clone [s3server-1] (unique)
      s3server-1:0       (ocf::seagate:s3server):        Started srvnode-1
