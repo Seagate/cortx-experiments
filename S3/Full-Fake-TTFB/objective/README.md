@@ -3,7 +3,19 @@ Running s3server in full fake mode to get the bets performance result
 
 Run S3 in full-fake mode on hardware (single node) and capture latency/TTFB
 that we currently observe, to see if there are bottlenecks in S3 components
-(S3server, Auth, ldap).
+(S3server, Auth, LDAP).
+
+Contents:
+
+- [Running s3server in full fake mode to get the bets performance result](#running-s3server-in-full-fake-mode-to-get-the-bets-performance-result)
+- [Corresponding Jira Ticket](#corresponding-jira-ticket)
+- [Objectives](#objectives)
+- [POC Details](#poc-details)
+- [Results](#results)
+- [Analysis](#analysis)
+  - [Intro](#intro)
+  - [TTFB](#ttfb)
+  - [Throughput](#throughput)
 
 
 Corresponding Jira Ticket
@@ -25,8 +37,10 @@ ranging from small to big.
 POC Details
 ===========
 
-HW node has 96 CPUs and 376GB of RAM.
+HW node has 96 CPUs and 376GB of RAM.  This is single R2-spec'd server node.
+
 Approximate number of s3 instances should be 31.
+
 With 600 concurrent clients and even load distribution each instance should
 process ~20 concurrent connections.
 
@@ -49,8 +63,8 @@ configuration
 Results
 =======
 
-| cfg                 | operation | RPS      | ttfb_avg | ttfb_99th-ile |
-| ------------------- | ---------- | -------- | --------- | -------------- |
+| Configuration       | operation | RPS      | ttfb_avg  | ttfb_99th-ile  |
+| ------------------- | --------- | -------- | --------- | -------------- |
 | 1c_10ko_1kb.json    | "Read"    | 24.19133 | 0.041307  | 0.080861       |
 | 5c_10ko_1kb.json    | "Read"    | 135.2289 | 0.036919  | 0.100477       |
 | 10c_10ko_1kb.json   | "Read"    | 219.8465 | 0.045367  | 0.118401       |
@@ -88,3 +102,164 @@ Detailed results could be found in [report](../doc/report.csv) and
 [histogram for all tests together](../doc/m0db_tests_hist.png).
 
 Shared [excel report](https://seagatetechnology.sharepoint.com/:x:/r/sites/gteamdrv1/tdrive1224/_layouts/15/doc2.aspx?sourcedoc=%7B9896f554-9380-4505-be06-a7f0cf0bade5%7D&action=edit&wdPreviousSession=e899fdec-292b-42d9-8f14-02f46a81336c&cid=850b7e27-b3d8-46ee-8523-feae709b83ce)
+
+
+Analysis
+========
+
+Intro
+-----
+
+"Full Fake" is a nick name for a special mode in S3 server when most of Motr
+calls are stubbed out and are not directed to Motr but are "faked", i.e. their
+results are "fake" (hard coded).  Motr KVS is replaced with in-memory KVS (kept
+as `std::map` in S3 memory).  Motr IO is not done; incoming data is just
+discarded, outcoming data is filled with "all zeroes".
+
+Notes:
+
+* Since KVS is kept in memory of an S3 process, there is no easy way to launch
+  multiple S3 instances.  So we're testing with single instance, and it should
+  be then extrapolated to multiple instances.
+* Not all of the Motr calls are stubbed out, some interaction is still
+  happening, so it's not true "full fake" (which might explain some of the
+  observations).
+
+The aim of this POC was to see what performance we can achieve in "isolated"
+environment, abstracted from possible latencies and limitations of the
+underlying storage engine (Motr).
+
+TTFB
+----
+
+DR level set for TTFB is: 99% of read requests must see first byte of data
+within 150ms.
+
+Summary table on TTFB (Time to First Byte):
+
+| `objectSize` (MB) | `objectSize` | `numClients` | `ttfb_avg` (ms) | `ttfb_99th-ile` (ms) |
+| ---------- | ---------: | ---------: | ------------: | -----------------: |
+| 0.000977   | 1 KB       | 1          | 41            | 81                 |
+| 0.000977   | 1 KB       | 5          | 37            | 100                |
+| 0.000977   | 1 KB       | 10         | 45            | 118                |
+| 0.000977   | 1 KB       | 15         | 55            | 128                |
+| 0.000977   | 1 KB       | 20         | 64            | 148                |
+| 0.015625   | 16 KB      | 1          | 11            | 27                 |
+| 0.015625   | 16 KB      | 5          | 22            | 91                 |
+| 0.015625   | 16 KB      | 10         | 40            | 111                |
+| 0.015625   | 16 KB      | 15         | 47            | 120                |
+| 0.015625   | 16 KB      | 20         | 55            | 129                |
+| 0.25       | 256 KB     | 1          | 31            | 62                 |
+| 0.25       | 256 KB     | 5          | 27            | 87                 |
+| 0.25       | 256 KB     | 10         | 37            | 107                |
+| 0.25       | 256 KB     | 15         | 45            | 122                |
+| 0.25       | 256 KB     | 20         | 53            | 135                |
+| 1          | 1 MB       | 1          | 11            | 25                 |
+| 1          | 1 MB       | 5          | 29            | 102                |
+| 1          | 1 MB       | 10         | 39            | 108                |
+| 1          | 1 MB       | 15         | 51            | 130                |
+| 1          | 1 MB       | 20         | 56            | 136                |
+| 16         | 16 MB      | 1          | 31            | 74                 |
+| 16         | 16 MB      | 5          | 51            | 153                |
+| 16         | 16 MB      | 10         | 70            | 218                |
+| 16         | 16 MB      | 15         | 87            | 288                |
+| 16         | 16 MB      | 20         | 91            | 358                |
+| 256        | 256 MB     | 1          | 180           | 323                |
+| 256        | 256 MB     | 5          | 122           | 639                |
+| 256        | 256 MB     | 10         | 95            | 434                |
+| 256        | 256 MB     | 15         | 95            | 394                |
+| 256        | 256 MB     | 20         | 97            | 395                |
+
+Notes:
+
+* `ttfb_avg` is true average: `sum(samples) / count(samples)`.
+* `numClients` is number of parallel sessions.
+* S3 servers do not depend on each other, so when running multiple instances,
+  TTFB latency from C++ code is supposed to stay the same.  But auth server is
+  single instance for entire node, so multiple instances will share it, and that
+  will add extra latency.  Needs separate POC.
+
+Conclusions from the test results:
+
+* Difference between average and 99th-ile is quite big (2-4 times).  There is a
+  lot of outlier samples, so this has to be investigated further.
+* Large objects definitely violate DR level of 150ms.
+* At the same time, average values lie within the DR.  Except for 256MB 1 and 5
+  clients (which anyway looks like a glitch and needs to be revisited -- compare
+  with results on 10/15/20 clients which are showing better TTFB, which is not).
+* Average value, even though within the DR, is still too high -- expectation is
+  it should be smaller with full fake.
+* TTFB is consistently growing with number of clients (as expected).
+* With max clients (20) average TTFB was consistently about 50ms up to 1MB, and then
+  almost doubled (91-97 ms).  It can be explained, but should not be happening
+  -- needs further investigation.
+
+
+Throughput
+----------
+
+DR level set for throughput is:
+
+* for objects of 256KB = 1GB/s read per node (implies 4k RPS);
+* for objects of 16MB  = 3GB/s read per node.
+
+| `objectSize` | `numClients` | `RPS`   | throughput (MB/s) |
+| ---------: | ---------: | ----: | ----------------: |
+| 1 KB       | 1          | 24.2  | 0.024             |
+| 1 KB       | 5          | 135.2 | 0.132             |
+| 1 KB       | 10         | 219.8 | 0.215             |
+| 1 KB       | 15         | 273.6 | 0.267             |
+| 1 KB       | 20         | 311.8 | 0.304             |
+| 16 KB      | 1          | 19.8  | 0.309             |
+| 16 KB      | 5          | 81.3  | 1.3               |
+| 16 KB      | 10         | 139.2 | 2.2               |
+| 16 KB      | 15         | 196.5 | 3.1               |
+| 16 KB      | 20         | 244.2 | 3.8               |
+| 256 KB     | 1          | 20.9  | 5.2               |
+| 256 KB     | 5          | 93.5  | 23                |
+| 256 KB     | 10         | 145.0 | 36                |
+| 256 KB     | 15         | 187.7 | 47                |
+| 256 KB     | 20         | 221.8 | 55                |
+| 1 MB       | 1          | 32.9  | 33                |
+| 1 MB       | 5          | 84.7  | 85                |
+| 1 MB       | 10         | 132.0 | 132               |
+| 1 MB       | 15         | 156.4 | 156               |
+| 1 MB       | 20         | 188.3 | 188               |
+| 16 MB      | 1          | 13.3  | 212               |
+| 16 MB      | 5          | 32.9  | 526               |
+| 16 MB      | 10         | 46.1  | 738               |
+| 16 MB      | 15         | 52.6  | 842               |
+| 16 MB      | 20         | 58.8  | 940               |
+| 256 MB     | 1          | 1.6   | 421               |
+| 256 MB     | 5          | 4.4   | 1114              |
+| 256 MB     | 10         | 6.1   | 1570              |
+| 256 MB     | 15         | 6.2   | 1578              |
+| 256 MB     | 20         | 6.0   | 1544              |
+
+Notes:
+
+* Since auth server is single instance per node, it will not automatically scale
+  with increasing number of s3server instances.  Thus, separate POC is needed
+  for auth server RPS research.  Results here are only applicable to s3server
+  instances.
+
+Conclusions from the test results:
+
+* With object sizes up to 256KB, RPS is over 200.  With 20 instances, this gives
+  4k RPS per node, as required by DR.  We are thinking of 30 instances per node, which
+  will give 6k RPS, so we should be good from C++ perspective.
+  * Also, growth curve suggests that s3server can take in more than 20 clients,
+    and RPS will continue to grow (i.e. there is still some resource to be
+    utilized).
+  * On the other hand, this is full fake, with no storage.  Adding storage will
+    add overhead, and will reduce RPS.
+* Throughput -- 10+ clients on 256 MB objects show throughput 1.5 GB/s with
+  single s3 instance.  This is more than enough with our plan of having 20+
+  instances.
+  * This shows that data path is pretty good in C++ code, with single instance
+    delivering half of the DR level on large objects.
+* Note the disbalance: single instance is capable of delivering half of the
+  GB/s, but only 1/20th of RPS.  This needs to be analyzed.
+* On 16MB objects and 20 clients we get 940 MB/s.  Still very good, at 20
+  instances it is 19GB/s, which is more than enough.
+* So C++ code is good at throughput, but not so good at RPS.
