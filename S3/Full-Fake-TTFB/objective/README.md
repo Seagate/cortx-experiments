@@ -169,6 +169,7 @@ Summary table on TTFB (Time to First Byte):
 | 256        | 256 MB     | 10         | 95            | 434                |
 | 256        | 256 MB     | 15         | 95            | 394                |
 | 256        | 256 MB     | 20         | 97            | 395                |
+| 51200      | 50 GB      | 5          | 33932         | 36197              |
 
 Notes:
 
@@ -193,6 +194,10 @@ Conclusions from the test results:
 * With max clients (20) average TTFB was consistently about 50ms up to 1MB, and then
   almost doubled (91-97 ms).  It can be explained, but should not be happening
   -- needs further investigation.
+* TTFB for the 50 GB test case exceeds 30 seconds. With small number of tests done
+  it is difficult to explain these numbers. Further research is required and should
+  include, besides addb analysis, experiments with memory pool parameters and
+  memory pool profiling.
 
 
 Throughput
@@ -235,6 +240,7 @@ DR level set for throughput is:
 | 256 MB     | 10         | 6.1   | 1570              |
 | 256 MB     | 15         | 6.2   | 1578              |
 | 256 MB     | 20         | 6.0   | 1544              |
+| 50 GB      | 5          | 0.01  | 514               |
 
 Notes:
 
@@ -263,3 +269,7 @@ Conclusions from the test results:
 * On 16MB objects and 20 clients we get 940 MB/s.  Still very good, at 20
   instances it is 19GB/s, which is more than enough.
 * So C++ code is good at throughput, but not so good at RPS.
+* 5 clients test case shows throughput growth with objects of sizes 1 KB to 256 MB.
+  However 50 GB throughput 2 times worse than 256 MB which means s3server is better
+  optimized for medium sized objects. Dynamic memory tuning for requests could help
+  to improve huge objects throughput.
