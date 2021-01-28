@@ -124,6 +124,8 @@
             remote: Total 243 (delta 37), reused 109 (delta 11), pack-reused 0
             Receiving objects: 100% (243/243), 430.01 KiB | 0 bytes/s, done.
             Resolving deltas: 100% (37/37), done.
+            
+    - Note : Commit hash used for following excercies is : e1843e8e71d4e6de91393d38a1ef907bfad73449
 
     ```mkdir build```
 
