@@ -113,7 +113,7 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
 
 * Use the 'df' command to verify mounting status.
 
-* Use this [server config file](daos_server.yml) which is having minimum settings to up and running a single node server. Copy this example file's configurations to /etc/daos/daos_server.yml
+* Use this [server config file](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/daos_server.yml) which is having minimum settings to up and run a single node daos server. Copy this example file's configurations to /etc/daos/daos_server.yml
 
         Server's default configuration files are located at following locations : 
 
