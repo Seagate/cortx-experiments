@@ -55,7 +55,7 @@ Use --skip-broken option if necessary.
   
   - This contains recent TAG release and ensures stability. latest tag can be found [here](https://daos-stack.github.io/admin/installation/#daos-source-code)
   
-  - Note : Commit hash used for following excercies is : 5da70421728d31ce8bc74d93e9b228eab34532c5
+  - Note : Commit hash used for following excercie is : 5da70421728d31ce8bc74d93e9b228eab34532c5
   
 ## Build daos
 
@@ -153,8 +153,10 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
         /root/daos_src/daos/install/etc/daos_agent.yml
         /root/daos_src/daos/utils/config/daos_agent.yml
 
-   
-## Container creation
+
+# CRUD operations on POSIX object
+
+* Steps for creating a posix object, reading, updating and deleting the same is demonstrated below. This activity demands creation of a pool, container and mounting of a container to dfuse for storing an object in the container and modify it just as a normal posix file object.
 
 * Open new terminal and Export variables 
 
@@ -172,80 +174,6 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
         Hosts     SCM Devices NVMe Devices
         -----     ----------- ------------
         localhost 1           0
-
-
-* Pool creation
-
-  ```dmg -i pool create -s 1G```
-  
-  Here the pool of only 1GB space is getting created. one may use other value as well, but that should be within the range of allocated storage.
-      
-      
-      Terminal log --
-        [root@ssc-vm-2051 daos]# dmg -i pool create -s 1G
-        Creating DAOS pool with manual per-server storage allocation: 1.0 GB SCM, 0 B NVMe (100.00% ratio)
-        Pool created with 100.00% SCM/NVMe ratio
-        -----------------------------------------
-          UUID          : c7b0c9e2-028d-4dde-b016-a68743dba49a
-          Service Ranks : 0
-          Storage Ranks : 0
-          Total Size    : 1.0 GB
-          SCM           : 1.0 GB (1.0 GB / rank)
-          NVMe          : 0 B (0 B / rank)
-
-
-      
-  ```export PUUID=VALUE_OF_RETURNED_UUID_IN_POOL_CREATE_COMMAND```
-  
-        i.e. export PUUID=c7b0c9e2-028d-4dde-b016-a68743dba49a
-      
-* List pool
-
-  ```dmg -i system list-pools```
-  
-        Terminal log --
-        [root@ssc-vm-2051 daos]# dmg -i system list-pools
-        Pool UUID                            Svc Replicas
-        ---------                            ------------
-        c7b0c9e2-028d-4dde-b016-a68743dba49a 0
-
-  
-* Create POSIX container
-
-  ```daos container create --pool=$PUUID --path=/path/to/some/non-existing/location --type=POSIX```
-        
-  Make sure the provided path does not exist, as this path is going to be linked with pool to keep a track of this newly created container.
-      
-      
-        Terminal log --
-      
-        [root@ssc-vm-2051 daos]# daos container create --pool=$PUUID --path=/tmp/cont1 --type=POSIX
-        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-        fi   WARN src/gurt/fault_inject.c:724 d_fault_attr_set() Fault Injection attr not set feature not included in build
-        daos INFO src/client/api/job.c:89 dc_job_init() Using JOBID ENV: DAOS_JOBID
-        daos INFO src/client/api/job.c:90 dc_job_init() Using JOBID ssc-vm-2051.colo.seagate.com-1664
-        mgmt INFO src/mgmt/cli_mgmt.c:360 dc_mgmt_net_cfg() Using client provided OFI_INTERFACE: lo
-        crt  INFO src/cart/crt_init.c:311 crt_init_opt() libcart version 4.9.0 initializing
-        fi   WARN src/gurt/fault_inject.c:687 d_fault_inject_init() Fault Injection not initialized feature not included in build
-        crt  WARN src/cart/crt_init.c:162 data_init() FI_UNIVERSE_SIZE was not set; setting to 2048
-        client INFO src/utils/daos.c:168 cmd_args_print()       DAOS system name: daos_server
-        client INFO src/utils/daos.c:169 cmd_args_print()       pool UUID: c7b0c9e2-028d-4dde-b016-a68743dba49a
-        client INFO src/utils/daos.c:170 cmd_args_print()       cont UUID: 00000000-0000-0000-0000-000000000000
-        client INFO src/utils/daos.c:174 cmd_args_print()       pool svc: parsed 0 ranks from input NULL
-        client INFO src/utils/daos.c:178 cmd_args_print()       attr: name=NULL, value=NULL
-        client INFO src/utils/daos.c:182 cmd_args_print()       path=/tmp/cont1, type=POSIX, oclass=UNKNOWN, chunk_size=0
-        client INFO src/utils/daos.c:188 cmd_args_print()       snapshot: name=NULL, epoch=0, epoch range=NULL (0-0)
-        client INFO src/utils/daos.c:189 cmd_args_print()       oid: 0.0
-        Successfully created container 226b4ee3-c972-4fea-8619-82f30e5bec4b type POSIX
-        fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-        fi   WARN src/gurt/fault_inject.c:693 d_fault_inject_fini() Fault Injection not finalized feature not included in build
-     
-     
-You should be able to create a posix container using the above source build method.
-
-# CRUD operations on POSIX object
-
-* Steps for creating a posix object, reading, updating and deleting the same is demonstrated below. This activity demands creation of a pool, container and mounting of a container to dfuse for storing an object in the container and modify it just as a normal posix file object.
 
     - Pool creation & export
     
@@ -273,6 +201,8 @@ You should be able to create a posix container using the above source build meth
 
 
     - Container creation & export
+    
+        creating a POSIX container requires a path where the last directory location is not present. In the following example path is taken as /tmp/test_container, where test_container is not present at the moment on the file system.
         
         Terminal logs -
 
@@ -333,22 +263,22 @@ You should be able to create a posix container using the above source build meth
         
         [root@ssc-vm-2051 dfuse_t_container]# ls
         fileA  fileB
-        [root@ssc-vm-2051 dfuse_t_container]# echo "hello world!" > fileA
-        [root@ssc-vm-2051 dfuse_t_container]# echo "hello universe!" > fileB
+        [root@ssc-vm-2051 dfuse_t_container]# echo `hello world...` > fileA
+        [root@ssc-vm-2051 dfuse_t_container]# echo `hello universe...` > fileB
         
 * Read object
 
         [root@ssc-vm-2051 dfuse_t_container]# cat fileA
-        hello world!
+        hello world...
         [root@ssc-vm-2051 dfuse_t_container]# cat fileB
-        hello universe!
+        hello universe...
         
 * Update object
 
-        [root@ssc-vm-2051 dfuse_t_container]# echo "new line added to the world!" >> fileA
+        [root@ssc-vm-2051 dfuse_t_container]# echo `new line added to the world.` >> fileA
         [root@ssc-vm-2051 dfuse_t_container]# cat fileA
-        hello world!
-        new line added to the world!
+        hello world...
+        new line added to the world.
     
 * Delete object
 
