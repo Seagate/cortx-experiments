@@ -263,8 +263,8 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
         
         [root@ssc-vm-2051 dfuse_t_container]# ls
         fileA  fileB
-        [root@ssc-vm-2051 dfuse_t_container]# echo `hello world...` > fileA
-        [root@ssc-vm-2051 dfuse_t_container]# echo `hello universe...` > fileB
+        [root@ssc-vm-2051 dfuse_t_container]# echo 'hello world...' > fileA
+        [root@ssc-vm-2051 dfuse_t_container]# echo 'hello universe...' > fileB
         
 * Read object
 
@@ -275,7 +275,7 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
         
 * Update object
 
-        [root@ssc-vm-2051 dfuse_t_container]# echo `new line added to the world.` >> fileA
+        [root@ssc-vm-2051 dfuse_t_container]# echo 'new line added to the world.' >> fileA
         [root@ssc-vm-2051 dfuse_t_container]# cat fileA
         hello world...
         new line added to the world.
