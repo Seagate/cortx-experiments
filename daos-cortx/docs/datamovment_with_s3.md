@@ -1,26 +1,26 @@
 # Daos object movement using aws s3cli
 
-- Daos source container to daos destination container object movement is possible using aws s3 cli. This setup demands following requisites.
+- Daos source container to Daos destination container object movement is possible using aws s3 cli. This setup demands following requisites.
 
-## prerequisites
+## Prerequisites
 
 * Daos server setup on a VM 
   
     - Daos node will be required to create pools, contianers and storing objects in it. refer to <TODO>
 
-* Install s3 cli on daos node
+* Install s3 cli on Daos node
 
-    - aws s3 cli daos node will be used to storing/retriving objects to/from cortx node. refer to <TODO>
+    - aws s3 cli Daos node will be used to storing/retriving objects to/from CORTX node. refer to <TODO>
 
 * single node deployment of cortx
 
     - The single node deployment for CORTX will hosting s3 server, which will be used to manage buckets and store objects requested aws s3 cli on daos node. refer to <TODO>
 
-# Steps :
+## Steps :
 
 * Setup CORTX node
 
- - Acquired a VM for cortx single node deployment. deployed it and verified the installation using hctl status.
+ - Acquired a VM for CORTX single node deployment. deployed it and verified the installation using hctl status.
 
         [root@ssc-vm-2161 ~]# hctl status
 
@@ -37,21 +37,60 @@
         [started] s3server 0x7200000000000001:0x16 192.168.29.186@tcp:12345:3:1
         [unknown] m0_client 0x7200000000000001:0x19 192.168.29.186@tcp:12345:4:1
 
-* Setup daos node
+* Setup Daos node
 
 - Quickstart <TODO>
   
-- make sure cortx and daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
+- make sure CORTX and Daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
 
-* installed s3 cli on daos node.
+* install s3 cli on Daos node.
 
 - setup <TODO>
 
-      [root@ssc-vm-2162 test_src]# aws s3 ls
+      [root@ssc-vm-2162 ~]# aws s3 ls
       2021-01-24 10:31:58 daos-bucket
-      [root@ssc-vm-2162 test_dest]#
 
-* Added same credentials for access of cortx node inside ~/.aws/credentials file (after creating) on daos node.
+* Added credentials on Daos node
+
+      [root@ssc-vm-2162 ~]# cd ~/.aws/
+      [root@ssc-vm-2162 ~]# ls
+      config  credentials
+
+- if these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
+
+- CORTX node might be having following contents as shown below
+
+      [root@ssc-vm-2161 .aws]# cat config
+      [default]
+      output = text
+      region = US
+      s3 =
+          endpoint_url = http://s3.seagate.com
+      s3api =
+          endpoint_url = http://s3.seagate.com
+      ca_bundle = /etc/ssl/stx-s3-clients/s3/ca.crt
+
+      [plugins]
+      endpoint = awscli_plugin_endpoint
+      [root@ssc-vm-2161 .aws]#
+      [root@ssc-vm-2161 .aws]# cat credentials
+      [default]
+      aws_access_key_id = AKIAqQWHc###################
+      aws_secret_access_key=  G6lFDsuvebBoOTfiKh###################
+
+- p.s. : credentials are hidden above using pound sign.
+
+config creden
+
+- go to CORTX node
+
+`ls ~/.aws/credentials file`
+
+config credentials
+
+copy contents from credentials and config contents on daos node
+
+
 
 * Register domain name on daos node.
 
@@ -66,19 +105,19 @@
 
 * create test-bucket on cortx node using following command
 
-`aws s3 mb s3://test-bucket`
+` [root@ssc-vm-2162 ~]# aws s3 mb s3://test-bucket`
 
-* verified bucket list on daos node
+* verify bucket list on daos node
 
-`aws s3 ls`
+` [root@ssc-vm-2162 test_dest]# aws s3 ls`
 
 * copied fileA from /mnt/dfuse_data/test_src/ (dfuse location) to s3 bucket
 
-`aws s3 cp fileA s3://test-bucket/`
+`[root@ssc-vm-2162 test_dest]# aws s3 cp fileA s3://test-bucket/`
 
 * copied back file to dest_src from s3 bucket.
 
-`aws s3 cp s3://test-bucket/fileA .`
+`[root@ssc-vm-2162 test_dest]# aws s3 cp s3://test-bucket/fileA .`
 
 * verified file contents inside dest_src
 
