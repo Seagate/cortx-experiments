@@ -55,7 +55,7 @@ Use --skip-broken option if necessary.
   
   - This contains recent TAG release and ensures stability. latest tag can be found [here](https://daos-stack.github.io/admin/installation/#daos-source-code)
   
-  - Note : Commit hash used for following excercie is : 5da70421728d31ce8bc74d93e9b228eab34532c5
+  - Note : Commit hash used for following exercise is : 5da70421728d31ce8bc74d93e9b228eab34532c5
   
 ## Build daos
 
