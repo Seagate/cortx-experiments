@@ -1,0 +1,788 @@
+Test run by: Ivan Tishchenko
+Date: Wed Jan 27 04:23:09 MST 2021
+Setup: dell05 S3 R2 setup
+Build #: integration-custom-ci/release/centos-7.8.2003/custom-build-338/cortx_iso/
+
+Hosts:
+
+Client hostname: smc73-m02.colo.seagate.com
+
+Client network settings:
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 3c:ec:ef:1b:82:90 brd ff:ff:ff:ff:ff:ff
+    inet 10.230.248.188/20 brd 10.230.255.255 scope global noprefixroute dynamic eno1
+       valid_lft 312280sec preferred_lft 312280sec
+    inet6 fe80::3eec:efff:fe1b:8290/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eno2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 3c:ec:ef:1b:82:91 brd ff:ff:ff:ff:ff:ff
+4: enp101s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+    link/ether 0c:42:a1:ad:76:76 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.48.88/19 brd 192.168.63.255 scope global dynamic enp101s0
+       valid_lft 35853sec preferred_lft 35853sec
+    inet6 fe80::e42:a1ff:fead:7676/64 scope link 
+       valid_lft forever preferred_lft forever
+
+
+
+Test script:
+
+#!/bin/bash
+
+# Last commit date: Thu Jul 30 01:41:45 2020 -0600
+# Last commit Git rev: 609c02f
+# CI-Storage Upload date: Thu Jul 30 01:42:08 MDT 2020
+
+
+bucket=s3perftest
+s3bench_binary=/root/s3-perf-test/s3bench.2020-04-09
+
+
+if ! test -x "$s3bench_binary"; then
+  echo "s3bench binary not installed at $s3bench_binary"
+  exit 1
+fi
+
+
+if test "$1" != "-run"; then
+  set -e
+  while true; do
+    echo -e "\n\nPlease provide accurate answers:\n"
+    read -p "Your name (First Last): " name
+    read -p "Name/nickname of the setup you run the test on: " setup
+    read -p "Build #: " build
+    if test -n "$name" -a -n "$setup" -a -n "$build"; then
+      break
+    fi
+  done
+  mkdir -p logs
+  log="logs/s3-perf-test-log-`date +%F_%H-%M-%S`.txt"
+  > $log
+  echo -e "Test run by: $name\nDate: `date`\nSetup: $setup\nBuild #: $build\n" >> "$log"
+  if test -n "$*"; then
+    echo -e "Test run extra parameters: $*\n" >> "$log"
+  fi
+  echo "Hosts:" >> "$log"
+  #cat /etc/hosts | grep s3.seagate.com >> "$log"
+  echo -e "\nClient hostname: `hostname`" >> "$log"
+  echo -e "\nClient network settings:" >> "$log"
+  ip a s >> "$log"
+  echo -e "\n\n\nTest script:\n" >> "$log"
+  cat "$BASH_SOURCE" >> "$log"
+  echo -e "\n\n\nTest run log:\n" >> "$log"
+  { time "$BASH_SOURCE" -run "$@" ; } 2>&1 | tee -a "$log"
+  echo -e "\n\nIf the script freezes at this point, just hit Ctrl-C"
+  #lftp -e "put -O uploads/s3-perf-test-logs/ $log; quit" cortx-storage.colo.seagate.com
+  rsync -rvP logs/ rsync://cortx-storage.colo.seagate.com/uploads/s3-perf-test-logs/
+  exit 0
+fi
+
+
+shift
+run_tiny=false
+run_short=false
+run_sustained=false
+case "$1" in
+  tiny)      run_tiny=true ;;
+  short|"")  run_short=true ;;
+  sustained) run_sustained=true ;;
+  *)
+    echo "Unknown load type requested: <$!>; exiting"
+esac
+
+
+#echo "Checking if AWS credentials are configured"
+#if ! aws s3 ls >/dev/null; then
+#  echo "Not configured"
+#  exit 0
+#fi
+#
+#
+#echo "Loading AWS credentials from ~/.aws/credentials"
+#export aws_access_key_id=`cat ~/.aws/credentials | grep '\[default]' -A2 | grep aws_access_key_id | head -n1 | awk '{print $3;}'`
+#export aws_secret_access_key=`cat ~/.aws/credentials | grep '\[default]' -A2 | grep aws_secret_access_key | head -n1 | awk '{print $3;}'`
+
+export aws_access_key_id='***'
+export aws_secret_access_key='***'
+
+#echo "Re-creating bucket $bucket"
+#while true; do
+#  files_removed=`aws s3 rm "s3://$bucket" --recursive`
+#  echo "$files_removed"
+#  if test -z "$files_removed"; then
+#    break
+#  fi
+#done
+#aws s3 rb "s3://$bucket"
+#aws s3 mb "s3://$bucket"
+
+set -x
+
+
+ulimit -n 100000 # increases the limit on number of open sockets for s3bench
+
+
+if $run_tiny; then
+  echo -e "\n\nRunning tiny load (underperforming nodes in range 1-1.5 GB/s).\nWorkload version tiny/1.1 (2020-04-24).\n"
+
+  run_s3bench() {
+    time "$s3bench_binary" \
+      -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 \
+      -bucket=$bucket \
+      -deleteAtOnce=500 \
+      -accessKey=$aws_access_key_id -accessSecret=$aws_secret_access_key \
+      "$@"
+  }
+
+  echo -e "\n\nWarm-up\n"
+  run_s3bench -numClients 64 -numSamples 64 -objectSize 64Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Large\n"
+  run_s3bench -numClients 128 -numSamples 256 -objectSize 128Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Small-1\n"
+  run_s3bench -numClients 128 -numSamples 768 -objectSize 5Mb -sampleReads 2
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Small-2\n"
+  run_s3bench -numClients 128 -numSamples 896 -objectSize 1Mb -sampleReads 2
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Tiny\n"
+  run_s3bench -numClients 128 -numSamples 896 -objectSize 100Kb -sampleReads 3
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nParallel Sessions/Short term\n"
+  run_s3bench -numClients 300 -numSamples 600 -objectSize 128Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nMD Latency/Short term\n"
+  run_s3bench -numClients 50 -numSamples 500 -objectSize 1Kb -sampleReads 5 -headObj -putObjTag -getObjTag
+
+  echo -e "\n\nWorkload complete.\n"
+fi
+
+if $run_short; then
+  echo -e "\n\nRunning short load (regular nodes in range 2-3 GB/s).\nWorkload version short/1.2.1 (2020-05-29).\n"
+
+  run_s3bench() {
+    time "$s3bench_binary" \
+      -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 \
+      -bucket=$bucket \
+      -deleteAtOnce=500 \
+      -accessKey=$aws_access_key_id -accessSecret=$aws_secret_access_key \
+      "$@"
+  }
+
+  echo -e "\n\nWarm-up\n"
+  run_s3bench -numClients 128 -numSamples 512 -objectSize 128Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Large\n"
+  run_s3bench -numClients 128 -numSamples 640 -objectSize 128Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Small-1\n"
+  run_s3bench -numClients 128 -numSamples 5120 -objectSize 5Mb -sampleReads 2
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Small-2\n"
+  run_s3bench -numClients 128 -numSamples 6528 -objectSize 1Mb -sampleReads 3
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nThroughput/Short term/Tiny\n"
+  run_s3bench -numClients 128 -numSamples 6528 -objectSize 100Kb -sampleReads 3
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nParallel Sessions/Short term\n"
+  run_s3bench -numClients 300 -numSamples 600 -objectSize 128Mb
+
+  sleep 15 # let the system calm down and flush all caches
+
+  echo -e "\n\nMD Latency/Short term\n"
+  run_s3bench -numClients 50 -numSamples 2000 -objectSize 1Kb -sampleReads 14 -headObj -putObjTag -getObjTag
+
+  echo -e "\n\nWorkload complete.\n"
+fi
+
+if $run_sustained; then
+  echo -e "\n\nRunning sustained load (hours-long run for regular nodes in range 2-3 GB/s).\nWorkload version 1.0 (TBD).\n"
+
+  echo "not implemented yet"
+fi
+
+
+
+Test run log:
+
++ ulimit -n 100000
++ false
++ true
++ echo -e '\n\nRunning short load (regular nodes in range 2-3 GB/s).\nWorkload version short/1.2.1 (2020-05-29).\n'
+
+
+Running short load (regular nodes in range 2-3 GB/s).
+Workload version short/1.2.1 (2020-05-29).
+
++ echo -e '\n\nWarm-up\n'
+
+
+Warm-up
+
++ run_s3bench -numClients 128 -numSamples 512 -objectSize 128Mb
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 128 -numSamples 512 -objectSize 128Mb
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 128
+    numSamples:                 512
+    objectSize (MB):            128.000
+    sampleReads:                1
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       512
+    Errors Count:               0
+    Total Throughput (MB/s):    1364.631
+    Duration Max:               29.844
+    Duration Avg:               10.788
+    Duration Min:               2.812
+    Ttfb Max:                   29.844
+    Ttfb Avg:                   10.788
+    Ttfb Min:                   2.812
+    Duration 90th-ile:          20.368
+    Duration 99th-ile:          25.905
+    Errors:                     []
+    Total Duration (s):         48.025
+    Total Transferred (MB):     65536.000
+    Ttfb 90th-ile:              20.368
+    Ttfb 99th-ile:              25.905
+
+    Operation:                  Read
+    Total Requests Count:       512
+    Errors Count:               0
+    Total Throughput (MB/s):    8746.216
+    Duration Max:               4.870
+    Duration Avg:               1.689
+    Duration Min:               0.558
+    Ttfb Max:                   1.162
+    Ttfb Avg:                   0.403
+    Ttfb Min:                   0.139
+    Duration 90th-ile:          2.398
+    Duration 99th-ile:          3.056
+    Errors:                     []
+    Total Duration (s):         7.493
+    Total Transferred (MB):     65536.000
+    Ttfb 90th-ile:              0.656
+    Ttfb 99th-ile:              1.096
+
+real	1m10.188s
+user	2m39.317s
+sys	1m7.808s
++ sleep 15
++ echo -e '\n\nThroughput/Short term/Large\n'
+
+
+Throughput/Short term/Large
+
++ run_s3bench -numClients 128 -numSamples 640 -objectSize 128Mb
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 128 -numSamples 640 -objectSize 128Mb
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 128
+    numSamples:                 640
+    objectSize (MB):            128.000
+    sampleReads:                1
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       640
+    Errors Count:               0
+    Total Throughput (MB/s):    1386.151
+    Duration Max:               25.108
+    Duration Avg:               10.762
+    Duration Min:               2.597
+    Ttfb Max:                   25.108
+    Ttfb Avg:                   10.762
+    Ttfb Min:                   2.597
+    Duration 90th-ile:          17.652
+    Duration 99th-ile:          21.682
+    Errors:                     []
+    Total Duration (s):         59.099
+    Total Transferred (MB):     81920.000
+    Ttfb 90th-ile:              17.652
+    Ttfb 99th-ile:              21.682
+
+    Operation:                  Read
+    Total Requests Count:       640
+    Errors Count:               0
+    Total Throughput (MB/s):    8619.167
+    Duration Max:               3.928
+    Duration Avg:               1.717
+    Duration Min:               0.652
+    Ttfb Max:                   1.392
+    Ttfb Avg:                   0.446
+    Ttfb Min:                   0.141
+    Duration 90th-ile:          2.295
+    Duration 99th-ile:          3.028
+    Errors:                     []
+    Total Duration (s):         9.504
+    Total Transferred (MB):     81920.000
+    Ttfb 90th-ile:              0.699
+    Ttfb 99th-ile:              1.017
+
+real	1m25.670s
+user	3m14.719s
+sys	1m18.730s
++ sleep 15
++ echo -e '\n\nThroughput/Short term/Small-1\n'
+
+
+Throughput/Short term/Small-1
+
++ run_s3bench -numClients 128 -numSamples 5120 -objectSize 5Mb -sampleReads 2
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 128 -numSamples 5120 -objectSize 5Mb -sampleReads 2
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 128
+    numSamples:                 5120
+    objectSize (MB):            5.000
+    sampleReads:                2
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       5120
+    Errors Count:               0
+    Total Throughput (MB/s):    804.601
+    Duration Max:               2.182
+    Duration Avg:               0.778
+    Duration Min:               0.409
+    Ttfb Max:                   2.182
+    Ttfb Avg:                   0.778
+    Ttfb Min:                   0.409
+    Duration 90th-ile:          0.936
+    Duration 99th-ile:          1.819
+    Errors:                     []
+    Total Duration (s):         31.817
+    Total Transferred (MB):     25600.000
+    Ttfb 90th-ile:              0.936
+    Ttfb 99th-ile:              1.819
+
+    Operation:                  Read
+    Total Requests Count:       10240
+    Errors Count:               0
+    Total Throughput (MB/s):    4351.579
+    Duration Max:               1.154
+    Duration Avg:               0.146
+    Duration Min:               0.044
+    Ttfb Max:                   1.113
+    Ttfb Avg:                   0.121
+    Ttfb Min:                   0.041
+    Duration 90th-ile:          0.190
+    Duration 99th-ile:          0.344
+    Errors:                     []
+    Total Duration (s):         11.766
+    Total Transferred (MB):     51200.000
+    Ttfb 90th-ile:              0.159
+    Ttfb 99th-ile:              0.319
+
+real	2m35.648s
+user	1m0.833s
+sys	0m28.164s
++ sleep 15
++ echo -e '\n\nThroughput/Short term/Small-2\n'
+
+
+Throughput/Short term/Small-2
+
++ run_s3bench -numClients 128 -numSamples 6528 -objectSize 1Mb -sampleReads 3
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 128 -numSamples 6528 -objectSize 1Mb -sampleReads 3
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 128
+    numSamples:                 6528
+    objectSize (MB):            1.000
+    sampleReads:                3
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       6528
+    Errors Count:               0
+    Total Throughput (MB/s):    101.289
+    Duration Max:               2.569
+    Duration Avg:               1.248
+    Duration Min:               0.487
+    Ttfb Max:                   2.569
+    Ttfb Avg:                   1.248
+    Ttfb Min:                   0.487
+    Duration 90th-ile:          1.617
+    Duration 99th-ile:          2.094
+    Errors:                     []
+    Total Duration (s):         64.449
+    Total Transferred (MB):     6528.000
+    Ttfb 90th-ile:              1.617
+    Ttfb 99th-ile:              2.094
+
+    Operation:                  Read
+    Total Requests Count:       19584
+    Errors Count:               0
+    Total Throughput (MB/s):    1255.467
+    Duration Max:               1.460
+    Duration Avg:               0.100
+    Duration Min:               0.013
+    Ttfb Max:                   1.419
+    Ttfb Avg:                   0.072
+    Ttfb Min:                   0.012
+    Duration 90th-ile:          0.139
+    Duration 99th-ile:          0.339
+    Errors:                     []
+    Total Duration (s):         15.599
+    Total Transferred (MB):     19584.000
+    Ttfb 90th-ile:              0.106
+    Ttfb 99th-ile:              0.322
+
+real	3m41.521s
+user	0m22.923s
+sys	0m9.894s
++ sleep 15
++ echo -e '\n\nThroughput/Short term/Tiny\n'
+
+
+Throughput/Short term/Tiny
+
++ run_s3bench -numClients 128 -numSamples 6528 -objectSize 100Kb -sampleReads 3
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 128 -numSamples 6528 -objectSize 100Kb -sampleReads 3
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 128
+    numSamples:                 6528
+    objectSize (MB):            0.098
+    sampleReads:                3
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       6528
+    Errors Count:               0
+    Total Throughput (MB/s):    8.688
+    Duration Max:               2.550
+    Duration Avg:               1.421
+    Duration Min:               0.533
+    Ttfb Max:                   2.550
+    Ttfb Avg:                   1.421
+    Ttfb Min:                   0.533
+    Duration 90th-ile:          1.630
+    Duration 99th-ile:          1.950
+    Errors:                     []
+    Total Duration (s):         73.378
+    Total Transferred (MB):     637.500
+    Ttfb 90th-ile:              1.630
+    Ttfb 99th-ile:              1.950
+
+    Operation:                  Read
+    Total Requests Count:       19584
+    Errors Count:               0
+    Total Throughput (MB/s):    122.607
+    Duration Max:               0.775
+    Duration Avg:               0.101
+    Duration Min:               0.012
+    Ttfb Max:                   0.735
+    Ttfb Avg:                   0.067
+    Ttfb Min:                   0.010
+    Duration 90th-ile:          0.138
+    Duration 99th-ile:          0.212
+    Errors:                     []
+    Total Duration (s):         15.599
+    Total Transferred (MB):     1912.500
+    Ttfb 90th-ile:              0.101
+    Ttfb 99th-ile:              0.177
+
+real	3m50.219s
+user	0m9.518s
+sys	0m2.543s
++ sleep 15
++ echo -e '\n\nParallel Sessions/Short term\n'
+
+
+Parallel Sessions/Short term
+
++ run_s3bench -numClients 300 -numSamples 600 -objectSize 128Mb
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 300 -numSamples 600 -objectSize 128Mb
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 300
+    numSamples:                 600
+    objectSize (MB):            128.000
+    sampleReads:                1
+    clientDelay:                1
+    readObj:                    true
+    headObj:                    false
+    putObjTag:                  false
+    getObjTag:                  false
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       600
+    Errors Count:               0
+    Total Throughput (MB/s):    1523.616
+    Duration Max:               36.791
+    Duration Avg:               22.535
+    Duration Min:               11.765
+    Ttfb Max:                   36.791
+    Ttfb Avg:                   22.535
+    Ttfb Min:                   11.765
+    Duration 90th-ile:          26.460
+    Duration 99th-ile:          31.848
+    Errors:                     []
+    Total Duration (s):         50.406
+    Total Transferred (MB):     76800.000
+    Ttfb 90th-ile:              26.460
+    Ttfb 99th-ile:              31.848
+
+    Operation:                  Read
+    Total Requests Count:       600
+    Errors Count:               0
+    Total Throughput (MB/s):    8319.756
+    Duration Max:               7.766
+    Duration Avg:               3.678
+    Duration Min:               1.228
+    Ttfb Max:                   2.206
+    Ttfb Avg:                   0.919
+    Ttfb Min:                   0.195
+    Duration 90th-ile:          6.373
+    Duration 99th-ile:          7.519
+    Errors:                     []
+    Total Duration (s):         9.231
+    Total Transferred (MB):     76800.000
+    Ttfb 90th-ile:              1.757
+    Ttfb 99th-ile:              2.027
+
+real	1m17.324s
+user	3m15.818s
+sys	1m37.263s
++ sleep 15
++ echo -e '\n\nMD Latency/Short term\n'
+
+
+MD Latency/Short term
+
++ run_s3bench -numClients 50 -numSamples 2000 -objectSize 1Kb -sampleReads 14 -headObj -putObjTag -getObjTag
++ /root/s3-perf-test/s3bench.2020-04-09 -endpoint=http://192.168.48.155,http://192.168.48.157,http://192.168.48.159 -bucket=s3perftest -deleteAtOnce=500 -accessKey=*** -accessSecret=*** -numClients 50 -numSamples 2000 -objectSize 1Kb -sampleReads 14 -headObj -putObjTag -getObjTag
+ Version:                    2020-04-08-07:38:44-4f7d65ecd3aaa644c4d2304c6818711c2d2cfdda
+ Parameters:                
+    numClients:                 50
+    numSamples:                 2000
+    objectSize (MB):            0.001
+    sampleReads:                14
+    clientDelay:                1
+    readObj:                    false
+    headObj:                    true
+    putObjTag:                  true
+    getObjTag:                  true
+    bucket:                     s3perftest
+    deleteAtOnce:               500
+    endpoints:                 
+       http://192.168.48.155
+       http://192.168.48.157
+       http://192.168.48.159
+    jsonOutput:                 false
+    numTags:                    10
+    objectNamePrefix:           loadgen_test_
+    reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:clientDelay;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+    tagNamePrefix:              tag_name_
+    tagValPrefix:               tag_val_
+    verbose:                    false
+ Tests:                     
+    Operation:                  Write
+    Total Requests Count:       2000
+    Errors Count:               0
+    Total Throughput (MB/s):    0.041
+    Duration Max:               1.936
+    Duration Avg:               1.186
+    Duration Min:               0.619
+    Ttfb Max:                   1.936
+    Ttfb Avg:                   1.186
+    Ttfb Min:                   0.619
+    Duration 90th-ile:          1.525
+    Duration 99th-ile:          1.607
+    Errors:                     []
+    Total Duration (s):         48.115
+    Total Transferred (MB):     1.953
+    Ttfb 90th-ile:              1.525
+    Ttfb 99th-ile:              1.607
+
+    Operation:                  PutObjTag
+    Total Requests Count:       28000
+    Errors Count:               0
+    Duration Max:               0.829
+    Duration Avg:               0.277
+    Duration Min:               0.012
+    Ttfb Max:                   0.829
+    Ttfb Avg:                   0.277
+    Ttfb Min:                   0.012
+    Duration 90th-ile:          0.337
+    Duration 99th-ile:          0.408
+    Errors:                     []
+    Total Duration (s):         155.520
+    Ttfb 90th-ile:              0.337
+    Ttfb 99th-ile:              0.408
+
+    Operation:                  GetObjTag
+    Total Requests Count:       28000
+    Errors Count:               0
+    Duration Max:               1.332
+    Duration Avg:               0.045
+    Duration Min:               0.007
+    Ttfb Max:                   1.332
+    Ttfb Avg:                   0.045
+    Ttfb Min:                   0.007
+    Duration 90th-ile:          0.075
+    Duration 99th-ile:          0.103
+    Errors:                     []
+    Total Duration (s):         25.489
+    Ttfb 90th-ile:              0.075
+    Ttfb 99th-ile:              0.103
+
+    Operation:                  HeadObj
+    Total Requests Count:       28000
+    Errors Count:               0
+    Duration Max:               0.818
+    Duration Avg:               0.044
+    Duration Min:               0.007
+    Ttfb Max:                   0.818
+    Ttfb Avg:                   0.044
+    Ttfb Min:                   0.007
+    Duration 90th-ile:          0.070
+    Duration 99th-ile:          0.101
+    Errors:                     []
+    Total Duration (s):         24.700
+    Ttfb 90th-ile:              0.070
+    Ttfb 99th-ile:              0.101
+
+real	15m33.310s
+user	0m31.796s
+sys	0m4.593s
++ echo -e '\n\nWorkload complete.\n'
+
+
+Workload complete.
+
++ false
+
+real	31m3.885s
+user	11m14.928s
+sys	4m48.998s
