@@ -47,7 +47,7 @@
 
 ## Install s3 cli on Daos node.
 
-* Follow this [document section](https://github.com/Seagate/cortx-s3server/blob/main/docs/CORTX-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
+* Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/CORTX-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
  
 * Add credentials on Daos node
 
