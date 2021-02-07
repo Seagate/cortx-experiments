@@ -51,3 +51,39 @@ n 'General' block, set filesystem root path, and the corresponding filesystem ty
  
 8. In 'ListManager' block, set database connection parameters:
 
+db = <db_name>;
+password_file = "/etc/robinhood.d/.dbpassword" ;
+
+It is recommended to define your fileclasses before running the initial filesystem scan:
+
+This way, you will get relevent information in 'rbh-report --class-info' report after the initial scan is completed.
+
+fileclass empty_file {
+    definition { type == file and size == 0 }
+ }
+ fileclass small_file {
+    definition { type == file
+             and size > 0
+             and size <= 32MB }
+ }
+ 
+9. feeding robinhood
+ 
+
+10. start scan
+
+ /root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf
+
+
+ 11. info
+ 
+ /root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info
+ 
+##TEST WITH DAOS_CORTX
+ 
+ N
+ 
+ 
+ 
+ 
+ 
