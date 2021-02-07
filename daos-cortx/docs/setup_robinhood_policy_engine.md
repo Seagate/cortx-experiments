@@ -8,11 +8,13 @@ Complete details for setup are available [here](https://github.com/cea-hpc/robin
 
 Still, basic steps are provided here for quick reference with posix support.
 
-* Build dependencies // https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#build-and-installation-from-sources
+* Build dependencies 
 
       Install build requirements:
        yum install -y git autogen rpm-build autoconf automake gcc libtool \
                       glib2-devel libattr-devel mariadb-devel mailx bison flex
+                
+- Reference is also available [here]( https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#build-and-installation-from-sources)
                 
 * Download source code
 
@@ -20,12 +22,11 @@ Still, basic steps are provided here for quick reference with posix support.
 
 `weget https://sourceforge.net/projects/robinhood/files/latest/download/robinhood/3.1.6/robinhood-3.1.6.tar.gz`
 
-`tar zxf robinhood-3.1.6.tar.gz // use your version`
+`tar zxf robinhood-3.1.6.tar.gz`
  
 `cd  robinhood-3.1.6`
 
- 
-*  build robinhood RPMs by running:
+* build robinhood RPMs by running
  
 `./configure`
   
@@ -39,17 +40,19 @@ Still, basic steps are provided here for quick reference with posix support.
 
 `systemctl start mariadb.service`
 
-* Creating robinhood database //https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration
+* Creating robinhood database 
 
-`rbh-config create_db <db_name>    'localhost' 'rbh_password' // /root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config rbh_fsname  'localhost' 'rbh_password'`
+`/root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config create_db <db_name>    'localhost' 'rbh_password'`
 
-A common name for robinhood database name is 'rbh_fsname. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
+reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
+
+A common name for robinhood database name is 'rbh_fsname'. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
+
+reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
 
 * Create a robinhood configuration file, starting with a simple robinhood template:
 
 `cp /root/setup_robinhood/robinhood-3.1.6/doc/templates/basic.conf /etc/robihood.d/posix.conf`
-
-For a reference this let me share a config file for 
 
 * Edit the configuration file
 
@@ -59,10 +62,10 @@ In 'General' block, set filesystem root path, and the corresponding filesystem t
  
 * In 'ListManager' block, set database connection parameters:
 
-      db = <db_name>;
+      db = rbh_fsname;
       password_file = "/etc/robinhood.d/.dbpassword" ;
 
-It is recommended to define your fileclasses before running the initial filesystem scan:
+It is recommended to define your fileclasses before running the initial filesystem scan.
 
 This way, you will get relevent information in 'rbh-report --class-info' report after the initial scan is completed.
 
@@ -75,6 +78,8 @@ This way, you will get relevent information in 'rbh-report --class-info' report 
                  and size <= 32MB }
      }
 
+Reference config file is avaialble [here]()
+
 * start scan
 
  `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf`
@@ -86,6 +91,7 @@ This way, you will get relevent information in 'rbh-report --class-info' report 
 ## Test for daos to CORTX and vice-versa data movement
 
 In this excercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two pre-requisites to carry out this test mentioned below.
+
 * daos server node running on one VM
 
   - follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
