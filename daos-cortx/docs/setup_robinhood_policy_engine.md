@@ -26,6 +26,8 @@ Still, basic steps are provided here for quick reference with posix support.
  
 `cd  robinhood-3.1.6`
 
+Note : Here, source is cloned inside /root/setup_robinhood/ path and same will be referenced in the following commands. so make sure you use your own path.
+
 * build robinhood RPMs by running
  
 `./configure`
@@ -55,8 +57,9 @@ Reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix
 * Edit the configuration file
 
 In 'General' block, set filesystem root path, and the corresponding file system type.
- fs_path = "/fs/root";
- fs_type = xfs;
+       
+       fs_path = "/fs/root";
+       fs_type = xfs;
  
 * In 'ListManager' block, set database connection parameters:
 
@@ -103,27 +106,29 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
  
 1. Create objects in a daos container (i.e. inside dfuse mount point)
 
-- create larger and smaller objects inside the container.
+- create larger and smaller objects inside the container. container is mounted at /mnt/daos_container for this excercise and same fs_path will be used in config file as well.
 
 - These object(s) are going to be moved to s3 bucket and downloaded from there to doas container directory.
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-- Readily available config files with correct config options are present [here]()
+- Readily available config files with correct config options are present [here](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/daos_cortx.conf`
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
 `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
  
 3. Create s3 bucket 
  
-`aws s3 mb s3://daos-perf-test-bucket`
+`aws s3 mb s3://daos-bucket`
+
+Note : For this excercise test buacket name used is daos-bucket and same is used inside rh_daos_cortx.conf file referenced above.
 
 4. Run the policy to move larger objects (daos_to_cortx_archive policy)
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf --run=daos_to_cortx_archive(all)`
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf --run=daos_to_cortx_archive(all)`
 
-5. Check contents on container and on s3 bucket
+5. Verify contents on container and on s3 bucket
 
 `ls`
 
@@ -133,12 +138,12 @@ This is how we have successfully moved larger objects (size > 1MB) from daos to 
 
 6. Run the policy to move objects from cortx to daos(run cortx_to_daos_restore policy)
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf --run=cortx_to_daos_restore(all)`
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf --run=cortx_to_daos_restore(all)`
 
-Check contents on container and on s3 bucket
+7. Verify contents on container and on s3 bucket
 
 `ls`
 
 `aws s3 ls s3://daos-bucket`
 
-This is how we have successfully moved objects from s3 bucket to daos container.
+So, This is how we have successfully moved objects from s3 bucket to daos container.
