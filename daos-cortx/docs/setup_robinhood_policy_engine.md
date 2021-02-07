@@ -4,7 +4,7 @@ Robinhood Policy Engine is a versatile tool to manage contents of large file sys
 
 # Setup guide
 
-Complete details for setup are available [here](https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#software-installation)
+Complete details for setup are available [here.](https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#software-installation)
 
 Still, basic steps are provided here for quick reference with posix support.
 
@@ -14,7 +14,7 @@ Still, basic steps are provided here for quick reference with posix support.
        yum install -y git autogen rpm-build autoconf automake gcc libtool \
                       glib2-devel libattr-devel mariadb-devel mailx bison flex
                 
-- Reference is also available [here]( https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#build-and-installation-from-sources)
+- Reference is also available [here.]( https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#build-and-installation-from-sources)
                 
 * Download source code
 
@@ -48,7 +48,7 @@ Note : Here, source is cloned inside /root/setup_robinhood/ path and same will b
 
 A common name for robinhood database name is 'rbh_fsname'. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
 
-Reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
+Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
 
 * Create a robinhood configuration file, starting with a simple robinhood template:
 
@@ -79,7 +79,7 @@ This way, you will get relevant information in 'rbh-report --class-info' report 
                  and size <= 32MB }
      }
 
-Reference config file is available [here](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/posix.conf)
+Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/posix.conf)
 Make sure to make above relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
@@ -112,7 +112,7 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-- Readily available config files with correct config options are present [here](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+- Readily available config files with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
 
 `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
