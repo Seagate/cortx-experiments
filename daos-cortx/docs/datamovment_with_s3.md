@@ -1,6 +1,6 @@
 # Daos object movement using aws s3cli
 
-- Daos source container to Daos destination container object movement is possible using aws s3 cli. This setup demands following requisites.
+- Daos source container to Daos destination container object movement is possible using aws s3 cli. This documents is the setup guide to perform mentioned exercise.
 
 # Test setup
 
@@ -12,17 +12,17 @@
 
 * Daos server node setup on a VM
   
-    - Daos node will be required to create pools, contianers and storing objects in it.
+    - Daos node will be required to create pools, containers and storing objects in it.
 
 * Install s3 cli on Daos node
 
-    - aws s3 cli Daos node will be used to storing/retriving objects to/from CORTX node.
+    - aws s3 cli Daos node will be used to storing/retrieving objects to/from CORTX node.
     
 ## Setup cortx node
 
   - Follow this [document](https://github.com/Seagate/cortx/blob/main/QUICK_START.md) to setup cortx on your vm.
 
-  - Vverified the installation using hctl status.
+  - Verify the installation using hctl status.
 
         [root@ssc-vm-2161 ~]# hctl status
 
@@ -48,13 +48,8 @@
 ## Install s3 cli on Daos node.
 
 * Follow this [document section](https://github.com/Seagate/cortx-s3server/blob/main/docs/CORTX-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
-
-* Make a test bucket.
-
-      [root@ssc-vm-2162 ~]# aws s3 mb s3://daos-bucket
-      2021-01-24 10:31:58 daos-bucket
  
-* Added credentials on Daos node
+* Add credentials on Daos node
 
       [root@ssc-vm-2162 ~]# cd ~/.aws/
       [root@ssc-vm-2162 ~]# ls
@@ -84,44 +79,61 @@
 
 - Note : credentials are hidden above using pound sign.
 
-config creden
-
 - go to cortx node
 
-`ls ~/.aws/credentials file`
+        ls ~/.aws/credentials file`
 
-config credentials
+        config credentials
 
-copy contents from credentials and config contents on daos node
-
+- Copy contents from here and populate credentials and config files on daos node
 
 * Register domain name on daos node.
 
-- added cortx node IP (s3.seagate.com) to /etc/hosts
+- Added cortx node IP (s3.seagate.com) to /etc/hosts
 
-* Created 2 containers inside a pull and mount using dfuse at following location
+* Create 2 containers inside a pool and mount using dfuse at following location
 
       /mnt/dfuse_data/src_container/
       /mnt/dfuse_data/dest_container/
 
-* created fileA inside with some contents in container's dfuse directory test_src //
+* Create test object (a file) with some contents in source container's dfuse directory (i.e. inside /mnt/dfuse_data/src_container/)
 
-* create test-bucket on cortx node using following command
+`touch file_obj`
 
-` [root@ssc-vm-2162 ~]# aws s3 mb s3://test-bucket`
+- Add some dummy contents inside this file.
 
-* verify bucket list on daos node
+* Create test-bucket on cortx node using following command
 
-` [root@ssc-vm-2162 test_dest]# aws s3 ls`
+`[root@ssc-vm-2162 src_container]# aws s3 mb s3://daos-bucket`
 
-* copied fileA from /mnt/dfuse_data/test_src/ (i.e. container's dfuse mount point) to s3 bucket
+* Verify bucket list on daos node
 
-`[root@ssc-vm-2162 test_dest]# aws s3 cp fileA s3://test-bucket/`
+`[root@ssc-vm-2162 src_container]# aws s3 ls`
 
-* copied back file to dest_src from s3 bucket.
+* Copy file_obj from /mnt/dfuse_data/src_container/ (i.e. container's dfuse mount point) to s3 bucket
 
-`[root@ssc-vm-2162 test_dest]# aws s3 cp s3://test-bucket/fileA .`
+`[root@ssc-vm-2162 src_container]# aws s3 cp file_obj s3://daos-bucket/`
 
-* verified file contents inside dest_src
+- contents can be verified using `aws s3 ls s3://daos-bucket/` command.
+
+* Copy back file to dest_container from s3 bucket
+
+`cd /mnt/dfuse_data/dest_container/`
+
+- Check contents
+
+        [root@ssc-vm-2162 dest_container]# ls
+        [root@ssc-vm-2162 dest_container]# 
+ 
+ Currently directory would be empty.
+ 
+ - Now copy contents from s3 bucket to dest_container
+
+`[root@ssc-vm-2162 dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
+
+* Verified file contents inside dest_container
+
+        [root@ssc-vm-2162 dest_container]# ls
+        file_obj
 
 Just like cp, one can also perform mv, sync, etc. operations.
