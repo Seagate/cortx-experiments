@@ -90,7 +90,7 @@ Make sure to make above relevant changes in fields mentioned above.
  
  `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
  
-## Test for daos to CORTX and vice-versa data movement
+# Test for daos to CORTX and vice-versa data movement
 
 In this exercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two prerequisites to carry out this test mentioned below.
 
@@ -106,7 +106,7 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
  
 1. Create objects in a daos container (i.e. inside dfuse mount point)
 
-- create larger and smaller objects inside the container. container is mounted at /mnt/daos_container for this excercise and same fs_path will be used in config file as well.
+- create larger and smaller objects inside the container. container is mounted at /mnt/daos_container for this exercise and same fs_path will be used in config file as well.
 
 - These object(s) are going to be moved to s3 bucket and downloaded from there to doas container directory.
 
@@ -122,7 +122,7 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
  
 `aws s3 mb s3://daos-bucket`
 
-Note : For this excercise test buacket name used is daos-bucket and same is used inside rh_daos_cortx.conf file referenced above.
+Note : For this exercise test bucket name used is daos-bucket and same is used inside rh_daos_cortx.conf file referenced above.
 
 4. Run the policy to move larger objects (daos_to_cortx_archive policy)
 
