@@ -1,6 +1,6 @@
 # Introduction
 
-Robinhood Policy Engine is a versatile tool to manage contents of large file systems. It maintains a replicate of filesystem medatada in a database that can be queried at will. for more details kindly check [Robinhood wiki](https://github.com/cea-hpc/robinhood/wiki) page.
+Robinhood Policy Engine is a versatile tool to manage contents of large file systems. It maintains a replica of file system metadata in a database that can be queried at will. for more details kindly check [Robinhood wiki](https://github.com/cea-hpc/robinhood/wiki) page.
 
 # Setup guide
 
@@ -44,11 +44,9 @@ Still, basic steps are provided here for quick reference with posix support.
 
 `/root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config create_db <db_name>    'localhost' 'rbh_password'`
 
-reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
-
 A common name for robinhood database name is 'rbh_fsname'. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
 
-reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
+Reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
 
 * Create a robinhood configuration file, starting with a simple robinhood template:
 
@@ -56,7 +54,7 @@ reference is available [here](https://github.com/cea-hpc/robinhood/wiki/v3_posix
 
 * Edit the configuration file
 
-In 'General' block, set filesystem root path, and the corresponding filesystem type:
+In 'General' block, set filesystem root path, and the corresponding file system type.
  fs_path = "/fs/root";
  fs_type = xfs;
  
@@ -65,9 +63,9 @@ In 'General' block, set filesystem root path, and the corresponding filesystem t
       db = rbh_fsname;
       password_file = "/etc/robinhood.d/.dbpassword" ;
 
-It is recommended to define your fileclasses before running the initial filesystem scan.
+It is recommended to define your fileclasses before running the initial file system scan.
 
-This way, you will get relevent information in 'rbh-report --class-info' report after the initial scan is completed.
+This way, you will get relevant information in 'rbh-report --class-info' report after the initial scan is completed.
 
     fileclass empty_file {
         definition { type == file and size == 0 }
@@ -78,49 +76,54 @@ This way, you will get relevent information in 'rbh-report --class-info' report 
                  and size <= 32MB }
      }
 
-Reference config file is avaialble [here]()
+Reference config file is available [here](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/posix.conf)
+Make sure to make above relevant changes in fields mentioned above.
 
-* start scan
+* Start Robinhood scan and update
 
  `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf`
 
- * info
+* Query database
  
  `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
  
 ## Test for daos to CORTX and vice-versa data movement
 
-In this excercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two pre-requisites to carry out this test mentioned below.
+In this exercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two prerequisites to carry out this test mentioned below.
 
-* daos server node running on one VM
+* Daos server node running on one VM
 
   - follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
   
-* cortx server node running on second VM
+* Cortx server node running on second VM
 
   - follow this [document](https://github.com/Seagate/cortx/blob/main/QUICK_START.md) to setup cortx on your vm.
   
-* once everything is in-place let's start with the datamovement test by following below steps on daos node which is hosting robinhood policy engine.
+* Once everything is in-place let's start with the data movement test by following the steps below on daos node which is hosting robinhood policy engine.
  
-1. create obejcts in a daos container (i.e. inside dfuse mount point)
+1. Create objects in a daos container (i.e. inside dfuse mount point)
 
-These object(s) are going to be moved to s3 bucket and downloaded from there to doas container directory
+- create larger and smaller objects inside the container.
 
-2. scan the database and check contents of the container on robinhood's database
+- These object(s) are going to be moved to s3 bucket and downloaded from there to doas container directory.
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf`
+2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
+
+- Readily available config files with correct config options are present [here]()
+
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/daos_cortx.conf`
 
 `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
  
-3. create s3 bucket 
+3. Create s3 bucket 
  
 `aws s3 mb s3://daos-perf-test-bucket`
 
-4. run the policy to move larger obejcts (daos_to_cortx_archive policy)
+4. Run the policy to move larger objects (daos_to_cortx_archive policy)
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf --run=daos_cortx(all)`
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf --run=daos_to_cortx_archive(all)`
 
-5. check contents on cotainer and on s3 bucket
+5. Check contents on container and on s3 bucket
 
 `ls`
 
@@ -128,9 +131,11 @@ These object(s) are going to be moved to s3 bucket and downloaded from there to 
 
 This is how we have successfully moved larger objects (size > 1MB) from daos to cortx
 
-6. run the policy to move objects from cortx to daos(run cortx_to_daos_restore policy)
+6. Run the policy to move objects from cortx to daos(run cortx_to_daos_restore policy)
 
-check contents on container and on s3 bucket
+`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf --run=cortx_to_daos_restore(all)`
+
+Check contents on container and on s3 bucket
 
 `ls`
 
