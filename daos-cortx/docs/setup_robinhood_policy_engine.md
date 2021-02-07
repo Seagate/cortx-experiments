@@ -16,11 +16,14 @@ Still, basic steps are provided here for quick reference with posix support.
                 
 * Download source code
 
+- Make sure to use commands as per your curren robinhood version.
+
 `weget https://sourceforge.net/projects/robinhood/files/latest/download/robinhood/3.1.6/robinhood-3.1.6.tar.gz`
 
 `tar zxf robinhood-3.1.6.tar.gz // use your version`
  
 `cd  robinhood-3.1.6`
+
  
 *  build robinhood RPMs by running:
  
@@ -38,25 +41,26 @@ Still, basic steps are provided here for quick reference with posix support.
 
 * Creating robinhood database //https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration
 
-rbh-config create_db <db_name>    'localhost' 'rbh_password' // /root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config rbh_fsname  'localhost' 'rbh_password'
+`rbh-config create_db <db_name>    'localhost' 'rbh_password' // /root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config rbh_fsname  'localhost' 'rbh_password'`
 
-A common name for robinhood database name is 'rbh_fsname.
-Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
+A common name for robinhood database name is 'rbh_fsname. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
 
 * Create a robinhood configuration file, starting with a simple robinhood template:
 
-cp /root/setup_robinhood/robinhood-3.1.6/doc/templates/basic.conf /etc/robihood.d/posix.conf
+`cp /root/setup_robinhood/robinhood-3.1.6/doc/templates/basic.conf /etc/robihood.d/posix.conf`
+
+For a reference this let me share a config file for 
 
 * Edit the configuration file
 
-n 'General' block, set filesystem root path, and the corresponding filesystem type:
+In 'General' block, set filesystem root path, and the corresponding filesystem type:
  fs_path = "/fs/root";
  fs_type = xfs;
  
 * In 'ListManager' block, set database connection parameters:
 
-db = <db_name>;
-password_file = "/etc/robinhood.d/.dbpassword" ;
+      db = <db_name>;
+      password_file = "/etc/robinhood.d/.dbpassword" ;
 
 It is recommended to define your fileclasses before running the initial filesystem scan:
 
@@ -79,18 +83,18 @@ This way, you will get relevent information in 'rbh-report --class-info' report 
  
  `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
  
-##TEST WITH DAOS_CORTX
+## Test for daos to CORTX and vice-versa data movement
 
 In this excercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two pre-requisites to carry out this test mentioned below.
 * daos server node running on one VM
 
-  - follow this document to setup daos and creating container.
+  - follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
   
 * cortx server node running on second VM
 
-  - follow this document to setup cortx on your vm.
+  - follow this [document](https://github.com/Seagate/cortx/blob/main/QUICK_START.md) to setup cortx on your vm.
   
-* once everything is in-place let's start with the datamovement test by following below steps on daos node which is running robinhood policy engine.
+* once everything is in-place let's start with the datamovement test by following below steps on daos node which is hosting robinhood policy engine.
  
 1. create obejcts in a daos container (i.e. inside dfuse mount point)
 
@@ -126,4 +130,4 @@ check contents on container and on s3 bucket
 
 `aws s3 ls s3://daos-bucket`
 
-THis is how we have successfully moved objects from s3 bucket to daos container.
+This is how we have successfully moved objects from s3 bucket to daos container.
