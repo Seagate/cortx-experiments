@@ -202,7 +202,7 @@ DAOS demands 2 kinds of storage. 1 for SCM storage for metadata and NVMe for bul
 
     - Container creation & export
     
-        creating a POSIX container requires a path where the last directory location is not present. In the following example path is taken as /tmp/test_container, where test_container is not present at the moment on the file system.
+        Creating a POSIX container requires a path where the last directory location is not present. In the following example path is taken as /tmp/test_container, where test_container is not present at the moment on the file system.
         
         Terminal logs -
 
