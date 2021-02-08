@@ -1,22 +1,25 @@
 # Daos object movement using aws s3cli
 
-- Daos source container to Daos destination container object movement is possible using aws s3 cli. This documents is the setup guide to perform mentioned exercise.
+- Document describes data movement between DAOS and CORTX using Posix Interface on DAOS and S3 interface on CORTX. This demonstrates two workflows using AWS S3 cli tool.
+
+   - DAOS to CORTX (posix to S3)
+   - CORTX to DAOS (S3 to posix)
 
 # Test setup
 
 ## Prerequisites
 
-* Single node deployment of cortx on another VM
+* Single node deployment of cortx on one VM
 
-    - The single node deployment for CORTX will hosting s3 server, which will be used to manage buckets and store objects requested aws s3 cli on daos node.
+    - The single node deployment for CORTX hosting s3 server, which will be used to manage buckets and store objects moved from DOAS using aws s3 cli.
 
-* Daos server node setup on a VM
+* Daos server node setup on another VM
   
     - Daos node will be required to create pools, containers and storing objects in it.
 
 * Install s3 cli on Daos node
 
-    - aws s3 cli Daos node will be used to storing/retrieving objects to/from CORTX node.
+    - Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from CORTX node.
     
 ## Setup cortx node
 
