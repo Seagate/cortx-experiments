@@ -79,7 +79,7 @@ This way, you will get relevant information in 'rbh-report --class-info' report 
                  and size <= 32MB }
      }
 
-Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/posix.conf)
+Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/posix.conf)
 Make sure to make above relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
@@ -112,7 +112,7 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-- Readily available config files with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+- Readily available config files with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
 
 `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
