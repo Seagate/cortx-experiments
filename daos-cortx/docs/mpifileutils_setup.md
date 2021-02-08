@@ -124,6 +124,8 @@
             remote: Total 243 (delta 37), reused 109 (delta 11), pack-reused 0
             Receiving objects: 100% (243/243), 430.01 KiB | 0 bytes/s, done.
             Resolving deltas: 100% (37/37), done.
+            
+    - Note : Commit hash used for following exercise is : 1968c5d8bf49cdd82a31e4d9f25dc7aa2deda17c
 
     ```mkdir build```
 
@@ -392,17 +394,9 @@
 
 * Object copy
 
-    For object copy within a pool and between containers dcp command is used to showcase the operation. There are two command forms are available.
-    
-    first is -     
+    For object copy within a pool and between containers dcp command is used to showcase the operation.
     
     ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v daos://$pool/$src_container_id daos://$pool/$dest_container_id```
-    
-    and second is - 
-
-    ```mpirun -np 1 --allow-run-as-root /root/mpifileutils_src/install/bin/dcp -v --daos-src-pool $pool_id --daos-src-cont $src_container_id --daos-dst-pool $pool_id --daos-dst-cont $dest_container_id```
-    
-    Here, for demonstration purpose the second form is used to show the object copy operation of containers.
 
     make sure openmpi commands (mpicc, mpirun) are already added in path and accessible.
     
