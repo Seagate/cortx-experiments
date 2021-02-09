@@ -21,6 +21,7 @@ Mellanox SN2100) using SNMPv3 for the future releases of LDR.
 
 * [SNMP v3 INFORM implementation](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/SNMPv3/docs/snmp_inform_impl.md)
 
+* [SSPL_trap.py {Update Sensor For the future help}](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/SNMPv3/src/trap_receiver.py)
 
 ### Please recheck any updated api's from the official documenation
 * [Net-Snmp Documentation](http://www.net-snmp.org/)
