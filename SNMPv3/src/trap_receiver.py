@@ -40,7 +40,7 @@ config.addV3User(
     config.usmDESPrivProtocol, 'mysecretpriv'
 )
 
-config.addV3User(snmpEngine, 'inform_sender', 
+config.addV3User(snmpEngine, 'inform_sender',
     config.usmHMACSHAAuthProtocol, 'authpass',
     config.usmAesCfb128Protocol, 'privpass',
 )
@@ -51,7 +51,7 @@ def cbFun(snmpEngine, stateReference, contextEngineId, contextName,
           varBinds, cbCtx):
     print('Notification from ContextEngineId "%s", ContextName "%s"' %
             (contextEngineId.prettyPrint(), contextName.prettyPrint()))
-            
+
     for name, val in varBinds:
         print('%s = %s' % (name.prettyPrint(), val.prettyPrint()))
 
@@ -66,4 +66,4 @@ try:
     snmpEngine.transportDispatcher.runDispatcher()
 except:
     snmpEngine.transportDispatcher.closeDispatcher()
-    raise        
+    raise

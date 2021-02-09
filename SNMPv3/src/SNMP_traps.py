@@ -19,7 +19,7 @@ from framework.base.module_thread import SensorThread
 from framework.base.internal_msgQ import InternalMsgQ
 from framework.utils.service_logging import logger
 
-# Modules that receive messages from this module 
+# Modules that receive messages from this module
 from framework.rabbitmq.rabbitmq_egress_processor import RabbitMQegressProcessor
 from message_handlers.logging_msg_handler import LoggingMsgHandler
 
@@ -113,20 +113,20 @@ class SNMPtraps(SensorThread, InternalMsgQ):
             )
 
             # SNMPv3/USM setup
-            # this USM entry is used for TRAP receiving purpose 
-            config.addV3User(snmpEngine, 'inform_sender', 
+            # this USM entry is used for TRAP receiving purpose
+            config.addV3User(snmpEngine, 'inform_sender',
                 config.usmHMACSHAAuthProtocol, 'authpass',
                 config.usmAesCfb128Protocol, 'privpass',
             )
 
-            # Create an asynchronous dispatcher and register a callback method 
+            # Create an asynchronous dispatcher and register a callback method
             # to handle incoming traps
             # Register SNMP Application at the SNMP engine
             ntfrcv.NotificationReceiver(snmpEngine, self._trap_catcher)
 
             snmpEngine.transportDispatcher.jobStarted(1)  # this job would never finish
 
-            # Run I/O dispatcher which would receive queries and send 
+            # Run I/O dispatcher which would receive queries and send
             # confirmations
             try:
                 # Dispatcher will never finish as job #1 never reaches zero
@@ -164,7 +164,7 @@ class SNMPtraps(SensorThread, InternalMsgQ):
         self._log_debug('Reading MIB sources...')
         logger.info('Reading MIB sources...')
         compiler.addMibCompiler(
-                        mibBuilder, 
+                        mibBuilder,
                         sources=['/etc/sspl-ll/templates/snmp'])
         # mibSources = mibBuilder.getMibSources() + (
         #     builder.DirMibSource('/etc/sspl-ll/templates/snmp'),)
@@ -187,7 +187,7 @@ class SNMPtraps(SensorThread, InternalMsgQ):
             ret_val = val
             self._log_debug(f'module: {modName}, {nodeDesc}: <{type(val).__name__}> {val.prettyPrint()}, oid: {oid.prettyPrint()}')
             logger.info('module: %s, %s: <%s> %s, oid: %s' % (
-                            modName, nodeDesc, type(val).__name__), 
+                            modName, nodeDesc, type(val).__name__),
                             val.prettyPrint(), oid.prettyPrint()
                         )
             # Lookup the trap name from the SNMP Modules MIB
@@ -262,7 +262,7 @@ class SNMPtraps(SensorThread, InternalMsgQ):
         self._enabled_MIBS = ['AGENTX-MIB.txt',  'IF-MIB.txt', 'NET-SNMP-EXAMPLES-MIB.txt',  'SCTP-MIB.txt', 'SNMPv2-TC.txt',
             'BRIDGE-MIB.txt', 'INET-ADDRESS-MIB.txt', 'NET-SNMP-EXTEND-MIB.txt', 'SMUX-MIB.txt', 'SNMPv2-TM.txt',
             'DISMAN-EVENT-MIB.txt', 'IP-FORWARD-MIB.txt', 'NET-SNMP-MIB.txt', 'SNMP-COMMUNITY-MIB.txt', 'SNMP-VIEW-BASED-ACM-MIB.txt',
-            'DISMAN-SCHEDULE-MIB.txt', 'IP-MIB.txt', 'NET-SNMP-PASS-MIB.txt', 'SNMP-FRAMEWORK-MIB.txt', 'TCP-MIB.txt', 
+            'DISMAN-SCHEDULE-MIB.txt', 'IP-MIB.txt', 'NET-SNMP-PASS-MIB.txt', 'SNMP-FRAMEWORK-MIB.txt', 'TCP-MIB.txt',
             'DISMAN-SCRIPT-MIB.txt', 'IPV6-FLOW-LABEL-MIB.txt', 'NET-SNMP-TC.txt', 'SNMP-MPD-MIB.txt', 'TRANSPORT-ADDRESS-MIB.txt',
             'EtherLike-MIB.txt', 'IPV6-ICMP-MIB.txt', 'NET-SNMP-VACM-MIB.txt', 'SNMP-NOTIFICATION-MIB.txt', 'TUNNEL-MIB.txt',
             'HCNUM-TC.txt', 'IPV6-MIB.txt', 'NETWORK-SERVICES-MIB.txt',   'SNMP-PROXY-MIB.txt', 'UCD-DEMO-MIB.txt',

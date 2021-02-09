@@ -1,4 +1,4 @@
-## Resources used 
+## Resources used
 * Linux Virtual machines :
    * ssc-vm-0748.colo.seagate.com (Agent)
    * ssc-vm-0804.colo.seagate.com (Manager)

@@ -2,7 +2,7 @@
 
 ## Configuration on Mellanox Switch
 
->NOTE: Mellanox switches run with Cumulus Linux operating system which is already enabled with SNMP capabilities and it can be configured via using cumulus linux commands (recommended) or by editing the /etc/snmp/snmpd.conf file. 
+>NOTE: Mellanox switches run with Cumulus Linux operating system which is already enabled with SNMP capabilities and it can be configured via using cumulus linux commands (recommended) or by editing the /etc/snmp/snmpd.conf file.
 
 1. Add the IP address of the manager server to the config,
    ```bash
@@ -10,7 +10,7 @@
    ```
 1. Create a v3 user which can query the agent.
    ```bash
-   >> net add snmp-server username cumulusro auth-sha seagate1 encrypt-aes encryptseagate1   
+   >> net add snmp-server username cumulusro auth-sha seagate1 encrypt-aes encryptseagate1
    ## username and passphrases can be changed
    ```
 1. Assign required oid permission level to the user.
@@ -35,13 +35,13 @@
    ```
 1. Check/Set firewall rule
    ```bash
-   ## check if firewalld is running or not 
+   ## check if firewalld is running or not
    >> systemctl status firewall
- 
+
    ## if it is running then run 2 commands mentioned below else skip these commands
- 
+
    >> firewall-cmd --permanent --zone=public --add-port={161/udp,162/udp}
- 
+
    >> firewall-cmd --reload
    ```
 1. Now We can Query any value from enabled MIBS.
@@ -49,8 +49,8 @@
    ```bash
    >> snmpget -v3 -u cumulusro -a SHA -A seagate1 -x AES -X encryptseagate1 -l authPriv 10.237.66.62 sysDescr.0
    SNMPv2-MIB::sysDescr.0 = STRING: Cumulus Linux 3.7.10 (Linux Kernel 4.1.33-1+cl3u24)
-   
-   >> snmpwalk -v3 -u cumulusro -a SHA -A seagate1 -x AES -X encryptseagate1 -l authPriv 
+
+   >> snmpwalk -v3 -u cumulusro -a SHA -A seagate1 -x AES -X encryptseagate1 -l authPriv
    10.237.66.62 interfaces
    IF-MIB::ifNumber.0 = INTEGER: 37
    IF-MIB::ifIndex.1 = INTEGER: 1

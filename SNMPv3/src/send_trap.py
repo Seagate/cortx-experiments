@@ -6,7 +6,7 @@ errorIndication, errorStatus, errorIndex, varBinds = next(
         SnmpEngine(),
 	    UsmUserData('inform_sender','authpass','privpass',
 		        authProtocol=usmHMACSHAAuthProtocol,
-                privProtocol=usmAesCfb128Protocol),        
+                privProtocol=usmAesCfb128Protocol),
 	    UdpTransportTarget(('10.230.242.110', 162)),
         ContextData(),
         'inform',
