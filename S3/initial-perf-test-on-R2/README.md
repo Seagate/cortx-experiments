@@ -26,6 +26,7 @@ Contents
     - [TTFB/RPS, object size 16 MB](#ttfbrps-object-size-16-mb)
     - [TTFB/RPS, object size 64 MB](#ttfbrps-object-size-64-mb)
     - [TTFB/RPS, object size 128 MB](#ttfbrps-object-size-128-mb)
+  - [Single stream read (based on TTFB test run)](#single-stream-read-based-on-ttfb-test-run)
 
 
 Goal of the POC
@@ -420,3 +421,21 @@ Notes:
 
 * Slight increase in TTFB on 1-128 clients, and huge jump on 256.  Maybe
   something temporary.
+
+
+## Single stream read (based on TTFB test run)
+
+As a side-effect of TTFB tests (see above), we have a summary on "single stream read", i.e. read when only 1 single parallel session is connected to S3.
+
+| size (MB)   | size         | `numClients` | read throughput (MB/s) | IOPS | read test length (s) |
+| ----------- | -----------: | -----------: | ---------------------- | ---: | -------------------: |
+| 0.000095    | 100 B        | 1            | 0.006935               | 73   | 141                  |
+| 0.00098     | 1 KB         | 1            | 0.07154                | 73   | 141                  |
+| 0.016       | 16 KB        | 1            | 0.288                  | 18   | 561                  |
+| 0.098       | 100 KB       | 1            | 3.822                  | 39   | 265                  |
+| 0.25        | 256 KB       | 1            | 6.5                    | 26   | 392                  |
+| 1           | 1 MB         | 1            | 20                     | 20   | 505                  |
+| 5           | 5 MB         | 1            | 85                     | 17   | 589                  |
+| 16          | 16 MB        | 1            | 224                    | 14   | 91                   |
+| 64          | 64 MB        | 1            | 512                    | 8    | 41                   |
+| 128         | 128 MB       | 1            | 512                    | 4    | 156                  |
