@@ -98,8 +98,8 @@ Results
 | 1c_5o_50gb.json     | "Read"    | 0.010054 | 33.9326   | 36.19711       |
 
 
-Detailed results could be found in [report](../doc/report.csv) and
-[histogram for all tests together](../doc/m0db_tests_hist.png).
+Detailed results could be found in [report](report.csv) and
+[histogram for all tests together](m0db_tests_hist.png).
 
 Shared [excel report](https://seagatetechnology.sharepoint.com/:x:/r/sites/gteamdrv1/tdrive1224/_layouts/15/doc2.aspx?sourcedoc=%7B9896f554-9380-4505-be06-a7f0cf0bade5%7D&action=edit&wdPreviousSession=e899fdec-292b-42d9-8f14-02f46a81336c&cid=850b7e27-b3d8-46ee-8523-feae709b83ce)
 
