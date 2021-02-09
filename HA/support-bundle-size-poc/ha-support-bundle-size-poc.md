@@ -1,50 +1,51 @@
-- [Report for Logs size PoC](#org7f56538)
-  - [Search through 2 NFS servers: Puny Longmorn](#org435fded)
-    - [<http://ssc-nfs-server1.colo.seagate.com/logs1/>](#orgd4a231e)
-    - [<http://ssc-nfs-srvr2.pun.seagate.com/>](#org872d571)
-    - [Result: big support bundles > 200M](#org8583807)
-  - [Pick several support bundles and check whether they have big amount of HA logs](#org5fda277)
-    - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-14767/secondary/SUPPORT_BUNDLE.SB36w38ubm;546630862>](#org1c5420f)
-    - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-15325/build532/secondary/SUPPORT_BUNDLE.SB1x0duu69o>](#orgd69e21a)
-    - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/certification/Node-1/SUPPORT_BUNDLE.SBeiyo8xuq>](#orgb7966a0)
-    - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-16253/live_node/SUPPORT_BUNDLE.SBsifj5q2r;925553016>](#org042df6a)
-  - [corosync.log size reduction options](#orgb19e458)
-    - [Initial number of lines: 127K, Size: 19M](#org7a4998d)
-    - [sed -E /fence\_ipmilan.\*stderr/d gives 127K -> 94K: -5MiB](#org4a49dab)
-    - [sed -E /common\_print/d gives 94K -> 76K: -3MiB](#orgc12950b)
-    - [sed -E /cib:/d gives 76K -> 58K: -3.2MiB](#orgc0d7025)
-    - [Generic solution: reduce size of logs in logrotate](#orgc93e691)
-    - [Pacemaker logging options](#org2fd90e2)
-    - [Summary:](#org6356f65)
-  - [Summary](#org9bcc42c)
-    - [Though current existing HA support bundles do not exceed the limit (5MiB) yet - it is just a matter of time taking into accound projected number of nodes in the cluster](#org2de6258)
-    - [Taking the mean of 2 forecass (10 days and 2 days), make sense to take 6 days as truncate limit](#orga9cfd72)
-    - [Need to implement logrotate mechanism in cortx-ha repo truncating logs after 6 days since it is not implemented](#orgf1971a6)
-    - [fence\_ipmi logs can be disabled close to release phase to save some space. So far, they may be quite useful debugging fencing issues.](#orgc2f7290)
+- [Report for Logs size PoC](#orgdc8c064)
+- [Search through 2 NFS servers: Puny Longmorn](#org49a44c9)
+  - [<http://ssc-nfs-server1.colo.seagate.com/logs1/>](#orgea0b083)
+  - [<http://ssc-nfs-srvr2.pun.seagate.com/>](#org3df1d22)
+  - [Result: big support bundles > 200M](#orgd6f34d1)
+- [Pick several support bundles and check whether they have big amount of HA logs](#org730d5b5)
+  - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-14767/secondary/SUPPORT_BUNDLE.SB36w38ubm;546630862>](#org1a9afa8)
+  - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-15325/build532/secondary/SUPPORT_BUNDLE.SB1x0duu69o>](#org025226f)
+  - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/certification/Node-1/SUPPORT_BUNDLE.SBeiyo8xuq>](#org4f58025)
+  - [<http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-16253/live_node/SUPPORT_BUNDLE.SBsifj5q2r;925553016>](#org1b2f86d)
+- [corosync.log size reduction options](#org7453cab)
+  - [Initial number of lines: 127K, Size: 19M](#org5f8812f)
+  - [sed -E /fence\_ipmilan.\*stderr/d gives 127K -> 94K: -5MiB](#org16d3e6d)
+  - [sed -E /common\_print/d gives 94K -> 76K: -3MiB](#org4e34f99)
+  - [sed -E /cib:/d gives 76K -> 58K: -3.2MiB](#orgc5aa218)
+  - [Generic solution: reduce size of logs in logrotate](#orge26a742)
+  - [Pacemaker logging options](#org5b2a372)
+  - [Summary:](#org3c8438a)
+- [Summary](#org0589f57)
+  - [Though current existing HA support bundles do not exceed the limit (5MiB) yet - it is just a matter of time taking into accound projected number of nodes in the cluster](#orgba53185)
+  - [Taking the mean of 2 forecass (10 days and 2 days), make sense to take 6 days as truncate limit](#org8264969)
+  - [Need to implement logrotate mechanism in cortx-ha repo truncating logs after 6 days since it is not implemented](#org216092d)
+  - [fence\_ipmi logs can be disabled close to release phase to save some space. So far, they may be quite useful debugging fencing issues.](#orgc946a1f)
+  - [Since support bundle is generated ondemand, HA support bundle script can implement some advanced logic for filtering out required logs to include only logs where errors are indicated.](#org322bb19)
 
 
-<a id="org7f56538"></a>
+<a id="orgdc8c064"></a>
 
 # Report for Logs size PoC
 
 
 
-<a id="org435fded"></a>
+<a id="org49a44c9"></a>
 
 ## Search through 2 NFS servers: Puny Longmorn
 
 
-<a id="orgd4a231e"></a>
+<a id="orgea0b083"></a>
 
 ### <http://ssc-nfs-server1.colo.seagate.com/logs1/>
 
 
-<a id="org872d571"></a>
+<a id="org3df1d22"></a>
 
 ### <http://ssc-nfs-srvr2.pun.seagate.com/>
 
 
-<a id="org8583807"></a>
+<a id="orgd6f34d1"></a>
 
 ### Result: big support bundles > 200M
 
@@ -70,12 +71,12 @@ RESULT;http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/test_8351_B515/SUPPORT_
 ```
 
 
-<a id="org5fda277"></a>
+<a id="org730d5b5"></a>
 
 ## Pick several support bundles and check whether they have big amount of HA logs
 
 
-<a id="org1c5420f"></a>
+<a id="org1a9afa8"></a>
 
 ### <http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-14767/secondary/SUPPORT_BUNDLE.SB36w38ubm;546630862>
 
@@ -98,7 +99,7 @@ RESULT;http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/test_8351_B515/SUPPORT_
         1.  This is quite an optimistic forecast since most likely logs size grouth is not linear
 
 
-<a id="orgd69e21a"></a>
+<a id="org025226f"></a>
 
 ### <http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-15325/build532/secondary/SUPPORT_BUNDLE.SB1x0duu69o>
 
@@ -145,7 +146,7 @@ RESULT;http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/test_8351_B515/SUPPORT_
     3.  Other logs are not considered due to minimal impact to the support bundle size
 
 
-<a id="orgb7966a0"></a>
+<a id="org4f58025"></a>
 
 ### <http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/certification/Node-1/SUPPORT_BUNDLE.SBeiyo8xuq>
 
@@ -156,47 +157,47 @@ RESULT;http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/test_8351_B515/SUPPORT_
     Doesn't make sense to check  
 
 
-<a id="org042df6a"></a>
+<a id="org1b2f86d"></a>
 
 ### <http://ssc-nfs-srvr2.pun.seagate.com/logs1/ldr-r1/EOS-16253/live_node/SUPPORT_BUNDLE.SBsifj5q2r;925553016>
 
 900M  
 
 
-<a id="orgb19e458"></a>
+<a id="org7453cab"></a>
 
 ## corosync.log size reduction options
 
 Since that file consumes major part of disk space in support bunle, lets check which options do we have to optimize the size.  
 
 
-<a id="org7a4998d"></a>
+<a id="org5f8812f"></a>
 
 ### Initial number of lines: 127K, Size: 19M
 
 
-<a id="org4a49dab"></a>
+<a id="org16d3e6d"></a>
 
 ### sed -E /fence\_ipmilan.\*stderr/d gives 127K -> 94K: -5MiB
 
 This can be disabled in fence\_ipmilan configuration for sure.  
 
 
-<a id="orgc12950b"></a>
+<a id="org4e34f99"></a>
 
 ### sed -E /common\_print/d gives 94K -> 76K: -3MiB
 
 Need to research whether common\_prints caused by \`pcs status\` invocations can be disabled via pacemaker configuration  
 
 
-<a id="orgc0d7025"></a>
+<a id="orgc5aa218"></a>
 
 ### sed -E /cib:/d gives 76K -> 58K: -3.2MiB
 
 CIB updates is not really interesing information for analysis, but I would not recommend to remove it from logs  
 
 
-<a id="orgc93e691"></a>
+<a id="orge26a742"></a>
 
 ### Generic solution: reduce size of logs in logrotate
 
@@ -206,7 +207,7 @@ CIB updates is not really interesing information for analysis, but I would not r
     Hare component code don't have corosync.log logrotate configuration anymore due to different scope of responsibility - this is expected and understandable.  
 
 
-<a id="org2fd90e2"></a>
+<a id="org5b2a372"></a>
 
 ### Pacemaker logging options
 
@@ -248,33 +249,38 @@ CIB updates is not really interesing information for analysis, but I would not r
         ```
 
 
-<a id="org6356f65"></a>
+<a id="org3c8438a"></a>
 
 ### Summary:
 
 1.  Up to 8M (42%) can be saved by selecting wich type of logs can disabled
 
 
-<a id="org9bcc42c"></a>
+<a id="org0589f57"></a>
 
 ## Summary
 
 
-<a id="org2de6258"></a>
+<a id="orgba53185"></a>
 
 ### Though current existing HA support bundles do not exceed the limit (5MiB) yet - it is just a matter of time taking into accound projected number of nodes in the cluster
 
 
-<a id="orga9cfd72"></a>
+<a id="org8264969"></a>
 
 ### Taking the mean of 2 forecass (10 days and 2 days), make sense to take 6 days as truncate limit
 
 
-<a id="orgf1971a6"></a>
+<a id="org216092d"></a>
 
 ### Need to implement logrotate mechanism in cortx-ha repo truncating logs after 6 days since it is not implemented
 
 
-<a id="orgc2f7290"></a>
+<a id="orgc946a1f"></a>
 
 ### fence\_ipmi logs can be disabled close to release phase to save some space. So far, they may be quite useful debugging fencing issues.
+
+
+<a id="org322bb19"></a>
+
+### Since support bundle is generated ondemand, HA support bundle script can implement some advanced logic for filtering out required logs to include only logs where errors are indicated.
