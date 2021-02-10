@@ -84,6 +84,6 @@
    Oid or Mib id to get value can be set using ObjectTyp() object.
 
    Sample scripts :
-   * [snmp_fetch.py](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/SNMPv3/src/snmp_fetch.py)
-   * [snmp_walk.py](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/SNMPv3/src/snmp_walk.py)
+   * [snmp_fetch.py](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/src/snmp_fetch.py)
+   * [snmp_walk.py](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/src/snmp_walk.py)
 
