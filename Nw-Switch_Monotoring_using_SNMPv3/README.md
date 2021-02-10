@@ -13,15 +13,15 @@ This POC (Proof of Concept) demonstrates how we can monitor network switches
 
 ### Links to the work done during the POC
 
-* [SNMP Architechture](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/docs/snmp_arch.md)
+* [SNMP Architechture](./docs/snmp_arch.md)
 
-* [Resources Used](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/docs/resources.md)
+* [Resources Used](./docs/resources.md)
 
-* [SNMP GET implementation](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/docs/snmp_get_impl.md)
+* [SNMP GET implementation](./docs/snmp_get_impl.md)
 
-* [SNMP v3 INFORM implementation](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/docs/snmp_inform_impl.md)
+* [SNMP v3 INFORM implementation](./docs/snmp_inform_impl.md)
 
-* [SSPL_trap.py {Update Sensor For the future help}](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/src/SNMP_traps.py)
+* [SSPL_trap.py {Update Sensor For the future help}](./src/SNMP_traps.py)
 
 ### Please recheck any updated api's from the official documenation
 * [Net-Snmp Documentation](http://www.net-snmp.org/)

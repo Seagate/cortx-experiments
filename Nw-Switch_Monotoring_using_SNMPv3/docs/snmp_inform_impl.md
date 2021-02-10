@@ -22,7 +22,7 @@
    ```
 ### Using python script
 1. Ensure that Python module `pysnmp` is installed.
-1. Refer the script : [trap_reciver.py](https://github.com/sumedhak27/cortx-experiments/blob/EOS-11060-Mellanox_SN2100_monitoring_using_SNMPv3/Nw-Switch_Monotoring_using_SNMPv3/src/trap_receiver.py) or [Pysnmp documentation](https://pysnmp.readthedocs.io/en/latest/) to write a script.
+1. Refer the script : [trap_reciver.py](../src/trap_receiver.py) or [Pysnmp documentation](https://pysnmp.readthedocs.io/en/latest/) to write a script.
 1. Edit or add the appropriate credentials in trap_receiver.py for :
    1. ip and port script is listening to
    1. v3 user credentials
