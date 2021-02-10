@@ -208,39 +208,40 @@ DR level set for throughput is:
 * for objects of 256KB = 1GB/s read per node (implies 4k RPS);
 * for objects of 16MB  = 3GB/s read per node.
 
-| `objectSize` | `numClients` | `RPS`   | throughput (MB/s) |
-| ---------: | ---------: | ----: | ----------------: |
-| 1 KB       | 1          | 24.2  | 0.024             |
-| 1 KB       | 5          | 135.2 | 0.132             |
-| 1 KB       | 10         | 219.8 | 0.215             |
-| 1 KB       | 15         | 273.6 | 0.267             |
-| 1 KB       | 20         | 311.8 | 0.304             |
-| 16 KB      | 1          | 19.8  | 0.309             |
-| 16 KB      | 5          | 81.3  | 1.3               |
-| 16 KB      | 10         | 139.2 | 2.2               |
-| 16 KB      | 15         | 196.5 | 3.1               |
-| 16 KB      | 20         | 244.2 | 3.8               |
-| 256 KB     | 1          | 20.9  | 5.2               |
-| 256 KB     | 5          | 93.5  | 23                |
-| 256 KB     | 10         | 145.0 | 36                |
-| 256 KB     | 15         | 187.7 | 47                |
-| 256 KB     | 20         | 221.8 | 55                |
-| 1 MB       | 1          | 32.9  | 33                |
-| 1 MB       | 5          | 84.7  | 85                |
-| 1 MB       | 10         | 132.0 | 132               |
-| 1 MB       | 15         | 156.4 | 156               |
-| 1 MB       | 20         | 188.3 | 188               |
-| 16 MB      | 1          | 13.3  | 212               |
-| 16 MB      | 5          | 32.9  | 526               |
-| 16 MB      | 10         | 46.1  | 738               |
-| 16 MB      | 15         | 52.6  | 842               |
-| 16 MB      | 20         | 58.8  | 940               |
-| 256 MB     | 1          | 1.6   | 421               |
-| 256 MB     | 5          | 4.4   | 1114              |
-| 256 MB     | 10         | 6.1   | 1570              |
-| 256 MB     | 15         | 6.2   | 1578              |
-| 256 MB     | 20         | 6.0   | 1544              |
-| 50 GB      | 5          | 0.01  | 514               |
+! `objectSize` | `numClients` | Read RPS | Read throughput (MB/s) | Write RPS | Write throughput (MB/s) | R/W ratio |
+| -----------: | -----------: | -------: | ---------------------: | --------: | ----------------------: | --------- |
+| 1 KB         | 1            | 24.2     | 0.024                  | 38.3      | 0.037                   | 0.65      |
+| 1 KB         | 5            | 135.2    | 0.132                  | 126.8     | 0.124                   | 1.06      |
+| 1 KB         | 10           | 219.8    | 0.215                  | 189.9     | 0.185                   | 1.16      |
+| 1 KB         | 15           | 273.6    | 0.267                  | 234.8     | 0.229                   | 1.17      |
+| 1 KB         | 20           | 311.8    | 0.304                  | 268.7     | 0.262                   | 1.16      |
+| 16 KB        | 1            | 19.8     | 0.309                  | 7.8       | 0.121                   | 2.55      |
+| 16 KB        | 5            | 81.3     | 1.3                    | 40.5      | 0.632                   | 2.06      |
+| 16 KB        | 10           | 139.2    | 2.2                    | 54.9      | 0.858                   | 2.56      |
+| 16 KB        | 15           | 196.5    | 3.1                    | 74.0      | 1.157                   | 2.68      |
+| 16 KB        | 20           | 244.2    | 3.8                    | 101.2     | 1.581                   | 2.40      |
+| 256 KB       | 1            | 20.9     | 5.2                    | 24.0      | 6                       | 0.87      |
+| 256 KB       | 5            | 93.5     | 23                     | 124.2     | 31                      | 0.74      |
+| 256 KB       | 10           | 145.0    | 36                     | 174.0     | 44                      | 0.82      |
+| 256 KB       | 15           | 187.7    | 47                     | 202.3     | 51                      | 0.92      |
+| 256 KB       | 20           | 221.8    | 55                     | 233.5     | 58                      | 0.95      |
+| 1 MB         | 1            | 32.9     | 33                     | 54.0      | 54                      | 0.61      |
+| 1 MB         | 5            | 84.7     | 85                     | 92.0      | 92                      | 0.92      |
+| 1 MB         | 10           | 132.0    | 132                    | 133.0     | 133                     | 0.99      |
+| 1 MB         | 15           | 156.4    | 156                    | 156.1     | 156                     | 1.00      |
+| 1 MB         | 20           | 188.3    | 188                    | 176.4     | 176                     | 1.07      |
+| 16 MB        | 1            | 13.3     | 212                    | 5.6       | 90                      | 2.36      |
+| 16 MB        | 5            | 32.9     | 526                    | 22.6      | 361                     | 1.46      |
+| 16 MB        | 10           | 46.1     | 738                    | 24.7      | 396                     | 1.86      |
+| 16 MB        | 15           | 52.6     | 842                    | 23.7      | 379                     | 2.22      |
+| 16 MB        | 20           | 58.8     | 940                    | 23.6      | 378                     | 2.49      |
+| 256 MB       | 1            | 1.6      | 421                    | 0.5       | 134                     | 3.14      |
+| 256 MB       | 5            | 4.4      | 1114                   | 1.2       | 295                     | 3.78      |
+| 256 MB       | 10           | 6.1      | 1570                   | 1.5       | 392                     | 4.01      |
+| 256 MB       | 15           | 6.2      | 1578                   | 1.5       | 389                     | 4.06      |
+| 256 MB       | 20           | 6.0      | 1544                   | 1.4       | 366                     | 4.22      |
+| 50 GB        | 5            | 0.01     | 514                    | 0.0039    | 198                     | 2.60      |
+
 
 Notes:
 
@@ -248,8 +249,10 @@ Notes:
   with increasing number of s3server instances.  Thus, separate POC is needed
   for auth server RPS research.  Results here are only applicable to s3server
   instances.
+* `R/W ratio` is `read_throughput` divided by `write_throughput`, i.e. how much
+  faster we can read than we can write.
 
-Conclusions from the test results:
+Conclusions from the test results on READ:
 
 * With object sizes up to 256KB, RPS is over 200.  With 20 instances, this gives
   4k RPS per node, as required by DR.  We are thinking of 30 instances per node, which
@@ -273,3 +276,18 @@ Conclusions from the test results:
   However 50 GB throughput 2 times worse than 256 MB which means s3server is better
   optimized for medium sized objects. Dynamic memory tuning for requests could help
   to improve huge objects throughput.
+* Read throughput consistently grows with object size, and seems to have reached
+  the limit of 1.5 GB/s at 256 MB (not confirmed though, as we have not tried
+  the next size).
+
+
+Conclusions on WRITE:
+
+* Write throughput seems to have reached its max of ~400 MB/s on 16 MB objects.
+  Next tested object size 256 MB did not show any improvement in the throughput.
+* There is no 100% correlation between read and write throughput -- in some
+  cases write is faster, in some cases read is faster.
+  * But there is a trend: write seen faster only on small objects.
+  * Also, write throughput tops at 16 MB, while read keeps growing, and so on
+    256 MB, read is 4 times faster than write (while on 16 MB it was only
+    1.5-2.5 times faster).
