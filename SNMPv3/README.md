@@ -1,10 +1,10 @@
-# SNMPv3 POC
+# Network switch monitoring using SNMPv3
 Simple Network Management Protocol (SNMP) is an Internet Standard protocol for collecting and organizing information about managed devices on IP networks and for monitoring or modifying that information to change device behavior.
 
 ### Objective of the POC
 SSPL currently does not support the monitoring of private/public switches.
-This POC (Proof of Concept) displays how we can monitor switches (like
-Mellanox SN2100) using SNMPv3 for the future releases of LDR.
+This POC (Proof of Concept) displays how we can monitor network switches
+(like Mellanox SN2100) using SNMPv3 for the future releases of LDR.
 
 ### The SNMP POC tried to achive the following things
 1. Try SNMPv1, SNMPv2 protocol implemetation using linux virtual machines in agent and the manager roles.

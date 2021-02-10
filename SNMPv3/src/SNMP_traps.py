@@ -223,7 +223,7 @@ class SNMPtraps(SensorThread, InternalMsgQ):
 
         self._log_debug(f"trap_name: {self._trap_name}")
         self._log_debug(f"enabled_traps: {self._enabled_traps}")
-        logger.infof"trap_name: {self._trap_name}")
+        logger.info(f"trap_name: {self._trap_name}")
         logger.info(f"enabled_traps: {self._enabled_traps}")
 
         # Apply filter unless there is an asterisk in the list
