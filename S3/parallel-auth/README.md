@@ -1,38 +1,38 @@
-Running Auth call in parallel with Motr KVS call
-================================================
+# Running Auth call in parallel with Motr KVS call
 
 Most of the S3 API calls invoke two calls between s3server and s3authserver:
 
-1 Authentication
-1 Authorization
+1.  Authentication
+2.  Authorization
 
 These calls are intermixed with Motr KVS calls, and are done sequentially one after another.
 It should be possible to run these calls, or one of them, in parallel.
 This would improve TTFB and small objects performance.
 
-
 Contents:
 
-- [Running Auth call in parallel with Motr KVS call](#running-auth-call-in-parallel-with-motr-kvs-call)
-- [Corresponding Jira Ticket](#corresponding-jira-ticket)
-- [Objectives](#objectives)
-- [POC Details](#poc-details)
-- [Results](#results)
-- [Analysis](#analysis)
-  - [Intro](#intro)
-  - [Normal configuration](#normal-configuration)
-  - [All auth calls are parallel to request execution](#all-auth-calls-are-parallel-to-request-execution)
-  - [Only one auth call is done in parallel while the other is sequential](#only-one-auth-call-is-done-in-parallel-while-the-other-is-sequential)
+-   [Running Auth call in parallel with Motr KVS call](#running-auth-call-in-parallel-with-motr-kvs-call)
 
+    -   [Corresponding Jira Ticket](#corresponding-jira-ticket)
 
-Corresponding Jira Ticket
-=========================
+    -   [Objectives](#objectives)
+
+    -   [POC Details](#poc-details)
+
+    -   [Results](#results)
+
+    -   [Analysis](#analysis)
+
+        -   [Intro](#intro)
+        -   [Normal configuration](#normal-configuration)
+        -   [All auth calls are parallel to request execution](#all-auth-calls-are-parallel-to-request-execution)
+        -   [Only one auth call is done in parallel while the other is sequential](#only-one-auth-call-is-done-in-parallel-while-the-other-is-sequential)
+
+## Corresponding Jira Ticket
 
 [EOS-16658](https://jts.seagate.com/browse/EOS-16658)
 
-
-Objectives
-==========
+## Objectives
 
 Identify if it is possible to run both auth calls, or some of them, in parallel
 with KVS ops and request processing.
@@ -40,9 +40,7 @@ with KVS ops and request processing.
 Measure or estimate the impact the parallel auth execution could have on
 performance metrics.
 
-
-POC Details
-===========
+## POC Details
 
 Both auth calls are independent. Authentication requires only request data and
 authorization requires metadata from the motr kvs. Request execution doesn't
@@ -51,24 +49,22 @@ in parallel to request processing.
 
 It is required to test following combinations:
 
-* All auth calls are parallel to request execution
-  The happy path for full auth in parallel configuration could easily be emulated
-  by disabling auth at all. S3server has a special option to do this - **disable_auth**.
+-   All auth calls are parallel to request execution
+    The happy path for full auth in parallel configuration could easily be emulated
+    by disabling auth at all. S3server has a special option to do this - **disable_auth**.
 
-* Only one auth call is done in parallel while the other is sequential
-  Such a configuration couldn't be easily implemented, but it could be estimated.
-  To do this normal configuration is run and addb metrics are collected. Based on
-  addb all auth calls are measured. Required auth configuration impact
-  could be estimated by substructing call duration from total request time.
+-   Only one auth call is done in parallel while the other is sequential
+    Such a configuration couldn't be easily implemented, but it could be estimated.
+    To do this normal configuration is run and addb metrics are collected. Based on
+    addb all auth calls are measured. Required auth configuration impact
+    could be estimated by substructing call duration from total request time.
 
-
-Results
-=======
+## Results
 
 All tests were run with objects of size 4KB and different number of clients per cluster - 250, 500 and 750.
 During each run all types of object and metadata requests were measured.
 
-* Normal configuration
+-   Normal configuration
 
 | number of clients    | 250        |           |           |         |         | 500     |           |           |         |        | 750     |           |           |          |          |
 | -------------------- | ---------- | --------- | --------- | ------- | ------- | ------- | --------- | --------- | ------- | ------ | ------- | --------- | --------- | -------- | -------- |
@@ -88,14 +84,14 @@ During each run all types of object and metadata requests were measured.
 | Ttfb 90th-ile        | 6.905      | 0.676     | 0.476     | 0.361   | 0.397   | 2.493   | 1.352     | 0.939     | 0.933   | 0.968  | 3.828   | 2.033     | 1.83      | 1.747    | 1.621    |
 | Ttfb 99th-ile        | 7.811      | 0.716     | 0.929     | 0.733   | 0.856   | 3.079   | 1.446     | 1.404     | 1.333   | 1.393  | 4.153   | 2.348     | 2.267     | 7.147    | 7.422    |
 
-* Auth call durations based on addb - [hist_auth.png](hist_auth.png)
+-   Auth call durations based on addb - [hist_auth.png](hist_auth.png)
 
 | phase       | min, s  | avg, s  | max, s  |
 | ----------- | ------- | ------- | ------- |
 | check_auth  | 0.00103 | 0.13648 | 3.78818 |
 | check_authz | 0.00066 | 0.01167 | 3.26455 |
 
-* All auth calls are parallel to request execution
+-   All auth calls are parallel to request execution
 
 | number of clients    | 250     |           |           |          |          | 500     |           |           |          |          | 750     |           |           |         |        |
 | -------------------- | ------- | --------- | --------- | -------- | -------- | ------- | --------- | --------- | -------- | -------- | ------- | --------- | --------- | ------- | ------ |
@@ -115,7 +111,7 @@ During each run all types of object and metadata requests were measured.
 | Ttfb 90th-ile        | 1.761   | 0.639     | 0.429     | 0.198    | 0.262    | 2.056   | 0.617     | 0.536     | 0.517    | 0.661    | 2.882   | 0.909     | 0.931     | 0.945   | 1.006  |
 | Ttfb 99th-ile        | 2.057   | 0.682     | 1.006     | 0.772    | 0.948    | 2.361   | 0.656     | 1.031     | 1.131    | 1.477    | 3.222   | 0.952     | 1.695     | 1.578   | 1.771  |
 
-* Estimation for parallel authentication
+-   Estimation for parallel authentication
 
 | number of clients | 250    |           |           |         |         | 500     |           |           |         |         | 750     |           |           |          |          |
 | ----------------- | ------ | --------- | --------- | ------- | ------- | ------- | --------- | --------- | ------- | ------- | ------- | --------- | --------- | -------- | -------- |
@@ -127,7 +123,7 @@ During each run all types of object and metadata requests were measured.
 | Ttfb Avg          | 3.7635 | 0.39552   | 0.18252   | 0.16452 | 0.19452 | 1.83452 | 0.89052   | 0.71052   | 0.70452 | 0.73152 | 2.79952 | 1.41452   | 1.56852   | 1.34052  | 1.46152  |
 | Ttfb Min          | 1.58   | 0.27197   | 0.00597   | 0.02197 | 0.01297 | 1.20797 | 0.28097   | 0.01597   | 0.01097 | 0.02697 | 1.63097 | 0.25097   | 0.01397   | 0.01197  | 0.02297  |
 
-* Estimation for parallel authorization
+-   Estimation for parallel authorization
 
 | number of clients | 250    |           |           |         |         | 500     |           |           |         |         | 750     |           |           |          |          |
 | ----------------- | ------ | --------- | --------- | ------- | ------- | ------- | --------- | --------- | ------- | ------- | ------- | --------- | --------- | -------- | -------- |
@@ -141,12 +137,9 @@ During each run all types of object and metadata requests were measured.
 
 Shared [excel report](https://seagatetechnology.sharepoint.com/:x:/r/sites/gteamdrv1/tdrive1224/Performance/S3/PerfTests/POC%20Parallel%20Auth.xlsx?d=wfd664f222f124278bd8265413a1c00c2&csf=1&web=1&e=yNEJqe)
 
+## Analysis
 
-Analysis
-========
-
-Intro
------
+### Intro
 
 Full background auth execution is possible for non-modifying requests, e.g. read or
 list. Requests that modify any data or metadata, e.g. put or delete, will require
@@ -156,8 +149,7 @@ could be run in parallel with Motr KVS calls for requests of all types.
 Happy path doesn't include any extra work to complete the request, but if
 auth fails all the work done will be wasted.
 
-Normal configuration
---------------------
+### Normal configuration
 
 There were two test sessions with normal configuration. Each one were run on a clean environment
 after the cluster rebootstrapped. The results were rougly the same and the number of 
@@ -172,14 +164,13 @@ for 750 clients tests.
 
 Based on addb, duration of auth calls exceeds 3.5 seconds at max - huge number.
 
-All auth calls are parallel to request execution
-------------------------------------------------
+### All auth calls are parallel to request execution
 
 These tests were the most stable, no errors at all. RPS values at least 2 times better the case with normal
 auth calls for all clients. Almost the same ttfb and duration
 
-* Normal Auth - NA
-* Parallel Auth - PA
+-   Normal Auth - NA
+-   Parallel Auth - PA
 
 | number of clients    | 250        |           |           |          |          | 500     |           |           |          |          | 750     |           |           |          |          |
 | -------------------- | ---------- | --------- | --------- | -------- | -------- | ------- | --------- | --------- | -------- | -------- | ------- | --------- | --------- | -------- | -------- |
@@ -207,7 +198,6 @@ auth calls for all clients. Almost the same ttfb and duration
 Conclusion: Parallel execution of auth calls in happy path shows better results comparing with normal auth on small objects.
 Such a difference applicable to all number of tested clients.
 
-Only one auth call is done in parallel while the other is sequential
---------------------------------------------------------------------
+### Only one auth call is done in parallel while the other is sequential
 
 Estimation shows in this case it is possible to save up to 3.7 seconds on authentication phase for all requests.
