@@ -1,14 +1,16 @@
+### Setup on 3 VM's
+
 1. Did pcs cluster setup on below 3 nodes by following the documents: 
 (https://github.com/Seagate/cortx-ha/wiki/Corosync-Pacemaker-Setup)
 
 -------------------------------------------------------------
-### Cluster details:
+## Cluster details:
 -------------------------------------------------------------
 10.230.242.67 node1
 10.230.242.95  node3
 10.230.249.166   node2
 -------------------------------------------------------------
-### pcsd status (on all nodes):
+## pcsd status (on all nodes):
 -------------------------------------------------------------
 -bash-4.2$ sudo pcs cluster status
 [sudo] password for 730727:
@@ -31,7 +33,7 @@ PCSD Status:
 - Created new VM and configured the icsci server to use the shared virtual disk
 - Followed below steps no iscsi server:
 
-### Create Volume
+## Create Volume
 
 ```
 -bash-4.2$ lsblk
@@ -118,7 +120,7 @@ The partition table has been altered!
 Calling ioctl() to re-read partition table.
 Syncing disks.
 -------------------------------------------------------------
-### Check the volume created
+## Check the volume created
 ```
 -bash-4.2$ lsblk
 NAME                         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -179,7 +181,7 @@ Creating journal (8192 blocks): done
 Writing superblocks and filesystem accounting information: done
 -------------------------------------------------------------
 
-### Check volume again
+## Check volume again
 ```
 -bash-4.2$ lsblk
 NAME                         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -200,7 +202,7 @@ sr0                           11:0    1 1024M  0 rom
 sr1                           11:1    1  374K  0 rom
 ```
 -------------------------------------------------------------
-### Create iscsi storage (On iscsi node only)
+## Create iscsi storage (On iscsi node only)
 ```
 -bash-4.2$ yum -y install targetcli
 
@@ -264,13 +266,14 @@ o- / ...........................................................................
   o- loopback ......................................................................................................... [Targets: 0]
 
 ---------------------------------------------------
+```
 ---------------------------------------------------
-# Create iscsi client on node1, node2 and node3
+## Create iscsi client on node1, node2 and node3
 ---------------------------------------------------
-### Login to node1
+# Login to node1
 ---------------------------------------------------
+```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
--------------------------------------------------------------
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
 # change to the same IQN you set on the iSCSI target server acl name
 InitiatorName=iqn.2021-06.com.lab:node1
@@ -279,9 +282,11 @@ InitiatorName=iqn.2021-06.com.lab:node1
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
+```
 -------------------------------------------------------------
-### Login to node2
+# Login to node2
 ---------------------------------------------------
+```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
 -------------------------------------------------------------
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
@@ -292,9 +297,11 @@ InitiatorName=iqn.2021-06.com.lab:node2
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
+```
 -------------------------------------------------------------
-### Login to node3
+# Login to node3
 ---------------------------------------------------
+```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
 -------------------------------------------------------------
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
@@ -305,16 +312,16 @@ InitiatorName=iqn.2021-06.com.lab:node3
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
+```
 -------------------------------------------------------------
-*** Successfully able to create shared disk using iscsi server and cluster nodes as initiator's in the setup. 
+*** Successfully able to create shared disk using iscsi server and cluster nodes as initiator's in the setup.
 
-### On all nodes:
+## On all nodes:
 
 -bash-4.2$ iscsiadm -m session -o show
 tcp: [1] 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7 (non-flash)
 -------------------------------------------------------------
--------------------------------------------------------------
-3. Install fence-agents (All Nodes)
+# Install fence-agents (All Nodes)
 ```
 [root@ssc ]# yum install -y sbd fence-agents-all
 
@@ -324,16 +331,18 @@ tcp: [1] 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7 (non-flash)
         sbd                        x86_64 1.4.0-15.el7
 ```
 -------------------------------------------------------------
-4 Followed the below steps to configure stonith using iscsi shared disk:
+# Followed the below steps to configure stonith using iscsi shared disk:
+```
 a. check reservation on all nodes
+
 -bash-4.2$ sudo /usr/bin/sg_persist -n -i -k -d /dev/sdd
 [sudo] password for 730727:
   PR generation=0x0, there are NO registered reservation keys
-  
+ 
 b. create stonith device
-pcs stonith create scsi-shooter fence_scsi pcmk_host_list="node1 node2 node3" devices=/dev/sdd 
 
-#pcmk_monitor_action="metadata" pcmk_reboot_action="off" meta provides="unfencing"
+pcs stonith create scsi-shooter fence_scsi pcmk_host_list="node1 node2 node3" devices=/dev/sdd 
+pcmk_monitor_action="metadata" pcmk_reboot_action="off" meta provides="unfencing"
 
 c. again check reservation
 -bash-4.2$  sudo /usr/bin/sg_persist -n -i -k -d /dev/sdb
@@ -342,14 +351,14 @@ c. again check reservation
     0x74ca0000
 
 d. Configure watchdog for scsi reservation. (All Node)
--bash-4.2$  yum install watchdog
 
+-bash-4.2$  yum install watchdog
 # Soft reboot for fence_scsi
 -bash-4.2$  cp /usr/share/cluster/fence_scsi_check.pl /etc/watchdog.d/
 
 # Hard reboot for fence_scsi
--bash-4.2$  cp /usr/share/cluster/fence_scsi_check_hardreboot /etc/watchdog.d/
 
+-bash-4.2$  cp /usr/share/cluster/fence_scsi_check_hardreboot /etc/watchdog.d/
 -bash-4.2$  chkconfig watchdog on
 -bash-4.2$  service watchdog start
 
@@ -360,11 +369,12 @@ Cluster Properties:
  cluster-name: amol_cluster
  dc-version: 1.1.23-1.el7-9acf116022
  stonith-enabled: True
+ ```
 -------------------------------------------------------------
-### Scenarios tested
+## Scenarios tested
 -------------------------------------------------------------
 # Scenario-1:
-
+```
 1. Bring down one node by closing the network using iptables cmds.
 Bring down node 10.230.242.95 (node3)
 iptables -A INPUT -s 10.230.242.67 -j DROP && iptables -A INPUT -s 10.230.249.166 -j DROP
@@ -373,7 +383,6 @@ iptables -A INPUT -s 10.230.242.67 -j DROP && iptables -A INPUT -s 10.230.249.16
 
 (on nodes node1 & node2)
 
-```
 -bash-4.2$ sudo pcs cluster status
 [sudo] password for 730727:
 Cluster Status:
@@ -388,11 +397,9 @@ PCSD Status:
   node2: Online
   node1: Online
   node3: Offline
-```
 
 (on nodes node3)
 
-```
 -bash-4.2$ sudo pcs cluster status
 [sudo] password for 730727:
 Cluster Status:
@@ -407,12 +414,13 @@ PCSD Status:
   node3: Online
 ```
 
-Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
+# Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
 
+```
 After 30/40 seconds node rebooted succesfully & joined cluster again.
 
 on all nodes
-```
+
 -bash-4.2$ sudo pcs cluster  status
 [sudo] password for 730727:
 Cluster Status:
@@ -431,6 +439,7 @@ PCSD Status:
 
 # Scenario-2:
 
+```
 1. Bring down one node by closing the network using iptables cmds.
 
 Bring down node 10.230.242.95 (node3)
@@ -440,7 +449,6 @@ ip link set down eth0
 
 on node1 and node2:
 
-```
 -bash-4.2$ sudo pcs cluster  status
 [sudo] password for 730727:
 Cluster Status:
@@ -455,11 +463,9 @@ PCSD Status:
   node2: Online
   node1: Online
   node3: Offline
-```
 
 On node3:
 
-```
 -bash-4.2$ sudo pcs cluster status
 [sudo] password for 730727:
 Cluster Status:
@@ -474,12 +480,13 @@ PCSD Status:
   node3: Online
 ```
 
-Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
+# Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
 
+```
 After 30/40 seconds node rebooted succesfully & joined cluster again.
 
 on all nodes
-```
+
 -bash-4.2$ sudo pcs cluster  status
 [sudo] password for 730727:
 Cluster Status:
@@ -496,3 +503,181 @@ PCSD Status:
   node3: Online
 ```
 
+### Setup on 3 Node HW:
+
+```
+*** Checked status of BMC Ipmi nodes and taken our IPS:
+smc40-m09-ipmi.colo.seagate.com / 10.230.244.126
+smc37-m09-ipmi.colo.seagate.com / 10.230.244.123
+smc33-m09-ipmi.colo.seagate.com / 10.230.241.149
+
+*** updated hosts file on each node 
+
+node1 / 192.168.81.104
+node2 /  192.168.81.106
+node3 / 192.168.81.105
+
+192.168.81.104  node1
+192.168.81.106  node2
+192.168.81.105  node3
+
+*** Configured cluster
+
+Using this link I have configured cluster on 3 nodes:
+https://github.com/Seagate/cortx-ha/wiki/Corosync-Pacemaker-Setup
+
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+Stack: corosync
+Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Sun Feb 14 23:01:59 2021
+Last change: Sun Feb 14 22:54:17 2021 by root via cibadmin on node1
+
+3 nodes configured
+Online: [ node1 node2 node3]
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+
+
+*** Configured Stonith:
+pcs stonith create stonith-c1 fence_ipmilan ipaddr=10.230.244.126 login=ADMIN passwd=adminBMC! pcmk_host_list=node1 pcmk_host_check=static-list lanplus=true auth=PASSWORD power_timeout=40 verbose=true op monitor interval=10s meta failure-timeout=15s
+pcs stonith create stonith-c2 fence_ipmilan ipaddr=10.230.244.123 login=ADMIN passwd=adminBMC! delay=15 pcmk_host_list=node2 pcmk_host_check=static-list lanplus=true auth=PASSWORD power_timeout=40 verbose=true op monitor interval=10s meta failure-timeout=15s
+pcs stonith create stonith-c3 fence_ipmilan ipaddr=10.230.241.149 login=ADMIN passwd=adminBMC! delay=30 pcmk_host_list=node3 pcmk_host_check=static-list lanplus=true auth=PASSWORD power_timeout=40 verbose=true op monitor interval=10s meta failure-timeout=15s
+
+*** Added location constraint to avoid action on same node
+ 
+pcs constraint location stonith-c1 avoids node1
+pcs constraint location stonith-c2 avoids node2
+pcs constraint location stonith-c3 avoids node3
+
+*** Clone stonith resources
+
+pcs resource clone stonith-c1
+pcs resource clone stonith-c2
+pcs resource clone stonith-c3
+
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+Stack: corosync
+Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Sun Feb 14 23:01:59 2021
+Last change: Sun Feb 14 22:54:17 2021 by root via cibadmin on node1
+
+3 nodes configured
+12 resource instances configured
+
+Online: [ node1 node2 ]
+OFFLINE: [ node3 ]
+
+Full list of resources:
+
+ Clone Set: dummy-clone [dummy]
+     Started: [ node1 node2 node3 ]
+ Clone Set: stonith-c1-clone [stonith-c1]
+     Started: [ node2 node3 ]
+     Stopped: [ node1 ]
+ Clone Set: stonith-c2-clone [stonith-c2]
+     Started: [ node1 node3 ]
+     Stopped: [ node2 ]
+ Clone Set: stonith-c3-clone [stonith-c3]
+     Started: [ node1 node2 ]
+     Stopped: [ node3 ]
+   
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled  
+
+
+*** Check stonith device status
+
+[root@smc33-m09 ~]# fence_ipmilan -a 10.230.241.149 -l ADMIN -p adminBMC! -o status
+Status: ON
+[root@smc33-m09 ~]# fence_ipmilan -a 10.230.244.123 -l ADMIN -p adminBMC! -o status
+Status: ON
+[root@smc33-m09 ~]# fence_ipmilan -a 10.230.244.126 -l ADMIN -p adminBMC! -o status
+Status: ON
+
+==============================
+Scenario 1
+==============================
+*** Did manual fence testing by taking ip link down:
+ip link set down enp175s0f1
+
+After the above command execution it has shown the output like below:
+
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+Stack: corosync
+Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Sun Feb 14 23:01:59 2021
+Last change: Sun Feb 14 22:54:17 2021 by root via cibadmin on node1
+
+3 nodes configured
+12 resource instances configured
+
+Online: [ node1 node2 ]
+OFFLINE: [ node3 ]
+
+Full list of resources:
+
+ Clone Set: dummy-clone [dummy]
+     Started: [ node1 node2 ]
+     Stopped: [ node3 ]
+ Clone Set: stonith-c1-clone [stonith-c1]
+     Started: [ node2 ]
+     Stopped: [ node1 node3 ]
+ Clone Set: stonith-c2-clone [stonith-c2]
+     Started: [ node1 ]
+     Stopped: [ node2 node3 ]
+ Clone Set: stonith-c3-clone [stonith-c3]
+     Started: [ node1 node2 ]
+     Stopped: [ node3 ]
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+
+Means node3 is stopped and we are good with our POC.
+
+After doing node on manually for node3 we can see its joined the cluster again
+
+*** After making node3 on we are able to the below output
+
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+Stack: corosync
+Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Sun Feb 14 23:13:26 2021
+Last change: Sun Feb 14 22:54:17 2021 by root via cibadmin on node1
+
+3 nodes configured
+12 resource instances configured
+
+Online: [ node1 node2 node3 ]
+
+Full list of resources:
+
+ Clone Set: dummy-clone [dummy]
+     Started: [ node1 node2 node3 ]
+ Clone Set: stonith-c1-clone [stonith-c1]
+     Started: [ node2 node3 ]
+     Stopped: [ node1 ]
+ Clone Set: stonith-c2-clone [stonith-c2]
+     Started: [ node1 node3 ]
+     Stopped: [ node2 ]
+ Clone Set: stonith-c3-clone [stonith-c3]
+     Started: [ node1 node2 ]
+     Stopped: [ node3 ]
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+[root@smc40-m09 cluster]# 
+
+```
