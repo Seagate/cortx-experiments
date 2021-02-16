@@ -1,17 +1,16 @@
-### Setup on 3 VM's (Self fencing)
+# Setup on 3 VM's (Self fencing)
 
 1. Did pcs cluster setup on below 3 nodes by following the documents: 
 (https://github.com/Seagate/cortx-ha/wiki/Corosync-Pacemaker-Setup)
 
--------------------------------------------------------------
-## Cluster details:
--------------------------------------------------------------
-10.230.242.67 node1
+### Cluster details:
+```
+10.230.242.67  node1
 10.230.242.95  node3
-10.230.249.166   node2
--------------------------------------------------------------
-## pcsd status (on all nodes):
--------------------------------------------------------------
+10.230.249.166  node2
+```
+### pcsd status (on all nodes):
+```
 -bash-4.2$ sudo pcs cluster status
 [sudo] password for 730727:
 Cluster Status:
@@ -26,15 +25,14 @@ PCSD Status:
   node2: Online
   node1: Online
   node3: Online
--------------------------------------------------------------
-  
+```
+
 2. Created shared disk using iscsi server:
 
 - Created new VM and configured the icsci server to use the shared virtual disk
 - Followed below steps no iscsi server:
 
-## Create Volume
-
+### Create Volume
 ```
 -bash-4.2$ lsblk
 NAME                         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -51,8 +49,7 @@ sdb                            8:16   0   25G  0 disk
 sdc                            8:32   0   25G  0 disk
 sr0                           11:0    1 1024M  0 rom
 sr1                           11:1    1  374K  0 rom
-```
--------------------------------------------------------------
+
 -bash-4.2$ fdisk /dev/sdb
 Welcome to fdisk (util-linux 2.23.2).
 
@@ -119,8 +116,9 @@ The partition table has been altered!
 
 Calling ioctl() to re-read partition table.
 Syncing disks.
--------------------------------------------------------------
-## Check the volume created
+```
+
+### Check the volume created
 ```
 -bash-4.2$ lsblk
 NAME                         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -139,7 +137,9 @@ sdc                            8:32   0   25G  0 disk
 sr0                           11:0    1 1024M  0 rom
 sr1                           11:1    1  374K  0 rom
 ```
--------------------------------------------------------------
+
+### Create PV
+```
 -bash-4.2$ pvcreate /dev/sdb1
   Physical volume "/dev/vda1" successfully created.
 
@@ -179,9 +179,9 @@ Allocating group tables: done
 Writing inode tables: done
 Creating journal (8192 blocks): done
 Writing superblocks and filesystem accounting information: done
--------------------------------------------------------------
+```
 
-## Check volume again
+### Check volume again
 ```
 -bash-4.2$ lsblk
 NAME                         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -201,8 +201,8 @@ sdc                            8:32   0   25G  0 disk
 sr0                           11:0    1 1024M  0 rom
 sr1                           11:1    1  374K  0 rom
 ```
--------------------------------------------------------------
-## Create iscsi storage (On iscsi node only)
+
+### Create iscsi storage (On iscsi node only)
 ```
 -bash-4.2$ yum -y install targetcli
 
@@ -264,15 +264,14 @@ o- / ...........................................................................
   |     o- portals .................................................................................................... [Portals: 1]
   |       o- 0.0.0.0:3260 ..................................................................................................... [OK]
   o- loopback ......................................................................................................... [Targets: 0]
+---------------------------------------------------
+```
 
----------------------------------------------------
+### Create iscsi client on node1, node2 and node3
 ```
 ---------------------------------------------------
-## Create iscsi client on node1, node2 and node3
+Login to node1
 ---------------------------------------------------
-# Login to node1
----------------------------------------------------
-```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
 # change to the same IQN you set on the iSCSI target server acl name
@@ -282,13 +281,11 @@ InitiatorName=iqn.2021-06.com.lab:node1
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
-```
+
 -------------------------------------------------------------
-# Login to node2
+Login to node2
 ---------------------------------------------------
-```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
--------------------------------------------------------------
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
 # change to the same IQN you set on the iSCSI target server acl name
 InitiatorName=iqn.2021-06.com.lab:node2
@@ -297,13 +294,11 @@ InitiatorName=iqn.2021-06.com.lab:node2
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
-```
+
 -------------------------------------------------------------
 # Login to node3
 ---------------------------------------------------
-```
 [root@node01 ~]# yum -y install iscsi-initiator-utils
--------------------------------------------------------------
 [root@node01 ~]# vi /etc/iscsi/initiatorname.iscsi
 # change to the same IQN you set on the iSCSI target server acl name
 InitiatorName=iqn.2021-06.com.lab:node3
@@ -312,17 +307,15 @@ InitiatorName=iqn.2021-06.com.lab:node3
 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7
 -bash-4.2$ sudo iscsiadm -m node --login
 able to login successfully.
-```
--------------------------------------------------------------
 *** Successfully able to create shared disk using iscsi server and cluster nodes as initiator's in the setup.
+```
 
-## On all nodes:
-
+### On all nodes:
+```
 -bash-4.2$ iscsiadm -m session -o show
 tcp: [1] 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7 (non-flash)
 -------------------------------------------------------------
 # Install fence-agents (All Nodes)
-```
 [root@ssc ]# yum install -y sbd fence-agents-all
 
     version:
@@ -330,8 +323,8 @@ tcp: [1] 10.230.250.178:3260,1 iqn.2021-06.com.lab:centos7 (non-flash)
         fence-agents-all           x86_64 4.2.1-30.el7_8.1
         sbd                        x86_64 1.4.0-15.el7
 ```
--------------------------------------------------------------
-# Followed the below steps to configure stonith using iscsi shared disk:
+
+3. Configure stonith using iscsi shared disk for all nodes & enable it:
 ```
 a. check reservation on all nodes
 
@@ -369,84 +362,18 @@ Cluster Properties:
  cluster-name: amol_cluster
  dc-version: 1.1.23-1.el7-9acf116022
  stonith-enabled: True
- ```
--------------------------------------------------------------
-## Scenarios tested
--------------------------------------------------------------
-# Scenario-1:
-```
-1. Bring down one node by closing the network using iptables cmds.
-Bring down node 10.230.242.95 (node3)
-iptables -A INPUT -s 10.230.242.67 -j DROP && iptables -A INPUT -s 10.230.249.166 -j DROP
-
-==> See the results 
-
-(on nodes node1 & node2)
-
--bash-4.2$ sudo pcs cluster status
-[sudo] password for 730727:
-Cluster Status:
- Stack: corosync
- Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
- Last updated: Thu Jan  7 22:30:53 2021
- Last change: Thu Jan  7 03:01:36 2021 by root via cibadmin on node1
- 3 nodes configured
- 1 resource instance configured
-
-PCSD Status:
-  node2: Online
-  node1: Online
-  node3: Offline
-
-(on nodes node3)
-
--bash-4.2$ sudo pcs cluster status
-[sudo] password for 730727:
-Cluster Status:
- Stack: corosync
- Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
- Last updated: Thu Jan  7 22:35:38 2021
- Last change: Thu Jan  7 03:01:36 2021 by root via cibadmin on node1
- 3 nodes configured
- 1 resource instance configured
-
-PCSD Status:
-  node3: Online
 ```
 
-# Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
-
-```
-After 30/40 seconds node rebooted succesfully & joined cluster again.
-
-on all nodes
-
--bash-4.2$ sudo pcs cluster  status
-[sudo] password for 730727:
-Cluster Status:
- Stack: corosync
- Current DC: node2 (version 1.1.23-1.el7-9acf116022) - partition with quorum
- Last updated: Thu Jan  7 23:50:23 2021
- Last change: Thu Jan  7 03:01:36 2021 by root via cibadmin on node1
- 3 nodes configured
- 1 resource instance configured
-
-PCSD Status:
-  node2: Online
-  node1: Online
-  node3: Online
-```
-
-# Scenario-2:
-
+5. Did fence testing 
 ```
 1. Bring down one node by closing the network using iptables cmds.
 
 Bring down node 10.230.242.95 (node3)
 ip link set down eth0
+```
 
-==> See the results
-
+6. See the results
+```
 on node1 and node2:
 
 -bash-4.2$ sudo pcs cluster  status
@@ -478,12 +405,9 @@ Cluster Status:
 
 PCSD Status:
   node3: Online
-```
 
 # Note: It just hanged here and putty session became inactive. Means the node is rebooted somehow.
-
-```
-After 30/40 seconds node rebooted succesfully & joined cluster again.
+# After 30/40 seconds node rebooted succesfully & joined cluster again.
 
 on all nodes
 
@@ -502,3 +426,4 @@ PCSD Status:
   node1: Online
   node3: Online
 ```
+
