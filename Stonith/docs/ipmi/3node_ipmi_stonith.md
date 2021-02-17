@@ -253,7 +253,7 @@ Feb 16 03:10:08 [27966] smc40-m09.colo.seagate.com       crmd:     info: control
 
 ```
 
-6. Measure of n/w trafiic
+6. Measure of network traffic for all nodes:
 
 - I saw the logs and in that there is traffic from stonith resources to the BMC nodes to check the chasisi power status
 - This monitoring check is happening after each 10 seconds 
@@ -272,4 +272,165 @@ Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_act
 fence_ipmilan_monitor_1:145920:stderr [ 2021-02-16 03:10:39,460 INFO: Executing: /usr/bin/ipmitool -I lanplus -H 10.230.244.126 -p 623 -U ADMIN -A PASSWORD -P [set] -L ADMINISTRATOR chassis power status ]
 Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [  ]
 Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [ 2021-02-16 03:10:30,436 DEBUG: 0 Chassis Power is on ]
+```
+
+## Before creating stonith resources
+
+```
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+
+WARNINGS:
+No stonith devices and stonith-enabled is not false
+
+Stack: corosync
+Current DC: node1 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Wed Feb 17 02:52:18 2021
+Last change: Wed Feb 17 02:38:33 2021 by root via cibadmin on node1
+
+3 nodes configured
+
+Online: [ node1 node2 node3 ]
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+[root@smc40-m09 cluster]#
+```
+
+
+### Network measures
+
+```
+=====================================
+Node1 : Device eno1 [10.230.249.203] (1/6):
+
+=====================================
+Incoming:
+    Curr: 26.43 kBit/s
+    Avg: 24.94 kBit/s
+    Min: 20.36 kBit/s
+    Max: 26.43 kBit/s
+    Ttl: 2.33 GByte
+Outgoing:
+    Curr: 9.55 kBit/s
+    Avg: 8.45 kBit/s
+    Min: 5.15 kBit/s
+    Max: 9.55 kBit/s
+    Ttl: 366.27 MByte
+=====================================
+Node2: Device eno1 [10.230.248.243] (1/6):
+=====================================
+Incoming:
+    Curr: 22.70 kBit/s
+    Avg: 16.81 kBit/s
+    Min: 11.21 kBit/s
+    Max: 22.70 kBit/s
+    Ttl: 377.32 MByte
+Outgoing:
+    Curr: 9.55 kBit/s
+    Avg: 9.43 kBit/s
+    Min: 5.99 kBit/s
+    Max: 10.76 kBit/s
+    Ttl: 54.41 MByte
+=====================================
+Node3: Device eno1 [10.230.248.193] (1/6):
+=====================================
+Incoming:
+    Curr: 15.30 kBit/s
+    Avg: 14.10 kBit/s
+    Min: 13.07 kBit/s
+    Max: 15.30 kBit/s
+      Ttl: 26.46 MByte
+Outgoing:
+    Curr: 10.76 kBit/s
+    Avg: 9.38 kBit/s
+    Min: 5.99 kBit/s
+    Max: 10.76 kBit/s
+    Ttl: 771.30 kByte
+```
+
+## After creating stonith resources
+
+```
+[root@smc40-m09 cluster]# pcs status
+Cluster name: test_cluster
+Stack: corosync
+Current DC: node1 (version 1.1.23-1.el7-9acf116022) - partition with quorum
+Last updated: Wed Feb 17 03:48:30 2021
+Last change: Wed Feb 17 03:48:27 2021 by root via cibadmin on node1
+
+3 nodes configured
+9 resource instances configured
+
+Online: [ node1 node2 node3 ]
+
+Full list of resources:
+
+ Clone Set: stonith-c1-clone [stonith-c1]
+     Started: [ node2 node3 ]
+     Stopped: [ node1 ]
+ Clone Set: stonith-c2-clone [stonith-c2]
+     Started: [ node1 node3 ]
+     Stopped: [ node2 ]
+ Clone Set: stonith-c3-clone [stonith-c3]
+     Started: [ node1 node2 ]
+     Stopped: [ node3 ]
+
+Daemon Status:
+  corosync: active/enabled
+  pacemaker: active/enabled
+  pcsd: active/enabled
+```
+
+### Network measures
+
+```
+=====================================
+Node1 : Device eno1 [10.230.249.203] (1/6):
+=====================================
+Incoming:
+    Curr: 19.10 kBit/s
+    Avg: 17.04 kBit/s
+    Min: 8.04 kBit/s
+    Max: 24.88 kBit/s
+    Ttl: 2.35 GByte
+Outgoing:
+    Curr: 9.54 kBit/s
+    Avg: 10.72 kBit/s
+    Min: 5.15 kBit/s
+    Max: 18.22 kBit/s
+    Ttl: 367.47 MByte
+=====================================
+Node2 : Device eno1 [10.230.248.243] (1/6):
+=====================================
+Incoming:
+  Curr: 19.12 kBit/s
+  Avg: 18.56 kBit/s
+  Min: 13.35 kBit/s
+  Max: 23.29 kBit/s
+  Ttl: 404.05 MByte
+Outgoing:
+  Curr: 9.87 kBit/s
+  Avg: 8.98 kBit/s
+  Min: 5.99 kBit/s
+  Max: 9.87 kBit/s
+  Ttl: 55.16 MByte
+=====================================
+Node3 : Device eno1 [10.230.248.193] (1/6):
+=====================================
+Incoming:
+    Curr: 25.51 kBit/s
+    Avg: 21.26 kBit/s
+    Min: 17.01 kBit/s
+    Max: 25.51 kBit/s
+    Ttl: 28.44 MByte
+Outgoing:
+    Curr: 18.22 kBit/s
+    Avg: 12.99 kBit/s
+    Min: 5.99 kBit/s
+    Max: 18.22 kBit/s
+    Ttl: 2.07 MByte
+=====================================
 ```
