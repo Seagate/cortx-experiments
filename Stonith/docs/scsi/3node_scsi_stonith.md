@@ -373,6 +373,11 @@ ip link set down eth0
 ```
 
 6. See the results
+
+- Once we made node unavailble to cluster by shutting down the network one of the VM from cluster
+- Self fencing happened and stonith device which is created for shared icsci server disk does the vm power off.
+- After the above operations we were able to see only 2 nodes in cluster and one node was permanantly off where user need to turn it on manually.
+
 ```
 on node1 and node2:
 
@@ -426,4 +431,3 @@ PCSD Status:
   node1: Online
   node3: Online
 ```
-

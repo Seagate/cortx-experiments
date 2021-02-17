@@ -155,6 +155,12 @@ Daemon Status:
 
 5. Results with actual logs
 
+- As node3 was down and not reachable in cluster, stonith device resources got stopped which are running for that node.
+- One of the stonith cloned resource running on other 2 nodes elected to perform the node power off operation.
+- Once one resource taken action then no other stonith resource will take part in doing the same action again.
+- After the above power off operation succeded, we were able to see only 2 nodes in cluster and one node was permanantly off where user need to turn it on manually.
+- Once we restart the HW node manually, We can see that online in cluster status & all stonith resources (actual & cloned resources) come back UP & running for that node.     
+
 ```
 Detailed steps of the result: 
 
@@ -245,4 +251,25 @@ Feb 16 03:10:08 [27966] smc40-m09.colo.seagate.com       crmd:     info: control
 Feb 16 03:10:08 [27966] smc40-m09.colo.seagate.com       crmd:   notice: tengine_stonith_notify:        Peer node3 was terminated (off) by node1 on behalf of crmd.27966: OK | initiator=node1 ref=377d32c8-d7b8-4b2e-b282-a91344b4b587
 Feb 16 03:10:08 [27966] smc40-m09.colo.seagate.com       crmd:     info: controld_delete_node_state:    Deleting all state for node node3 (via CIB call 217) | xpath=//node_state[@uname='node3']/*
 
+```
+
+6. Measure of n/w trafiic
+
+- I saw the logs and in that there is traffic from stonith resources to the BMC nodes to check the chasisi power status
+- This monitoring check is happening after each 10 seconds 
+
+```
+fence_ipmilan_monitor_1:145920:stderr [ 2021-02-16 03:10:39,460 INFO: Executing: /usr/bin/ipmitool -I lanplus -H 10.230.241.149 -p 623 -U ADMIN -A PASSWORD -P [set] -L ADMINISTRATOR chassis power status ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [  ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [ 2021-02-16 03:10:30,436 DEBUG: 0 Chassis Power is on ]
+```
+```
+fence_ipmilan_monitor_1:145920:stderr [ 2021-02-16 03:10:39,460 INFO: Executing: /usr/bin/ipmitool -I lanplus -H 10.230.244.123 -p 623 -U ADMIN -A PASSWORD -P [set] -L ADMINISTRATOR chassis power status ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [  ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [ 2021-02-16 03:10:30,436 DEBUG: 0 Chassis Power is on ]
+```
+```
+fence_ipmilan_monitor_1:145920:stderr [ 2021-02-16 03:10:39,460 INFO: Executing: /usr/bin/ipmitool -I lanplus -H 10.230.244.126 -p 623 -U ADMIN -A PASSWORD -P [set] -L ADMINISTRATOR chassis power status ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [  ]
+Feb 16 03:10:30 [27962] smc40-m09.colo.seagate.com stonith-ng:  warning: log_action:    fence_ipmilan[145909] stderr: [ 2021-02-16 03:10:30,436 DEBUG: 0 Chassis Power is on ]
 ```
