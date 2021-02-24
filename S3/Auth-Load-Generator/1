@@ -1,0 +1,17 @@
+EOS-16557 - Create load test tool for AuthServer capable of 4k RPS
+
+Goal:
+Determine if AuthServer can be tuned to sustain 4000 S3 API requests per second
+
+Development:
+Previously, we had used Locust to generate the load.But Locust, since it is using 
+python libraries was not able to scale to a high RPS.
+So, a C++ load generator was used.
+- Requests were generated using the CURL library.
+- For Digital Signing, part of the code were used from Amazon C++ SDK and from 
+  https://github.com/rhymu8354/Excalibur/tree/main/AwsPlay
+- Client/Server framework in https://github.com/Seagate/cortx-s3server/tree/main/scripts/libevhtp-throughput was used to send the requests.
+ 
+
+Environment Details:
+
