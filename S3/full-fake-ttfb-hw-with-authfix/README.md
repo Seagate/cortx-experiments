@@ -16,7 +16,7 @@ Contents:
 
         -   [Branches and repos](#branches-and-repos)
         -   [Workloads](#workloads)
-        -   [Results](#results)
+        -   [Report](#report)
 
     -   [POC Details](#poc-details)
 
@@ -43,9 +43,11 @@ Run standard tests on the latest S3 master and compare results with the same tes
 -   Hare:
     -   repo: [https://github.com/t7ko-seagate/cortx-hare](https://github.com/t7ko-seagate/cortx-hare)
     -   branch: R2-HW-test-base-branch
+
 -   Motr:
     -   repo: [https://github.com/t7ko-seagate/cortx-motr](https://github.com/t7ko-seagate/cortx-motr)
     -   branch: R2-HW-test-base-branch
+
 -   S3:
     -   repo: [https://github.com/t7ko-seagate/cortx-s3server](https://github.com/t7ko-seagate/cortx-s3server)
     -   branch: R2-HW-test-base-branch
@@ -55,14 +57,17 @@ Run standard tests on the latest S3 master and compare results with the same tes
 -   256 KB throughput:
     -   [Workload-1](../initial-perf-test-on-R2/raw-test-results.md#21-perfline-job-yaml)
     -   [Workload-2](../initial-perf-test-on-R2/raw-test-results.md#31-perfline-job-yaml)
+
 -   Tiny object TTFB:
     -   [Workload-3](../initial-perf-test-on-R2/raw-test-results.md#8-ttfb-100-bytes-1-512-sessions---take-2)
+
 -   256 KB TTFB:
     -   [Workload-4](../initial-perf-test-on-R2/raw-test-results.md#13-ttfb-256-kb-1-512-sessions)
+
 -   Large object TTFB:
     -   [Workload-5](../initial-perf-test-on-R2/raw-test-results.md#18-ttfb-128-mb-1-512-sessions)
 
-### Results
+### Report
 
 [Results.csv](../initial-perf-test-on-R2/results.csv)
 
