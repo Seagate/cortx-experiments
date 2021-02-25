@@ -127,6 +127,7 @@ Full logs:
 
 * [baseline performance test run log](s3-perf-test-log-2021-01-27_04-23-09.txt).
 * [s3bench runs logs](raw-test-results.md).
+* [CSV report](results.csv)
 
 
 Throughput
