@@ -136,7 +136,7 @@ MB).  Results:
 
 ### 100 bytes
 
-| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` |     
+| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` |  `improved` | `degraded`  | 
 | ---------- | ------------- | ---------------- | -------- | -------- |
 | 1          | 0.014         | 0.013            | 11%      |          |
 | 16         | 0.036         | 0.024            | 33%      |          |
