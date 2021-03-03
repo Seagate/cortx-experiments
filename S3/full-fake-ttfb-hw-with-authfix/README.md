@@ -128,10 +128,11 @@ writes operation does not have such metric by definition.
 From Dmitry CSV, I took only 'initial' and 'restart'.  Ignored 'fix', because it
 had some configuration issue and lots of IOs failed.  ('restart' fixed that
 config issue and is more "clean" for comparison.)  I also ignored object size
-256, since that was "warm-up" workload, not intended for analysis and comparison.
+256 MB, since that was "warm-up" workload, not intended for analysis and
+comparison.
 
-We had tests for 3 object sizes: tiny (100 bytes), small (256 KB) and large (128
-MB).  Results:
+After that I got test results for 3 object sizes: tiny (100 bytes), small (256
+KB) and large (128 MB).  Results:
 
 
 ### 100 bytes
@@ -148,7 +149,7 @@ MB).  Results:
 | 512        | 0.743         | 0.596            | 20%      |          |
 
 Table shows average TTFB for `init` (baseline version of s3) and `restart`
-latest main with corrected environment.
+(latest main with corrected environment).
 
 We can see that there is an improvement for 1, 16, and 512 sessions, and
 degradation for the rest of experiments in the middle.
@@ -173,7 +174,7 @@ degradation for the rest of experiments in the middle.
 For some of clients, test was run twice, so there are two columns for `init`
 version, and two columns for `restart` version.  All these show average TTFB.
 It can be seen that TTFB change is not consistent -- in some tests it shows
-improvement, in some others -- degradation.
+improvement, in some others -- degradation, with no visible pattern.
 
 
 ### 128 MB
@@ -189,9 +190,9 @@ improvement, in some others -- degradation.
 | 384          | 2.444           | 1.063              | 57%        |            |
 | 512          | 2.83            | 3.417              |            | -21%       |
 
-Surprisingly, 128 MB shows good improvement in TTFB -- too big.  We only
-expected minor improvement (because auth is relatively short as compared to data
-transfers).
+Surprisingly, 128 MB shows good improvement in TTFB (except 1 and 512 sessions).
+Surprise is -- the improvement is too big.  We only expected minor improvement
+(because auth is relatively short as compared to data transfers).
 
 
 ### Summary
@@ -201,6 +202,6 @@ transfers).
 * Measurement results are chaotic and not consistent.  This seems to indicate
   that either HW was not stable, or test is not stable (e.g. too short), or --
   the fixes between `init` and `restart` versions brought in some significant
-  instability into TTFB.
+  instability into TTFB -- UNDEFINED.
 
 Conclusion: need further testing.
