@@ -6,23 +6,22 @@ Which in turn improves TTFB and small object throughput
 
 Contents:
 
--   [Test TTFB with Auth fixes](#test-ttfb-with-auth-fixes)
+- [Test TTFB with Auth fixes](#test-ttfb-with-auth-fixes)
+  - [Corresponding Jira Ticket](#corresponding-jira-ticket)
+  - [Objectives](#objectives)
+  - [Initial Tests](#initial-tests)
+    - [Branches and repos](#branches-and-repos)
+    - [Workloads](#workloads)
+    - [Report](#report)
+  - [POC Details](#poc-details)
+  - [Results](#results)
+  - [Analysis](#analysis)
+  - [Some Data](#some-data)
+    - [100 bytes](#100-bytes)
+    - [256 KB](#256-kb)
+    - [128 MB](#128-mb)
+    - [Summary](#summary)
 
-    -   [Corresponding Jira Ticket](#corresponding-jira-ticket)
-
-    -   [Objectives](#objectives)
-
-    -   [Initial Tests](#initial-tests)
-
-        -   [Branches and repos](#branches-and-repos)
-        -   [Workloads](#workloads)
-        -   [Report](#report)
-
-    -   [POC Details](#poc-details)
-
-    -   [Results](#results)
-
-    -   [Analysis](#analysis)
 
 ## Corresponding Jira Ticket
 
@@ -115,5 +114,93 @@ marked as `restart` and `restart-2` have better numbers that `fix`.
 However expected TTFB and Duration improvements were not reached with the
 tested AuthServer fix as expected. In some case small degradation is observed.
 
-Addb analysis is required since it is unclear for the moment why there are no
+ADDB analysis is required since it is unclear for the moment why there are no
 expected improvements that were observed in tests on VM.
+
+
+## Some Data
+
+By Ivan Tishchenko.
+
+I was specifically looking at Reads, because we expect improvement in TTFB, and
+writes operation does not have such metric by definition.
+
+From Dmitry CSV, I took only 'initial' and 'restart'.  Ignored 'fix', because it
+had some configuration issue and lots of IOs failed.  ('restart' fixed that
+config issue and is more "clean" for comparison.)  I also ignored object size
+256, since that was "warm-up" workload, not intended for analysis and comparison.
+
+We had tests for 3 object sizes: tiny (100 bytes), small (256 KB) and large (128
+MB).  Results:
+
+
+### 100 bytes
+
+| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` |     
+| ---------- | ------------- | ---------------- | -------- | -------- |
+| 1          | 0.014         | 0.013            | 11%      |          |
+| 16         | 0.036         | 0.024            | 33%      |          |
+| 32         | 0.041         | 0.049            |          | -19%     |
+| 64         | 0.053         | 0.068            |          | -28%     |
+| 128        | 0.089         | 0.139            |          | -56%     |
+| 256        | 0.169         | 0.241            |          | -43%     |
+| 384        | 0.360         | 0.405            |          | -13%     |
+| 512        | 0.743         | 0.596            | 20%      |          |
+
+Table shows average TTFB for `init` (baseline version of s3) and `restart`
+latest main with corrected environment.
+
+We can see that there is an improvement for 1, 16, and 512 sessions, and
+degradation for the rest of experiments in the middle.
+
+### 256 KB
+
+| `numClients` | `init_1` | `init_2` | `restart_1` | `restart_2` | `improved` | `degraded`   |
+| ------------ | -------- | -------- | ----------- | ----------- | ---------- | ------------ |
+| 1            | 0.015    |          | 0.015       |             |            | -1%          |
+| 16           | 0.026    |          | 0.024       |             | 9%         |              |
+| 32           | 0.035    | 0.036    | 0.024       | 0.032       | 10% to 32% |              |
+| 64           | 0.045    | 0.047    | 0.036       | 0.048       | +24%       | -7%          |
+| 80           | 0.048    |          | 0.054       |             |            | -13%         |
+| 100          | 0.069    |          | 0.098       |             |            | -43%         |
+| 128          | 0.071    | 0.078    | 0.117       | 0.122       |            | -50% to -73% |
+| 256          | 0.249    | 0.14 (*) | 0.229       | 0.230       | 8%         |              |
+| 384          | 0.315    | 0.378    | 0.401       | 0.490       |            | -6% to -56%  |
+| 512          | 0.624    | 0.528    | 0.536       | 0.625       | 14%        | -18%         |
+
+(*) This sample seems too much inconsistent, probably measurement error.
+
+For some of clients, test was run twice, so there are two columns for `init`
+version, and two columns for `restart` version.  All these show average TTFB.
+It can be seen that TTFB change is not consistent -- in some tests it shows
+improvement, in some others -- degradation.
+
+
+### 128 MB
+
+| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` | `improved` | `degraded` |
+| ------------ | --------------- | ------------------ | ---------- | ---------- |
+| 1            | 0.073           | 0.086              |            | -17%       |
+| 16           | 0.146           | 0.136              | 7%         |            |
+| 32           | 0.202           | 0.155              | 23%        |            |
+| 64           | 0.271           | 0.154              | 43%        |            |
+| 128          | 0.382           | 0.180              | 53%        |            |
+| 256          | 1.617           | 0.528              | 67%        |            |
+| 384          | 2.444           | 1.063              | 57%        |            |
+| 512          | 2.83            | 3.417              |            | -21%       |
+
+Surprisingly, 128 MB shows good improvement in TTFB -- too big.  We only
+expected minor improvement (because auth is relatively short as compared to data
+transfers).
+
+
+### Summary
+
+* We confirmed that latest S3 server code from `main` branch is working on 3
+  node R2 HW setup -- POSITIVE.
+* Measurement results are chaotic and not consistent.  This seems to indicate
+  that either HW was not stable, or test is not stable (e.g. too short), or --
+  the fixes between `init` and `restart` versions brought in some significant
+  instability into TTFB.
+
+Conclusion: need further testing.
