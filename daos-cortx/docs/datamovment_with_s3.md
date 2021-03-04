@@ -11,15 +11,15 @@
 
 * Single node deployment of cortx on one VM
 
-The single node deployment for CORTX hosting s3 server, which will be used to manage buckets and store objects moved from DOAS using aws s3 cli.
+   The single node deployment for CORTX hosting s3 server, which will be used to manage buckets and store objects moved from DOAS using aws s3 cli.
 
 * Daos server node setup on another VM
   
-Daos node will be required to create pools, containers and storing objects in it.
+   Daos node will be required to create pools, containers and storing objects in it.
 
 * Install s3 cli on daos node
 
-Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from cortx node.
+   Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from cortx node.
     
 ## Setup cortx node
 
@@ -52,7 +52,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
 * Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/cortx-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
  
-* Add credentials on Daos node
+* Add credentials on daos node
 
       [root@daos-node ~]# cd ~/.aws/
       [root@daos-node ~]# ls
@@ -60,7 +60,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
    If these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
 
-- cortx node might be having following contents in config and credentials files.
+- cortx node may have following contents in config and credentials files.
 
    config file
 
@@ -84,19 +84,19 @@ Make sure cortx and daos node can communicate or both are in the same network. T
       aws_access_key_id = AKIAqQWHc###################
       aws_secret_access_key=  G6lFDsuvebBoOTfiKh###################
 
-- Note : credentials are hidden above using pound sign.
+   Note : credentials are hidden above using pound sign.
 
-- go to cortx node and verify file contents
+   go to cortx node and verify file contents
 
         ls ~/.aws/credentials file`
 
         config credentials
 
-- Copy contents from here and populate credentials and config files on daos node
+   Copy contents from here and populate credentials and config files on daos node
 
 * Register domain name on daos node.
 
-- Added cortx node IP (s3.seagate.com) to /etc/hosts
+   Added cortx node IP (s3.seagate.com) to /etc/hosts
 
 * Create 2 containers inside a pool and mount using dfuse at following location
 
@@ -107,7 +107,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
 `touch file_obj`
 
-- Add some dummy contents inside this file.
+   Add some dummy contents inside this file.
 
 * Create test-bucket on cortx node using following command
 
@@ -121,20 +121,20 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
 `[root@daos-node src_container]# aws s3 cp file_obj s3://daos-bucket/`
 
-- contents can be verified using `aws s3 ls s3://daos-bucket/` command.
+   Contents can be verified using `aws s3 ls s3://daos-bucket/` command.
 
 * Copy back file to dest_container from s3 bucket
 
 `cd /mnt/dfuse_data/dest_container/`
 
-- Check contents
+   Check contents
 
         [root@daos-node dest_container]# ls
         [root@daos-node dest_container]# 
  
- Currently directory would be empty.
+   Currently directory would be empty.
  
- Now copy contents from s3 bucket to dest_container
+   Now copy contents from s3 bucket to dest_container
 
 `[root@daos-node dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
 
