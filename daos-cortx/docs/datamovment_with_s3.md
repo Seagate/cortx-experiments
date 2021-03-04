@@ -27,7 +27,7 @@
 
   - Verify the installation using hctl status.
 
-        [root@ssc-vm-2161 ~]# hctl status
+        [root@cortx-node ~]# hctl status
 
         Profile: 0x7000000000000001:0x1c
 
@@ -54,15 +54,15 @@
  
 * Add credentials on Daos node
 
-      [root@ssc-vm-2162 ~]# cd ~/.aws/
-      [root@ssc-vm-2162 ~]# ls
+      [root@daos-node ~]# cd ~/.aws/
+      [root@daos-node ~]# ls
       config  credentials
 
 - If these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
 
 - cortx node might be having following contents as below.
 
-      [root@ssc-vm-2161 .aws]# cat config
+      [root@cortx-node .aws]# cat config
       [default]
       output = text
       region = US
@@ -74,8 +74,8 @@
 
       [plugins]
       endpoint = awscli_plugin_endpoint
-      [root@ssc-vm-2161 .aws]#
-      [root@ssc-vm-2161 .aws]# cat credentials
+      [root@cortx-node .aws]#
+      [root@cortx-node .aws]# cat credentials
       [default]
       aws_access_key_id = AKIAqQWHc###################
       aws_secret_access_key=  G6lFDsuvebBoOTfiKh###################
@@ -107,15 +107,15 @@
 
 * Create test-bucket on cortx node using following command
 
-`[root@ssc-vm-2162 src_container]# aws s3 mb s3://daos-bucket`
+`[root@daos-node src_container]# aws s3 mb s3://daos-bucket`
 
 * Verify bucket list on daos node
 
-`[root@ssc-vm-2162 src_container]# aws s3 ls`
+`[root@daos-node src_container]# aws s3 ls`
 
 * Copy file_obj from /mnt/dfuse_data/src_container/ (i.e. container's dfuse mount point) to s3 bucket
 
-`[root@ssc-vm-2162 src_container]# aws s3 cp file_obj s3://daos-bucket/`
+`[root@daos-node src_container]# aws s3 cp file_obj s3://daos-bucket/`
 
 - contents can be verified using `aws s3 ls s3://daos-bucket/` command.
 
@@ -125,18 +125,18 @@
 
 - Check contents
 
-        [root@ssc-vm-2162 dest_container]# ls
-        [root@ssc-vm-2162 dest_container]# 
+        [root@daos-node dest_container]# ls
+        [root@daos-node dest_container]# 
  
  Currently directory would be empty.
  
  - Now copy contents from s3 bucket to dest_container
 
-`[root@ssc-vm-2162 dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
+`[root@daos-node dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
 
 * Verified file contents inside dest_container
 
-        [root@ssc-vm-2162 dest_container]# ls
+        [root@daos-node dest_container]# ls
         file_obj
 
 Just like cp, one can also perform mv, sync, etc. operations.
