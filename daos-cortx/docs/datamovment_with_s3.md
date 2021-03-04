@@ -50,7 +50,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
 ## Install s3 cli on daos node.
 
-* Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/cortx-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
+* Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/CORTX-S3%20Server%20Quick%20Start%20Guide.md#14-Test-your-Build-using-S3-CLI) for installing s3 cli on daos node. 
  
 * Add credentials on daos node
 
