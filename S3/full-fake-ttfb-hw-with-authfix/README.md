@@ -16,7 +16,7 @@ Contents:
   - [POC Details](#poc-details)
   - [Results](#results)
   - [Analysis](#analysis)
-  - [Some Data](#some-data)
+  - [Some More Data](#some-more-data)
     - [100 bytes](#100-bytes)
     - [256 KB](#256-kb)
     - [128 MB](#128-mb)
@@ -118,20 +118,19 @@ ADDB analysis is required since it is unclear for the moment why there are no
 expected improvements that were observed in tests on VM.
 
 
-## Some Data
+## Some More Data
 
-By Ivan Tishchenko.
+In this section, we were specifically looking at Reads, because we expect
+improvement in TTFB, and writes operation does not have such metric by
+definition.
 
-I was specifically looking at Reads, because we expect improvement in TTFB, and
-writes operation does not have such metric by definition.
+From Dmitry CSV, we took only 'initial' and 'restart' tests.  Ignored 'fix',
+because it had some configuration issue and lots of IOs failed.  ('restart'
+fixed that config issue and is more "clean" for comparison.)  I also ignored
+object size 256 MB, since that was "warm-up" workload, not intended for analysis
+and comparison.
 
-From Dmitry CSV, I took only 'initial' and 'restart'.  Ignored 'fix', because it
-had some configuration issue and lots of IOs failed.  ('restart' fixed that
-config issue and is more "clean" for comparison.)  I also ignored object size
-256 MB, since that was "warm-up" workload, not intended for analysis and
-comparison.
-
-After that I got test results for 3 object sizes: tiny (100 bytes), small (256
+After that we got test results for 3 object sizes: tiny (100 bytes), small (256
 KB) and large (128 MB).  Results:
 
 
