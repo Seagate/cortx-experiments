@@ -22,7 +22,6 @@ Contents:
     - [128 MB](#128-mb)
     - [Summary](#summary)
 
-
 ## Corresponding Jira Ticket
 
 [EOS-17555](https://jts.seagate.com/browse/EOS-17555)
@@ -39,32 +38,32 @@ Run standard tests on the latest S3 master and compare results with the same tes
 
 ### Branches and repos
 
--   Hare:
-    -   repo: [https://github.com/t7ko-seagate/cortx-hare](https://github.com/t7ko-seagate/cortx-hare)
-    -   branch: R2-HW-test-base-branch
+- Hare:
+  - repo: [https://github.com/t7ko-seagate/cortx-hare](https://github.com/t7ko-seagate/cortx-hare)
+  - branch: R2-HW-test-base-branch
 
--   Motr:
-    -   repo: [https://github.com/t7ko-seagate/cortx-motr](https://github.com/t7ko-seagate/cortx-motr)
-    -   branch: R2-HW-test-base-branch
+- Motr:
+  - repo: [https://github.com/t7ko-seagate/cortx-motr](https://github.com/t7ko-seagate/cortx-motr)
+  - branch: R2-HW-test-base-branch
 
--   S3:
-    -   repo: [https://github.com/t7ko-seagate/cortx-s3server](https://github.com/t7ko-seagate/cortx-s3server)
-    -   branch: R2-HW-test-base-branch
+- S3:
+  - repo: [https://github.com/t7ko-seagate/cortx-s3server](https://github.com/t7ko-seagate/cortx-s3server)
+  - branch: R2-HW-test-base-branch
 
 ### Workloads
 
--   256 KB throughput:
-    -   [Workload-1](../initial-perf-test-on-R2/raw-test-results.md#21-perfline-job-yaml)
-    -   [Workload-2](../initial-perf-test-on-R2/raw-test-results.md#31-perfline-job-yaml)
+- 256 KB throughput:
+  - [Workload-1](../initial-perf-test-on-R2/raw-test-results.md#21-perfline-job-yaml)
+  - [Workload-2](../initial-perf-test-on-R2/raw-test-results.md#31-perfline-job-yaml)
 
--   Tiny object TTFB:
-    -   [Workload-3](../initial-perf-test-on-R2/raw-test-results.md#8-ttfb-100-bytes-1-512-sessions---take-2)
+- Tiny object TTFB:
+  - [Workload-3](../initial-perf-test-on-R2/raw-test-results.md#8-ttfb-100-bytes-1-512-sessions---take-2)
 
--   256 KB TTFB:
-    -   [Workload-4](../initial-perf-test-on-R2/raw-test-results.md#13-ttfb-256-kb-1-512-sessions)
+- 256 KB TTFB:
+  - [Workload-4](../initial-perf-test-on-R2/raw-test-results.md#13-ttfb-256-kb-1-512-sessions)
 
--   Large object TTFB:
-    -   [Workload-5](../initial-perf-test-on-R2/raw-test-results.md#18-ttfb-128-mb-1-512-sessions)
+- Large object TTFB:
+  - [Workload-5](../initial-perf-test-on-R2/raw-test-results.md#18-ttfb-128-mb-1-512-sessions)
 
 ### Report
 
@@ -101,10 +100,10 @@ Results comparison report is shared as [Excel Report](https://seagatetechnology.
 
 The **State** column identifies results
 
--   `initial` - results of the base build tests
--   `fix` - first test session with errors before AuthServer restart
--   `restart` - repeated tests after AuthServer restart
--   `restart-2` - additional tests run after one more AuthServer restart
+- `initial` - results of the base build tests
+- `fix` - first test session with errors before AuthServer restart
+- `restart` - repeated tests after AuthServer restart
+- `restart-2` - additional tests run after one more AuthServer restart
 
 Unclear behavior of AuthServer was reproduced in base build as well, so it is
 unlikely it was caused by the tested AuthServer changes. Tests runs containing
@@ -116,7 +115,6 @@ tested AuthServer fix as expected. In some case small degradation is observed.
 
 ADDB analysis is required since it is unclear for the moment why there are no
 expected improvements that were observed in tests on VM.
-
 
 ## Some More Data
 
@@ -133,10 +131,9 @@ and comparison.
 After that we got test results for 3 object sizes: tiny (100 bytes), small (256
 KB) and large (128 MB).  Results:
 
-
 ### 100 bytes
 
-| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` |  `improved` | `degraded`  | 
+| `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` |  `improved` | `degraded`  |
 | ---------- | ------------- | ---------------- | -------- | -------- |
 | 1          | 0.014         | 0.013            | 11%      |          |
 | 16         | 0.036         | 0.024            | 33%      |          |
@@ -175,7 +172,6 @@ version, and two columns for `restart` version.  All these show average TTFB.
 It can be seen that TTFB change is not consistent -- in some tests it shows
 improvement, in some others -- degradation, with no visible pattern.
 
-
 ### 128 MB
 
 | `numClients` | `ttfb_avg_init` | `ttfb_avg_restart` | `improved` | `degraded` |
@@ -193,12 +189,11 @@ Surprisingly, 128 MB shows good improvement in TTFB (except 1 and 512 sessions).
 Surprise is -- the improvement is too big.  We only expected minor improvement
 (because auth is relatively short as compared to data transfers).
 
-
 ### Summary
 
-* We confirmed that latest S3 server code from `main` branch is working on 3
+- We confirmed that latest S3 server code from `main` branch is working on 3
   node R2 HW setup -- POSITIVE.
-* Measurement results are chaotic and not consistent.  This seems to indicate
+- Measurement results are chaotic and not consistent.  This seems to indicate
   that either HW was not stable, or test is not stable (e.g. too short), or --
   the fixes between `init` and `restart` versions brought in some significant
   instability into TTFB -- UNDEFINED.
