@@ -11,21 +11,21 @@
 
 * Single node deployment of cortx on one VM
 
-    - The single node deployment for CORTX hosting s3 server, which will be used to manage buckets and store objects moved from DOAS using aws s3 cli.
+The single node deployment for CORTX hosting s3 server, which will be used to manage buckets and store objects moved from DOAS using aws s3 cli.
 
 * Daos server node setup on another VM
   
-    - Daos node will be required to create pools, containers and storing objects in it.
+Daos node will be required to create pools, containers and storing objects in it.
 
 * Install s3 cli on Daos node
 
-    - Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from CORTX node.
+Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from CORTX node.
     
 ## Setup cortx node
 
-  - Follow this [document](https://github.com/Seagate/cortx/blob/main/QUICK_START.md) to setup cortx on your vm.
+Follow this [document](https://github.com/Seagate/cortx/blob/main/QUICK_START.md) to setup cortx on your vm.
 
-  - Verify the installation using hctl status.
+Verify the installation using hctl status.
 
         [root@cortx-node ~]# hctl status
 
@@ -44,9 +44,9 @@
 
 ## Setup Daos node
 
-- Follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
+Follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
   
-- Make sure CORTX and Daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
+Make sure CORTX and Daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
 
 ## Install s3 cli on Daos node.
 
@@ -58,9 +58,11 @@
       [root@daos-node ~]# ls
       config  credentials
 
-- If these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
+   If these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
 
-- cortx node might be having following contents as below.
+- cortx node might be having following contents in config and credentials files.
+
+   config file
 
       [root@cortx-node .aws]# cat config
       [default]
@@ -74,7 +76,9 @@
 
       [plugins]
       endpoint = awscli_plugin_endpoint
-      [root@cortx-node .aws]#
+
+   credential file
+
       [root@cortx-node .aws]# cat credentials
       [default]
       aws_access_key_id = AKIAqQWHc###################
@@ -82,7 +86,7 @@
 
 - Note : credentials are hidden above using pound sign.
 
-- go to cortx node
+- go to cortx node and verify file contents
 
         ls ~/.aws/credentials file`
 
@@ -130,7 +134,7 @@
  
  Currently directory would be empty.
  
- - Now copy contents from s3 bucket to dest_container
+ Now copy contents from s3 bucket to dest_container
 
 `[root@daos-node dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
 
