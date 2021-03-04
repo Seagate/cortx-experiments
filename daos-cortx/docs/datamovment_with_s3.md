@@ -1,9 +1,9 @@
 # Daos object movement using aws s3cli
 
-- Document describes data movement between DAOS and CORTX using Posix Interface on DAOS and S3 interface on CORTX. This demonstrates two workflows using AWS S3 cli tool.
+- Document describes data movement between daos and cortx using Posix Interface on daos and S3 interface on cortx. This demonstrates two workflows using AWS S3 cli tool.
 
-   - DAOS to CORTX (posix to S3)
-   - CORTX to DAOS (S3 to posix)
+   - daos to cortx (posix to S3)
+   - cortx to daos (S3 to posix)
 
 # Test setup
 
@@ -17,9 +17,9 @@ The single node deployment for CORTX hosting s3 server, which will be used to ma
   
 Daos node will be required to create pools, containers and storing objects in it.
 
-* Install s3 cli on Daos node
+* Install s3 cli on daos node
 
-Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from CORTX node.
+Aws s3 cli installed on DOAS node will be used to storing/retrieving objects to/from cortx node.
     
 ## Setup cortx node
 
@@ -42,15 +42,15 @@ Verify the installation using hctl status.
         [started] s3server 0x7200000000000001:0x16 192.168.29.186@tcp:12345:3:1
         [unknown] m0_client 0x7200000000000001:0x19 192.168.29.186@tcp:12345:4:1
 
-## Setup Daos node
+## Setup daos node
 
 Follow this [document](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md) to setup daos and creating container.
   
-Make sure CORTX and Daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
+Make sure cortx and daos node can communicate or both are in the same network. Try pinging cortx from daos or vice-versa to check connectivity.
 
-## Install s3 cli on Daos node.
+## Install s3 cli on daos node.
 
-* Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/CORTX-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
+* Follow this [steps](https://github.com/Seagate/cortx-s3server/blob/main/docs/cortx-S3%20Server%20Quick%20Start%20Guide.md#14-test-your-build-using-s3-cli) for installing s3 cli on daos node. 
  
 * Add credentials on Daos node
 
