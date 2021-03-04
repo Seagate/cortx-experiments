@@ -86,7 +86,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
    Note : credentials are hidden above using pound sign.
 
-   go to cortx node and verify file contents
+   Switch to cortx node and verify file contents
 
         ls ~/.aws/credentials file`
 
@@ -105,27 +105,27 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
 * Create test object (a file) with some contents in source container's dfuse directory (i.e. inside /mnt/dfuse_data/src_container/)
 
-`touch file_obj`
+   `touch file_obj`
 
    Add some dummy contents inside this file.
 
 * Create test-bucket on cortx node using following command
 
-`[root@daos-node src_container]# aws s3 mb s3://daos-bucket`
+   `[root@daos-node src_container]# aws s3 mb s3://daos-bucket`
 
 * Verify bucket list on daos node
 
-`[root@daos-node src_container]# aws s3 ls`
+   `[root@daos-node src_container]# aws s3 ls`
 
 * Copy file_obj from /mnt/dfuse_data/src_container/ (i.e. container's dfuse mount point) to s3 bucket
 
-`[root@daos-node src_container]# aws s3 cp file_obj s3://daos-bucket/`
+   `[root@daos-node src_container]# aws s3 cp file_obj s3://daos-bucket/`
 
    Contents can be verified using `aws s3 ls s3://daos-bucket/` command.
 
 * Copy back file to dest_container from s3 bucket
 
-`cd /mnt/dfuse_data/dest_container/`
+   `cd /mnt/dfuse_data/dest_container/`
 
    Check contents
 
@@ -136,7 +136,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
  
    Now copy contents from s3 bucket to dest_container
 
-`[root@daos-node dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
+   `[root@daos-node dest_container]# aws s3 cp s3://daos-bucket/file_obj .`
 
 * Verified file contents inside dest_container
 
