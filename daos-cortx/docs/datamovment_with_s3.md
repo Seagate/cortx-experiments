@@ -60,7 +60,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
 
    If these files are not already present then create them and populate both files with the same contents of credentials and config file on cortx node(residing at ~/.aws/).
 
-- cortx node may have following contents in config and credentials files.
+- Cortx node may have following contents as config and credentials :
 
    config file
 
@@ -77,7 +77,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
       [plugins]
       endpoint = awscli_plugin_endpoint
 
-   credential file
+   credentials file
 
       [root@cortx-node .aws]# cat credentials
       [default]
