@@ -1,0 +1,152 @@
+0
+smc73-m02: Generating in-memory sample data...
+smc73-m02: Done (2.11000339s)
+smc73-m02: Running Write test...
+smc73-m02: operation Write(1) completed in 1.47s|RequestError: send request failed
+smc73-m02: caused by: Put "https://s3.seagate.com/bmax/loadgen_test_6YHTGPN54Z3HHFCPYOVCOXDMGMBZYLCQNXWCTA73VXHLWPVKOLLM3WCAR3Q23XJ5WMYFDAF557ILIH5E5F4HGMFC7EXHHKR5H2WDLDY_60": write tcp 192.168.48.88:57904->192.168.48.159:443: write: broken pipe
+smc73-m02: operation Write(2) completed in 2.61s|ServiceUnavailable: Reduce your request rate
+smc73-m02: 	status code: 503, request id: , host id: 
+smc73-m02: operation Write(3) completed in 2.75s|ServiceUnavailable: Reduce your request rate
+smc73-m02: 	status code: 503, request id: , host id: 
+smc73-m02: operation Write(4) completed in 3.22s|RequestError: send request failed
+smc73-m02: caused by: Put "https://s3.seagate.com/bmax/loadgen_test_6YHTGPN54Z3HHFCPYOVCOXDMGMBZYLCQNXWCTA73VXHLWPVKOLLM3WCAR3Q23XJ5WMYFDAF557ILIH5E5F4HGMFC7EXHHKR5H2WDLDY_17": write tcp 192.168.48.88:58002->192.168.48.159:443: write: broken pipe
+smc73-m02: operation Write(5) completed in 4.80s|ServiceUnavailable: Reduce your request rate
+smc73-m02: 	status code: 503, request id: , host id: 
+smc73-m02: operation Write(6) completed in 4.95s|ServiceUnavailable: Reduce your request rate
+smc73-m02: 	status code: 503, request id: , host id: 
+smc73-m02: operation Write(7) completed in 4.62s|ServiceUnavailable: Reduce your request rate
+smc73-m02: 	status code: 503, request id: , host id: 
+smc73-m02: operation Write(8) completed in 7.79s|%!s(<nil>)
+smc73-m02: operation Write(9) completed in 8.44s|%!s(<nil>)
+smc73-m02: operation Write(10) completed in 8.47s|%!s(<nil>)
+smc73-m02: operation Write(11) completed in 8.50s|%!s(<nil>)
+smc73-m02: operation Write(12) completed in 8.55s|%!s(<nil>)
+smc73-m02: operation Write(13) completed in 7.93s|%!s(<nil>)
+smc73-m02: operation Write(14) completed in 8.56s|%!s(<nil>)
+smc73-m02: operation Write(15) completed in 8.04s|%!s(<nil>)
+smc73-m02: operation Write(16) completed in 8.04s|%!s(<nil>)
+smc73-m02: operation Write(17) completed in 7.50s|%!s(<nil>)
+smc73-m02: operation Write(18) completed in 8.66s|%!s(<nil>)
+smc73-m02: operation Write(19) completed in 8.07s|%!s(<nil>)
+smc73-m02: operation Write(20) completed in 8.72s|%!s(<nil>)
+smc73-m02: operation Write(21) completed in 8.11s|%!s(<nil>)
+smc73-m02: operation Write(22) completed in 8.15s|%!s(<nil>)
+smc73-m02: operation Write(23) completed in 8.77s|%!s(<nil>)
+smc73-m02: operation Write(24) completed in 8.77s|%!s(<nil>)
+smc73-m02: operation Write(25) completed in 8.19s|%!s(<nil>)
+smc73-m02: operation Write(26) completed in 8.19s|%!s(<nil>)
+smc73-m02: operation Write(27) completed in 8.19s|%!s(<nil>)
+smc73-m02: operation Write(28) completed in 8.20s|%!s(<nil>)
+smc73-m02: operation Write(29) completed in 8.91s|%!s(<nil>)
+smc73-m02: operation Write(30) completed in 8.92s|%!s(<nil>)
+smc73-m02: operation Write(31) completed in 8.32s|%!s(<nil>)
+smc73-m02: operation Write(32) completed in 8.34s|%!s(<nil>)
+smc73-m02: operation Write(33) completed in 7.87s|%!s(<nil>)
+smc73-m02: operation Write(34) completed in 9.03s|%!s(<nil>)
+smc73-m02: operation Write(35) completed in 7.92s|%!s(<nil>)
+smc73-m02: operation Write(36) completed in 9.16s|%!s(<nil>)
+smc73-m02: operation Write(37) completed in 9.16s|%!s(<nil>)
+smc73-m02: operation Write(38) completed in 9.24s|%!s(<nil>)
+smc73-m02: operation Write(39) completed in 9.25s|%!s(<nil>)
+smc73-m02: operation Write(40) completed in 8.14s|%!s(<nil>)
+smc73-m02: operation Write(41) completed in 8.84s|%!s(<nil>)
+smc73-m02: operation Write(42) completed in 8.91s|%!s(<nil>)
+smc73-m02: operation Write(43) completed in 8.93s|%!s(<nil>)
+smc73-m02: operation Write(44) completed in 8.44s|%!s(<nil>)
+smc73-m02: operation Write(45) completed in 8.68s|%!s(<nil>)
+smc73-m02: operation Write(46) completed in 9.28s|%!s(<nil>)
+smc73-m02: operation Write(47) completed in 9.90s|%!s(<nil>)
+smc73-m02: operation Write(48) completed in 8.88s|%!s(<nil>)
+smc73-m02: operation Write(49) completed in 10.33s|%!s(<nil>)
+smc73-m02: operation Write(50) completed in 9.33s|%!s(<nil>)
+smc73-m02: operation Write(51) completed in 9.37s|%!s(<nil>)
+smc73-m02: operation Write(52) completed in 9.94s|%!s(<nil>)
+smc73-m02: operation Write(53) completed in 10.66s|%!s(<nil>)
+smc73-m02: operation Write(54) completed in 9.56s|%!s(<nil>)
+smc73-m02: operation Write(55) completed in 10.82s|%!s(<nil>)
+smc73-m02: operation Write(56) completed in 10.53s|%!s(<nil>)
+smc73-m02: operation Write(57) completed in 10.33s|%!s(<nil>)
+smc73-m02: operation Write(58) completed in 11.16s|%!s(<nil>)
+smc73-m02: operation Write(59) completed in 11.78s|%!s(<nil>)
+smc73-m02: operation Write(60) completed in 11.48s|%!s(<nil>)
+smc73-m02: operation Write(61) completed in 11.24s|%!s(<nil>)
+smc73-m02: operation Write(62) completed in 11.55s|%!s(<nil>)
+smc73-m02: operation Write(63) completed in 11.86s|%!s(<nil>)
+smc73-m02: operation Write(64) completed in 12.80s|%!s(<nil>)
+smc73-m02: Running Read test...
+smc73-m02: operation Read(1) completed in 0.09s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 9cbc7b5e-116a-4ecb-9f41-727f9531663b, host id: 
+smc73-m02: operation Read(2) completed in 0.09s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 3132e1f5-4499-4dab-b450-d92e0e4f15af, host id: 
+smc73-m02: operation Read(3) completed in 0.09s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 0556afa7-83d0-4244-b46d-5259ebf6ca89, host id: 
+smc73-m02: operation Read(4) completed in 0.12s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 8050a1ee-e0d9-43cd-b149-b56a9335bf93, host id: 
+smc73-m02: operation Read(5) completed in 0.12s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 1159f0c6-376a-4602-92e0-eada3b6c35d1, host id: 
+smc73-m02: operation Read(6) completed in 0.12s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: b34ed45e-98dd-4c1c-a0a2-067b21505294, host id: 
+smc73-m02: operation Read(7) completed in 0.14s|NoSuchKey: The specified key does not exist.
+smc73-m02: 	status code: 404, request id: 46568f55-b36e-434d-972b-041b31e272c6, host id: 
+smc73-m02: operation Read(8) completed in 1.34s|%!s(<nil>)
+smc73-m02: operation Read(9) completed in 2.65s|%!s(<nil>)
+smc73-m02: operation Read(10) completed in 2.71s|%!s(<nil>)
+smc73-m02: operation Read(11) completed in 2.72s|%!s(<nil>)
+smc73-m02: operation Read(12) completed in 2.72s|%!s(<nil>)
+smc73-m02: operation Read(13) completed in 2.74s|%!s(<nil>)
+smc73-m02: operation Read(14) completed in 2.77s|%!s(<nil>)
+smc73-m02: operation Read(15) completed in 2.77s|%!s(<nil>)
+smc73-m02: operation Read(16) completed in 2.78s|%!s(<nil>)
+smc73-m02: operation Read(17) completed in 2.79s|%!s(<nil>)
+smc73-m02: operation Read(18) completed in 2.80s|%!s(<nil>)
+smc73-m02: operation Read(19) completed in 11.65s|%!s(<nil>)
+smc73-m02: operation Read(20) completed in 11.89s|%!s(<nil>)
+smc73-m02: operation Read(21) completed in 12.43s|%!s(<nil>)
+smc73-m02: operation Read(22) completed in 12.57s|%!s(<nil>)
+smc73-m02: operation Read(23) completed in 12.60s|%!s(<nil>)
+smc73-m02: operation Read(24) completed in 12.72s|%!s(<nil>)
+smc73-m02: operation Read(25) completed in 12.90s|%!s(<nil>)
+smc73-m02: operation Read(26) completed in 12.93s|%!s(<nil>)
+smc73-m02: operation Read(27) completed in 12.94s|%!s(<nil>)
+smc73-m02: operation Read(28) completed in 12.97s|%!s(<nil>)
+smc73-m02: operation Read(29) completed in 12.99s|%!s(<nil>)
+smc73-m02: operation Read(30) completed in 13.01s|%!s(<nil>)
+smc73-m02: operation Read(31) completed in 13.01s|%!s(<nil>)
+smc73-m02: operation Read(32) completed in 13.04s|%!s(<nil>)
+smc73-m02: operation Read(33) completed in 13.04s|%!s(<nil>)
+smc73-m02: operation Read(34) completed in 13.05s|%!s(<nil>)
+smc73-m02: operation Read(35) completed in 13.05s|%!s(<nil>)
+smc73-m02: operation Read(36) completed in 13.06s|%!s(<nil>)
+smc73-m02: operation Read(37) completed in 13.06s|%!s(<nil>)
+smc73-m02: operation Read(38) completed in 13.07s|%!s(<nil>)
+smc73-m02: operation Read(39) completed in 13.07s|%!s(<nil>)
+smc73-m02: operation Read(40) completed in 13.07s|%!s(<nil>)
+smc73-m02: operation Read(41) completed in 13.08s|%!s(<nil>)
+smc73-m02: operation Read(42) completed in 13.08s|%!s(<nil>)
+smc73-m02: operation Read(43) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(44) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(45) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(46) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(47) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(48) completed in 13.09s|%!s(<nil>)
+smc73-m02: operation Read(49) completed in 13.10s|%!s(<nil>)
+smc73-m02: operation Read(50) completed in 13.10s|%!s(<nil>)
+smc73-m02: operation Read(51) completed in 13.10s|%!s(<nil>)
+smc73-m02: operation Read(52) completed in 13.10s|%!s(<nil>)
+smc73-m02: operation Read(53) completed in 13.11s|%!s(<nil>)
+smc73-m02: operation Read(54) completed in 13.11s|%!s(<nil>)
+smc73-m02: operation Read(55) completed in 13.12s|%!s(<nil>)
+smc73-m02: operation Read(56) completed in 13.13s|%!s(<nil>)
+smc73-m02: operation Read(57) completed in 13.13s|%!s(<nil>)
+smc73-m02: operation Read(58) completed in 13.13s|%!s(<nil>)
+smc73-m02: operation Read(59) completed in 13.15s|%!s(<nil>)
+smc73-m02: operation Read(60) completed in 13.16s|%!s(<nil>)
+smc73-m02: operation Read(61) completed in 13.16s|%!s(<nil>)
+smc73-m02: operation Read(62) completed in 13.16s|%!s(<nil>)
+smc73-m02: operation Read(63) completed in 13.18s|%!s(<nil>)
+smc73-m02: operation Read(64) completed in 13.18s|%!s(<nil>)
+smc73-m02: Cleaning up 64 objects...
+smc73-m02: Deleting a batch of 64 objects in range {0, 63}...  done in 1.886641435s | err <nil>
+smc73-m02: Deleting bucket...
+smc73-m02: Succeeded
+smc73-m02: {"Parameters":{"TLSHandshakeTimeout":0,"bucket":"bmax","connectTimeout":0,"deleteAtOnce":1000,"deleteClients":1,"deleteOnly":false,"endpoints":["https://s3.seagate.com"],"getObjTag":false,"headObj":false,"httpClientTimeout":0,"idleConnTimeout":0,"jsonOutput":true,"maxIdleConnsPerHost":0,"multipartSize":0,"numClients":64,"numSamples":64,"numTags":10,"objectNamePrefix":"loadgen_test","objectSize (MB)":256,"protocolDebug":0,"putObjTag":false,"readObj":true,"reportFormat":"Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:RPS;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Total Duration (s);Tests:Total Transferred (MB);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;","responseHeaderTimeout":0,"s3Disable100Continue":false,"s3MaxRetries":-1,"sampleReads":1,"skipRead":false,"skipWrite":false,"tagNamePrefix":"tag_name_","tagValPrefix":"tag_val_","validate":false,"verbose":true,"zero":false},"Tests":[{"Duration 25th-ile":8.19788785,"Duration 50th-ile":8.836772724,"Duration 75th-ile":9.558185123,"Duration 90th-ile":11.241996937,"Duration 99th-ile":12.798830572,"Duration Avg":9.169530747000001,"Duration Max":12.798830572,"Duration Min":7.500628084,"Errors":["Write(1) completed in 1.47s with error RequestError: send request failed\ncaused by: Put \"https://s3.seagate.com/bmax/loadgen_test_6YHTGPN54Z3HHFCPYOVCOXDMGMBZYLCQNXWCTA73VXHLWPVKOLLM3WCAR3Q23XJ5WMYFDAF557ILIH5E5F4HGMFC7EXHHKR5H2WDLDY_60\": write tcp 192.168.48.88:57904-\u003e192.168.48.159:443: write: broken pipe","Write(2) completed in 2.61s with error ServiceUnavailable: Reduce your request rate\n\tstatus code: 503, request id: , host id: ","Write(3) completed in 2.75s with error ServiceUnavailable: Reduce your request rate\n\tstatus code: 503, request id: , host id: ","Write(4) completed in 3.22s with error RequestError: send request failed\ncaused by: Put \"https://s3.seagate.com/bmax/loadgen_test_6YHTGPN54Z3HHFCPYOVCOXDMGMBZYLCQNXWCTA73VXHLWPVKOLLM3WCAR3Q23XJ5WMYFDAF557ILIH5E5F4HGMFC7EXHHKR5H2WDLDY_17\": write tcp 192.168.48.88:58002-\u003e192.168.48.159:443: write: broken pipe","Write(5) completed in 4.80s with error ServiceUnavailable: Reduce your request rate\n\tstatus code: 503, request id: , host id: ","Write(6) completed in 4.95s with error ServiceUnavailable: Reduce your request rate\n\tstatus code: 503, request id: , host id: ","Write(7) completed in 4.62s with error ServiceUnavailable: Reduce your request rate\n\tstatus code: 503, request id: , host id: "],"Errors Count":7,"Operation":"Write","RPS":3.5817983907344457,"Total Duration (s)":13.959467995,"Total Requests Count":57,"Total Throughput (MB/s)":1045.3120423519406,"Total Transferred (MB)":14592,"Ttfb 25th-ile":8.197887701,"Ttfb 50th-ile":8.836772484,"Ttfb 75th-ile":9.558184742,"Ttfb 90th-ile":11.241996537,"Ttfb 99th-ile":12.798830424,"Ttfb Avg":9.169530448824561,"Ttfb Max":12.798830424,"Ttfb Min":7.500627724},{"Duration 25th-ile":12.574130069,"Duration 50th-ile":13.059069168,"Duration 75th-ile":13.100401061,"Duration 90th-ile":13.148385723,"Duration 99th-ile":13.184723866,"Duration Avg":10.977828478333334,"Duration Max":13.184723866,"Duration Min":1.344587859,"Errors":["Read(1) completed in 0.09s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 9cbc7b5e-116a-4ecb-9f41-727f9531663b, host id: ","Read(2) completed in 0.09s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 3132e1f5-4499-4dab-b450-d92e0e4f15af, host id: ","Read(3) completed in 0.09s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 0556afa7-83d0-4244-b46d-5259ebf6ca89, host id: ","Read(4) completed in 0.12s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 8050a1ee-e0d9-43cd-b149-b56a9335bf93, host id: ","Read(5) completed in 0.12s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 1159f0c6-376a-4602-92e0-eada3b6c35d1, host id: ","Read(6) completed in 0.12s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: b34ed45e-98dd-4c1c-a0a2-067b21505294, host id: ","Read(7) completed in 0.14s with error NoSuchKey: The specified key does not exist.\n\tstatus code: 404, request id: 46568f55-b36e-434d-972b-041b31e272c6, host id: "],"Errors Count":7,"Operation":"Read","RPS":3.7920904999095137,"Total Duration (s)":13.185339327,"Total Requests Count":57,"Total Throughput (MB/s)":1106.6836914935925,"Total Transferred (MB)":14592,"Ttfb 25th-ile":0.36363869,"Ttfb 50th-ile":0.468036758,"Ttfb 75th-ile":0.523317511,"Ttfb 90th-ile":0.601707593,"Ttfb 99th-ile":1.533136155,"Ttfb Avg":0.47124356040350857,"Ttfb Max":1.533136155,"Ttfb Min":0.177511977}],"Version":"2021-02-04-04:50:32-04b03ce50b88c07fe8bf0e60b74af03dfbc12c38"}
