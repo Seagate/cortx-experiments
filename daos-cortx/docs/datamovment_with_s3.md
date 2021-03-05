@@ -132,7 +132,7 @@ Make sure cortx and daos node can communicate or both are in the same network. T
         [root@daos-node dest_container]# ls
         [root@daos-node dest_container]# 
  
-   Currently directory would be empty.
+   At present directory would be empty.
  
    Now copy contents from s3 bucket to dest_container
 
