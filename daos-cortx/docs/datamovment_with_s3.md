@@ -1,6 +1,6 @@
 # Daos object movement using aws s3cli
 
-- Document describes data movement between daos and cortx using Posix Interface on daos and S3 interface on cortx. This demonstrates two workflows using AWS S3 cli tool.
+Document describes data movement between daos and cortx using Posix Interface on daos and S3 interface on cortx. This demonstrates two workflows using AWS S3 cli tool.
 
    - daos to cortx (posix to S3)
    - cortx to daos (S3 to posix)
