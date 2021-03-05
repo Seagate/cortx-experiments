@@ -18,7 +18,7 @@ Still, basic steps are provided here for quick reference with posix support.
                 
 * Download source code
 
- Make sure to use commands as per your curren robinhood version.
+  Make sure to use commands as per your curren robinhood version.
 
       `wget https://sourceforge.net/projects/robinhood/files/latest/download/robinhood/3.1.6/robinhood-3.1.6.tar.gz`
 
@@ -26,17 +26,17 @@ Still, basic steps are provided here for quick reference with posix support.
  
       `cd  robinhood-3.1.6`
 
-Note : Here, source is cloned inside /root/setup_robinhood/ path and same will be referenced in the following commands. so make sure you use your own path.
+  Note : Here, source is cloned inside /root/setup_robinhood/ path and same will be referenced in the following commands. so make sure you use your own path.
 
-* build robinhood RPMs by running
+* Build robinhood RPMs by running
  
       `./configure`
   
-* install missing deps -- mycase yum install jemalloc-devel.x86_64 jemalloc.x86_64
+* Install missing deps -- mycase yum install jemalloc-devel.x86_64 jemalloc.x86_64
   
       `make rpm`
 
-* install and start database service
+* Install and start database service
 
       `yum install mariadb-server`
 
@@ -46,9 +46,9 @@ Note : Here, source is cloned inside /root/setup_robinhood/ path and same will b
 
       `/root/setup_robinhood/robinhood-3.1.6/scripts/rbh-config create_db <db_name>    'localhost' 'rbh_password'`
 
-A common name for robinhood database name is 'rbh_fsname'. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
+  A common name for robinhood database name is 'rbh_fsname'. Write the selected password to a file only readable by 'root' (600), for example in /etc/robinhood.d/.dbpassword.
 
-Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
+  Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
 
 * Create a robinhood configuration file, starting with a sample robinhood template:
 
@@ -70,17 +70,17 @@ Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posi
 
   This way, you will get relevant information in 'rbh-report --class-info' report after the initial scan is completed.
 
-    fileclass all_object {
-          definition { size > 0 }
-    }
+      fileclass all_object {
+                definition { size > 0 }
+      }
 
-    fileclass big_object {
-          definition { size > 1MB }
-    }
+      fileclass big_object {
+                definition { size > 1MB }
+      }
 
-    fileclass small_object {
-          definition { size < 1MB}
-    }
+      fileclass small_object {
+                definition { size < 1MB}
+      }
 
 
 Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/posix.conf)
@@ -142,7 +142,7 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
 
 6. Run the policy to move objects from cortx to daos(run cortx_to_daos_restore policy)
 
-`/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf --run=cortx_to_daos_restore(all)`
+      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf --run=cortx_to_daos_restore(all)`
 
 7. Verify contents on container and on s3 bucket
 
