@@ -17,18 +17,21 @@
 
 #define ITERATION_CNT 100
 
-#define BM_KEY_64B      64
-#define BM_KEY_128B     128
-#define BM_KEY_256B     256
-#define BM_KEY_512B     512
-#define BM_KEY_1024B    1024
+#define NR_QUERY 10
 
+#define BM_KEY_64B   64
+#define BM_KEY_128B  128
+#define BM_KEY_256B  256
+#define BM_KEY_512B  512
+#define BM_KEY_1024B 1024
 
-#define BM_VAL_1K   1024
-#define BM_VAL_4K   (1024 * 4)
-#define BM_VAL_8K   (1024 * 8)
-#define BM_VAL_16K  (1024 * 16)
-#define BM_VAL_32K  (1024 * 32)
+#define BM_VAL_1K  1024
+#define BM_VAL_4K  (1024 * 4)
+#define BM_VAL_8K  (1024 * 8)
+#define BM_VAL_16K (1024 * 16)
+#define BM_VAL_32K (1024 * 32)
+
+#define KEY_DESC_BUF (1024 * 1024)
 
 static char node[ 128 ] = "new_node";
 
@@ -114,8 +117,8 @@ static void kv_remove_function( benchmark::State &state ) {
       0
    };
 
-   unsigned int val_size = state.range( 0 );
-   unsigned int key_size = state.range( 1 );
+   unsigned int key_size = state.range( 0 );
+   unsigned int val_size = state.range( 1 );
    unsigned int num_keys = state.range( 2 );
 
    /* allocate key and value buffers */
@@ -131,8 +134,8 @@ static void kv_remove_function( benchmark::State &state ) {
 
          /* generate different key */
          memset( key_buf, 'x', key_size - 1 );
-         sprintf( key_name, "key_%d", i );
-         strncpy( ( char * )key_buf, ( char * )key_name, strlen( key_name ) );
+         sprintf( key_name, "%d", i );
+         strncpy( ( char * )key_buf + strlen( key_buf ) - strlen( key_name ), ( char * )key_name, strlen( key_name ) );
 
          state.ResumeTiming( );
 
@@ -149,6 +152,107 @@ static void kv_remove_function( benchmark::State &state ) {
 }
 
 // bnechmark function is getting called here.
+static void kv_list_function( benchmark::State &state ) {
+   /* perform setup */
+   setup_main( );
+
+   char key_name[ 20 ] = {
+      0
+   };
+
+   unsigned int key_size = state.range( 0 );
+   unsigned int val_size = state.range( 1 );
+   unsigned int num_keys = state.range( 2 );
+   unsigned int nr_query = state.range( 3 );
+
+   /* allocate key and value buffers */
+   char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
+   char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   memset( val_buf, 'z', val_size - 1 );                         // populate with some random value.
+
+   char *rbuf = ( char * )calloc( val_size, sizeof( char ) ); // rbuf to check value
+
+   /* call daos_kv_put for state.range(2) times */
+   for ( int i = 0; i < num_keys; i++ )
+   {
+      /* generate different key */
+      memset( key_buf, 'x', key_size - 1 );
+      sprintf( key_name, "%d", i );
+      strncpy( ( char * )key_buf + strlen( key_buf ) - strlen( key_name ), ( char * )key_name, strlen( key_name ) );
+
+      /* put keys and values */
+      daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, key_size, val_buf, NULL );
+   }
+
+   /* actual computation starts here */
+   for ( auto _ : state )
+   {
+      char            *buf;
+      daos_key_desc_t kds[ NR_QUERY ];
+      daos_anchor_t   anchor = {
+         0
+      };
+      int             key_nr = 0;
+      d_sg_list_t     sgl;
+      d_iov_t         sg_iov;
+
+      buf = ( char * )calloc( KEY_DESC_BUF, sizeof( char ) );
+      d_iov_set( &sg_iov, buf, KEY_DESC_BUF );
+      sgl.sg_nr     = 1;
+      sgl.sg_nr_out = 0;
+      sgl.sg_iovs   = &sg_iov;
+
+      while ( !daos_anchor_is_eof( &anchor ) )
+      {
+         uint32_t nr = NR_QUERY;
+         int      rc;
+
+         memset( buf, 0, KEY_DESC_BUF );
+         rc = daos_kv_list( oh, DAOS_TX_NONE, &nr, kds, &sgl, &anchor, \
+                            NULL );
+         ASSERT( rc == 0, "KV list failed with %d", rc );
+
+         /* verify if returned number of descriptors are zero */
+         if ( nr == 0 )
+         {
+            continue;
+         }
+         else // if returned descriptors are non zero then compute each key and query value.
+         {
+            /* compute each key and fetch value */
+            for ( int i = 0; i < nr; i++ )
+            {
+               static unsigned int offset = 0; // to get key from sgl buffer
+               memset( key_buf, 0, key_size ); // clear key_buf
+               memset( rbuf, 0, val_size );    // clear key_buf
+
+               /* obtain key_buf value from sgl.sg_iovs */
+               strncpy( key_buf, kds[ i ].kd_key_len, sgl.sg_iovs + offset );
+
+               /* update offset for next key */
+               offset += kds[ i ].kd_key_len;
+
+               /* compute value for the key_buf */
+               daos_size_t size = 0;
+               size = val_size;
+               daos_kv_get( oh, DAOS_TX_NONE, 0, key_buf, &size, rbuf, NULL );
+            }
+         }
+      }
+
+      free( ( char * )buf );
+   }
+
+   /* free resources */
+   free( ( char * )key_buf );
+   free( ( char * )val_buf );
+   free( ( char * )rbuf );
+
+   /* tear down */
+   tear_down( );
+}
+
+// bnechmark function is getting called here.
 static void kv_put_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
@@ -157,8 +261,8 @@ static void kv_put_function( benchmark::State &state ) {
       0
    };
 
-   unsigned int val_size = state.range( 0 );
-   unsigned int key_size = state.range( 1 );
+   unsigned int key_size = state.range( 0 );
+   unsigned int val_size = state.range( 1 );
    unsigned int num_keys = state.range( 2 );
 
    /* allocate key and value buffers */
@@ -186,8 +290,6 @@ static void kv_put_function( benchmark::State &state ) {
       }
    }
 
-   state.counters[ "FooRate" ] = Counter( num_keys, benchmark::Counter::kIsRate );
-
    /* free resources */
    free( ( char * )key_buf );
    free( ( char * )val_buf );
@@ -205,13 +307,14 @@ static void kv_get_function( benchmark::State &state ) {
       0
    };
 
-   unsigned int val_size = state.range( 0 );
-   unsigned int key_size = state.range( 1 );
+   unsigned int key_size = state.range( 0 );
+   unsigned int val_size = state.range( 1 );
    unsigned int num_keys = state.range( 2 );
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
    char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+
    memset( val_buf, 'z', val_size - 1 );
 
    char *rbuf = ( char * )calloc( val_size, sizeof( char ) ); // rbuf to check value
@@ -260,11 +363,11 @@ static void kv_get_function( benchmark::State &state ) {
 // Put key
 BENCHMARK( kv_put_function )
 ->ArgsProduct( { {
-                  BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K // value buffer sizes [1K, 4K, 8K, 16K, 32K]
+                  BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
                }, {
-                     BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B // key sizes [64B, 128B, 256B, 512B, 1024B]
+                     BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
-                     ITERATION_CNT // number of keys generated for each value buffer size and key size combination
+                     ITERATION_CNT
                   }
                } )
 ->Iterations( 1 )
@@ -273,9 +376,9 @@ BENCHMARK( kv_put_function )
 // Get key
 BENCHMARK( kv_get_function )
 ->ArgsProduct( { {
-                  BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
+                  BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
                }, {
-                     BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
+                     BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
                      ITERATION_CNT
                   }
@@ -284,11 +387,26 @@ BENCHMARK( kv_get_function )
 ->Unit( benchmark::kMillisecond );
 
 // Remove key
+
+BENCHMARK( kv_list_function )
+->ArgsProduct( { {
+                  BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
+               }, {
+                     BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
+                  }, {
+                     ITERATION_CNT
+                  }, {
+                     NR_QUERY
+                  }
+               } )
+->Iterations( 1 )
+->Unit( benchmark::kMillisecond );
+
 BENCHMARK( kv_remove_function )
 ->ArgsProduct( { {
-                  BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
+                  BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
                }, {
-                     BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
+                     BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
                      ITERATION_CNT
                   }
