@@ -20,7 +20,7 @@ Still, basic steps are provided here for quick reference with posix support.
 
 - Make sure to use commands as per your curren robinhood version.
 
-`weget https://sourceforge.net/projects/robinhood/files/latest/download/robinhood/3.1.6/robinhood-3.1.6.tar.gz`
+`wget https://sourceforge.net/projects/robinhood/files/latest/download/robinhood/3.1.6/robinhood-3.1.6.tar.gz`
 
 `tar zxf robinhood-3.1.6.tar.gz`
  
@@ -50,7 +50,7 @@ A common name for robinhood database name is 'rbh_fsname'. Write the selected pa
 
 Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posix_tuto#configuration)
 
-* Create a robinhood configuration file, starting with a simple robinhood template:
+* Create a robinhood configuration file, starting with a sample robinhood template:
 
 `cp /root/setup_robinhood/robinhood-3.1.6/doc/templates/basic.conf /etc/robihood.d/posix.conf`
 
@@ -58,8 +58,8 @@ Reference is available [here.](https://github.com/cea-hpc/robinhood/wiki/v3_posi
 
 In 'General' block, set filesystem root path, and the corresponding file system type.
        
-       fs_path = "/fs/root";
-       fs_type = xfs;
+       fs_path = "/mnt/src_container_mnt";
+       fs_type = fuse.daos;
  
 * In 'ListManager' block, set database connection parameters:
 
@@ -70,14 +70,18 @@ It is recommended to define your fileclasses before running the initial file sys
 
 This way, you will get relevant information in 'rbh-report --class-info' report after the initial scan is completed.
 
-    fileclass empty_file {
-        definition { type == file and size == 0 }
-     }
-     fileclass small_file {
-        definition { type == file
-                 and size > 0
-                 and size <= 32MB }
-     }
+    fileclass all_object {
+          definition { size > 0 }
+    }
+
+    fileclass big_object {
+          definition { size > 1MB }
+    }
+
+    fileclass small_object {
+          definition { size < 1MB}
+    }
+
 
 Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/posix.conf)
 Make sure to make above relevant changes in fields mentioned above.
