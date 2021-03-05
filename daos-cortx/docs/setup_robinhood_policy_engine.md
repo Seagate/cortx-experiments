@@ -1,12 +1,12 @@
 # Introduction
 
-Robinhood Policy Engine is a versatile tool to manage contents of large file systems. It maintains a replica of file system metadata in a database that can be queried at will. for more details kindly check [Robinhood wiki](https://github.com/cea-hpc/robinhood/wiki) page.
+  Robinhood Policy Engine is a versatile tool to manage contents of large file systems. It maintains a replica of file system metadata in a database that can be queried at will. for more details kindly check [Robinhood wiki](https://github.com/cea-hpc/robinhood/wiki) page.
 
 # Setup guide
 
-Complete details for setup are available [here.](https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#software-installation)
+  Complete details for setup are available [here.](https://github.com/cea-hpc/robinhood/wiki/robinhood_v3_admin_doc#software-installation)
 
-Still, basic steps are provided here for quick reference with posix support.
+  Still, basic steps are provided here for quick reference with posix support.
 
 * Build dependencies 
 
@@ -83,8 +83,8 @@ Still, basic steps are provided here for quick reference with posix support.
       }
 
 
-Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
-Make sure to make above relevant changes in fields mentioned above.
+  Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+  Make sure to make above relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
 
@@ -116,19 +116,24 @@ Node : There's a demostration video available for the following exercies [here](
    
    For this excercise, my mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
 
-      `cd /mnt/src_container_mnt`
+      `[root@daos-node ~]# cd /mnt/src_container_mnt`
    
    Create a samll object (<1MB) and a big object(>1MB) inside a container.
    
             dd if=/dev/urandom bs=100 count=1 | base64 > ./small_object
    
-            dd if=/dev/urandom bs=1024 count=2000 | base64 > ./big_object
+            dd if=/dev/urandom bs=1024 count=2048 | base64 > ./big_object
+            
+   Verify contents
+   
+         [root@daos-node src_container_mnt]# ls
+         big_object samll_object
 
    Large object files (>1MB) residing /mnt/src_container_mnt will be archived to cortx-s3 bucket and all objects inside bucket will be restored to /mnt/dest_container_mnt using robinhood policy engine.
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-   Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
+   Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
 
       `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
@@ -136,7 +141,7 @@ Node : There's a demostration video available for the following exercies [here](
  
 3. Create s3 bucket 
  
-      `aws s3 mb s3://daos-bucket`
+      `[root@daos-node src_container_mnt]# aws s3 mb s3://daos-bucket`
 
    Note : For this exercise test bucket name used is daos-bucket and same is used inside rh_daos_cortx.conf file referenced above.
 
@@ -144,11 +149,12 @@ Node : There's a demostration video available for the following exercies [here](
 
       `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf --run=daos_to_cortx_archive(all)`
 
-5. Verify contents on container and on s3 bucket
+5. Verify contents on source container and on s3 bucket
 
-      `ls`
-
-      `aws s3 ls s3://daos-bucket`
+            [root@daos-node src_container_mnt]# ls
+            small_object
+            [root@daos-node src_container_mnt]# aws s3 ls s3://daos-bucket
+            2021-03-03 00:47:02    2832997 big_object
 
    This is how we have successfully moved larger objects (size > 1MB) from daos to cortx
 
@@ -158,8 +164,9 @@ Node : There's a demostration video available for the following exercies [here](
 
 7. Verify contents on container and on s3 bucket
 
-      `ls`
-
-      `aws s3 ls s3://daos-bucket`
+            [root@daos-node dest_container_mnt]# ls
+            big_object
+            [root@daos-node dest_container_mnt]# aws s3 ls s3://daos-bucket
+            [root@daos-node dest_container_mnt]# 
 
 So, This is how we have successfully moved objects from s3 bucket to daos container.
