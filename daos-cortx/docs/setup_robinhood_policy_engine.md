@@ -83,20 +83,22 @@ Still, basic steps are provided here for quick reference with posix support.
       }
 
 
-Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/posix.conf)
+Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
 Make sure to make above relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
 
-      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/posix.conf`
+      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
 * Query database
  
-      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
+      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info -f /etc/robinhood.d/rh_daos_cortx.conf`
  
 # Test for daos to CORTX and vice-versa data movement
 
 In this exercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two prerequisites to carry out this test mentioned below.
+
+Node : There's a demostration video available for the following exercies [here](). //TODO
 
 * Daos server node running on one VM
 
@@ -110,17 +112,27 @@ In this exercise object movements from daos to cortx and cortx to daos will be m
  
 1. Create objects in a daos container (i.e. inside dfuse mount point)
 
-   Create larger and smaller objects inside the container. container is mounted at /mnt/daos_container for this exercise and same fs_path will be used in config file as well.
+   Create a pool and 2 containers inside that pool. Create dfuse mount points for both containers.
+   
+   For this excercise, my mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
 
-   These object(s) are going to be moved to s3 bucket and downloaded from there to doas container directory.
+      `cd /mnt/src_container_mnt`
+   
+   Create a samll object (<1MB) and a big object(>1MB) inside a container.
+   
+            dd if=/dev/urandom bs=100 count=1 | base64 > ./small_object
+   
+            dd if=/dev/urandom bs=1024 count=2000 | base64 > ./big_object
+
+   Large object files (>1MB) residing /mnt/src_container_mnt will be archived to cortx-s3 bucket and all objects inside bucket will be restored to /mnt/dest_container_mnt using robinhood policy engine.
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-   Readily available config files with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
+   Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
 
       `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
-      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info`
+      `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/rbh-report --fs-info --class-info -f /etc/robinhood.d/rh_daos_cortx.conf`
  
 3. Create s3 bucket 
  
