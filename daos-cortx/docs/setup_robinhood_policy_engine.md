@@ -56,10 +56,12 @@
 
 * Edit the configuration file
 
-  In 'General' block, set filesystem root path, and the corresponding file system type.
+  In 'General' block, set filesystem path to be scanned by Robinhood policy engine.
        
        fs_path = "/mnt/src_container_mnt";
        fs_type = fuse.daos;
+       
+  Note : Make sure you use filesystem path of your interest.
  
   In 'ListManager' block, set database connection parameters:
 
@@ -68,7 +70,7 @@
 
   It is recommended to define your fileclasses before running the initial file system scan.
 
-  This way, you will get relevant information in 'rbh-report --class-info' report after the initial scan is completed.
+  This way, you will get relevant information in 'rbh-report --class-info' report after the initial scan is completed. 3 Example file-classes are give below.
 
       fileclass all_object {
                 definition { size > 0 }
@@ -84,7 +86,8 @@
 
 
   Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
-  Make sure to make above relevant changes in fields mentioned above.
+  
+  Make relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
 
@@ -110,11 +113,11 @@ Node : There's a demostration video available for the following exercies [here](
   
 * Once everything is in-place let's start with the data movement test by following the steps below on daos node which is hosting robinhood policy engine.
  
-1. Create objects in a daos container (i.e. inside dfuse mount point)
+1. Create objects in a daos container
 
    Create a pool and 2 containers inside that pool. Create dfuse mount points for both containers.
    
-   For this excercise, my mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
+   For this excercise, mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
 
       `[root@daos-node ~]# cd /mnt/src_container_mnt`
    
@@ -134,6 +137,46 @@ Node : There's a demostration video available for the following exercies [here](
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
    Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+   
+   There are two policies added for archive and restore operation of the objects from daos to cortx node and cortx to daos.
+   
+   Archive Policy :
+   
+        #daos_to_cortx_archive -- aws s3 mv
+        define_policy daos_to_cortx_archive{
+             status_manager = none;
+             scope=all;
+             default_action = cmd("aws s3 ls");
+             default_lru_sort_attr = none;
+        }
+
+        daos_to_cortx_archive_rules{
+            rule big_movement{
+              target_fileclass = big_object;
+              action = cmd("aws s3 mv /mnt/src_container_mnt/{name} s3://daos-bucket");
+              condition { last_access < 1d }
+            }
+        }
+        
+    Restore Policy :
+    
+        #cortx_to_daos_restore -- aws s3 mv from bucket to daos container
+        define_policy cortx_to_daos_restore{
+             status_manager = none;
+             scope=all;
+             default_action = cmd("aws s3 ls");
+             default_lru_sort_attr = none;
+        }
+
+        cortx_to_daos_restore_rules{
+            rule s3_move_operation{
+              target_fileclass = all_object;
+              action = cmd("aws s3 mv s3://daos-bucket/ /mnt/dest_container_mnt/ --recursive");
+              condition { last_access < 1d }
+            }
+        }
+        
+   Trigger scan and query report to check latest entries inside fs_path(i.e. /mnt/src_container_mnt).
 
       `/root/setup_robinhood/robinhood-3.1.6/rpms/BUILD/robinhood-3.1.6/src/robinhood/robinhood --scan --once -L stderr -f /etc/robinhood.d/rh_daos_cortx.conf`
 
@@ -157,6 +200,12 @@ Node : There's a demostration video available for the following exercies [here](
             2021-03-03 00:47:02    2832997 big_object
 
    This is how we have successfully moved larger objects (size > 1MB) from daos to cortx
+   
+            [root@daos-node src_container_mnt]# cd /mnt/dest_cotntainer_mnt
+            [root@daos-node dest_container_mnt]# ls
+            [root@daos-node dest_container_mnt]# 
+            
+   At the moment, no objects are present inside dest_container_mnt.
 
 6. Run the policy to move objects from cortx to daos(run cortx_to_daos_restore policy)
 
