@@ -83,7 +83,7 @@ Still, basic steps are provided here for quick reference with posix support.
       }
 
 
-Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
+Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
 Make sure to make above relevant changes in fields mentioned above.
 
 * Start Robinhood scan and update
