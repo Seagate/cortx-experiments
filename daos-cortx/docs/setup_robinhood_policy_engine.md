@@ -85,7 +85,7 @@
       }
 
 
-  Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+  Reference config file is available [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
   
   Make relevant changes in fields mentioned above.
 
@@ -136,7 +136,7 @@ Node : There's a demonstration video available for the following exercise[here](
 
 2. Create config file and add policies and start Scanning the database and check contents of the container on robinhood's database
 
-   Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/rajkumarpatel2602-robinhood-pengine/daos-cortx/src/samples/rh_daos_cortx.conf)
+   Readily available config file with correct config options are present [here.](https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/samples/rh_daos_cortx.conf)
    
    There are two policies added for archive and restore operation of the objects from daos to cortx node and cortx to daos.
    
