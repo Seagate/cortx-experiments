@@ -101,7 +101,7 @@
 
 In this exercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two prerequisites to carry out this test mentioned below.
 
-Node : There's a demostration video available for the following exercies [here](). //TODO
+Node : There's a demonstration video available for the following exercise[here](). //TODO
 
 * Daos server node running on one VM
 
@@ -117,11 +117,11 @@ Node : There's a demostration video available for the following exercies [here](
 
    Create a pool and 2 containers inside that pool. Create dfuse mount points for both containers.
    
-   For this excercise, mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
+   For this exercise, mount points are /mnt/src_container_mnt and /mnt/dest_container_mnt.
 
       `[root@daos-node ~]# cd /mnt/src_container_mnt`
    
-   Create a samll object (<1MB) and a big object(>1MB) inside a container.
+   Create a small object (<1MB) and a big object(>1MB) inside a container.
    
             dd if=/dev/urandom bs=100 count=1 | base64 > ./small_object
    
@@ -194,16 +194,16 @@ Node : There's a demostration video available for the following exercies [here](
 
 5. Verify contents on source container and on s3 bucket
 
-            [root@daos-node src_container_mnt]# ls
-            small_object
-            [root@daos-node src_container_mnt]# aws s3 ls s3://daos-bucket
-            2021-03-03 00:47:02    2832997 big_object
+        [root@daos-node src_container_mnt]# ls
+        small_object
+        [root@daos-node src_container_mnt]# aws s3 ls s3://daos-bucket
+        2021-03-03 00:47:02    2832997 big_object
 
    This is how we have successfully moved larger objects (size > 1MB) from daos to cortx
    
-            [root@daos-node src_container_mnt]# cd /mnt/dest_cotntainer_mnt
-            [root@daos-node dest_container_mnt]# ls
-            [root@daos-node dest_container_mnt]# 
+        [root@daos-node src_container_mnt]# cd /mnt/dest_cotntainer_mnt
+        [root@daos-node dest_container_mnt]# ls
+        [root@daos-node dest_container_mnt]# 
             
    At the moment, no objects are present inside dest_container_mnt.
 
@@ -213,9 +213,9 @@ Node : There's a demostration video available for the following exercies [here](
 
 7. Verify contents on container and on s3 bucket
 
-            [root@daos-node dest_container_mnt]# ls
-            big_object
-            [root@daos-node dest_container_mnt]# aws s3 ls s3://daos-bucket
-            [root@daos-node dest_container_mnt]# 
+        [root@daos-node dest_container_mnt]# ls
+        big_object
+        [root@daos-node dest_container_mnt]# aws s3 ls s3://daos-bucket
+        [root@daos-node dest_container_mnt]# 
 
 So, This is how we have successfully moved objects from s3 bucket to daos container.
