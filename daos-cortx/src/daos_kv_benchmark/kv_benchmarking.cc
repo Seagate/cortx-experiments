@@ -15,7 +15,10 @@
 #define KEY_SIZES 5
 #define VAL_SIZES 5
 
-#define ITERATION_CNT 100
+#define NR_KEYS_100    100
+#define NR_KEYS_1000   1000
+#define NR_KEYS_10000  10000
+#define NR_KEYS_100000 100000
 
 #define NR_QUERY 10
 
@@ -367,7 +370,7 @@ BENCHMARK( kv_put_function )
                }, {
                      BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
-                     ITERATION_CNT
+                     NR_KEYS_100, NR_KEYS_1000, NR_KEYS_10000, NR_KEYS_100000
                   }
                } )
 ->Iterations( 1 )
@@ -380,21 +383,20 @@ BENCHMARK( kv_get_function )
                }, {
                      BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
-                     ITERATION_CNT
+                     NR_KEYS_100, NR_KEYS_1000, NR_KEYS_10000, NR_KEYS_100000
                   }
                } )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
 // Remove key
-
 BENCHMARK( kv_list_function )
 ->ArgsProduct( { {
                   BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
                }, {
                      BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
-                     ITERATION_CNT
+                     NR_KEYS_100, NR_KEYS_1000, NR_KEYS_10000, NR_KEYS_100000
                   }, {
                      NR_QUERY
                   }
@@ -408,7 +410,7 @@ BENCHMARK( kv_remove_function )
                }, {
                      BM_VAL_1K, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K
                   }, {
-                     ITERATION_CNT
+                     NR_KEYS_100, NR_KEYS_1000, NR_KEYS_10000, NR_KEYS_100000
                   }
                } )
 ->Iterations( 1 )
