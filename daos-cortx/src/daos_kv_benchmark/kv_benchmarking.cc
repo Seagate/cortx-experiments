@@ -12,10 +12,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define POOL_ID "7d630b52-65c3-4061-aa87-4e02b4e6d818"
+
 #define KEY_SIZES 5
 #define VAL_SIZES 5
 
-#define NR_KEYS_100    100
+#define NR_KEYS_100    20
 #define NR_KEYS_1000   1000
 #define NR_KEYS_10000  10000
 #define NR_KEYS_100000 100000
@@ -68,7 +70,7 @@ int setup_main( )
    rc = daos_init( );
    ASSERT( rc == 0, "daos_init failed with %d", rc );
 
-   rc = uuid_parse( "11d1110f-f52e-43d2-8e11-7e0f2e8a6228", pool_uuid );
+   rc = uuid_parse( POOL_ID, pool_uuid );
 
    rc = daos_pool_connect( pool_uuid, NULL, DAOS_PC_RW, &poh,
                            NULL, NULL );
@@ -100,6 +102,9 @@ int setup_main( )
 }
 
 void tear_down( ) {
+   //close object handle
+   daos_kv_close( oh, NULL );
+
    rc = daos_cont_close( coh, NULL );
    ASSERT( rc == 0, "cont close failed" );
 
@@ -184,7 +189,7 @@ static void kv_list_function( benchmark::State &state ) {
       strncpy( ( char * )key_buf + strlen( key_buf ) - strlen( key_name ), ( char * )key_name, strlen( key_name ) );
 
       /* put keys and values */
-      daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, key_size, val_buf, NULL );
+      daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
    }
 
    /* actual computation starts here */
@@ -211,6 +216,7 @@ static void kv_list_function( benchmark::State &state ) {
          int      rc;
 
          memset( buf, 0, KEY_DESC_BUF );
+
          rc = daos_kv_list( oh, DAOS_TX_NONE, &nr, kds, &sgl, &anchor, \
                             NULL );
          ASSERT( rc == 0, "KV list failed with %d", rc );
@@ -222,15 +228,20 @@ static void kv_list_function( benchmark::State &state ) {
          }
          else // if returned descriptors are non zero then compute each key and query value.
          {
+            unsigned int offset = 0;
+
             /* compute each key and fetch value */
             for ( int i = 0; i < nr; i++ )
             {
-               static unsigned int offset = 0; // to get key from sgl buffer
+               // to get key from sgl buffer
                memset( key_buf, 0, key_size ); // clear key_buf
                memset( rbuf, 0, val_size );    // clear key_buf
 
                /* obtain key_buf value from sgl.sg_iovs */
-               strncpy( key_buf, kds[ i ].kd_key_len, sgl.sg_iovs + offset );
+
+               // printf( "key size is : %d\n", kds[ i ].kd_key_len );
+               memcpy( key_buf, ( char * )( ( sgl.sg_iovs )->iov_buf ) + offset, kds[ i ].kd_key_len );
+               // printf( "key is : %s", key_buf );
 
                /* update offset for next key */
                offset += kds[ i ].kd_key_len;
@@ -239,6 +250,8 @@ static void kv_list_function( benchmark::State &state ) {
                daos_size_t size = 0;
                size = val_size;
                daos_kv_get( oh, DAOS_TX_NONE, 0, key_buf, &size, rbuf, NULL );
+
+               // printf( "rbuf is %s\n", rbuf );
             }
          }
       }
@@ -389,7 +402,7 @@ BENCHMARK( kv_get_function )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
-// Remove key
+// list key
 BENCHMARK( kv_list_function )
 ->ArgsProduct( { {
                   BM_KEY_64B, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B
