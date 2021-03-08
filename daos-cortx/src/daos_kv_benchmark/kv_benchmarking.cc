@@ -197,6 +197,8 @@ static void kv_list_function( benchmark::State &state ) {
    /* actual computation starts here */
    for ( auto _ : state )
    {
+      state.PauseTiming( );
+       
       char            *buf;
       daos_key_desc_t kds[ NR_QUERY ];
       daos_anchor_t   anchor = {
@@ -211,6 +213,8 @@ static void kv_list_function( benchmark::State &state ) {
       sgl.sg_nr     = 1;
       sgl.sg_nr_out = 0;
       sgl.sg_iovs   = &sg_iov;
+       
+      state.ResumeTiming( );
 
       while ( !daos_anchor_is_eof( &anchor ) )
       {
@@ -240,9 +244,7 @@ static void kv_list_function( benchmark::State &state ) {
 
                /* obtain key_buf value from sgl.sg_iovs */
 
-               //printf( "key size is : %d\n", kds[ i ].kd_key_len );
                memcpy( key_buf, ( char * )( ( sgl.sg_iovs )->iov_buf ) + offset, kds[ i ].kd_key_len );
-               //printf( "key is : %s", key_buf );
 
                /* update offset for next key */
                offset += kds[ i ].kd_key_len;
@@ -252,7 +254,6 @@ static void kv_list_function( benchmark::State &state ) {
                size = val_size;
                daos_kv_get( oh, DAOS_TX_NONE, 0, key_buf, &size, rbuf, NULL );
 
-               //printf( "rbuf is %s\n", rbuf );
             }
          }
       }
