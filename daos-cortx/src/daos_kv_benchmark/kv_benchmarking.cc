@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+/* add pool id here */
 #define POOL_ID "7d630b52-65c3-4061-aa87-4e02b4e6d818"
 
 #define KEY_SIZES 5
@@ -22,26 +23,31 @@
 #define NR_KEYS_10000  10000
 #define NR_KEYS_100000 100000
 
+/* number of keys to list at once */
 #define NR_QUERY 10
 
+/* key sizes */
 #define BM_KEY_64B   64
 #define BM_KEY_128B  128
 #define BM_KEY_256B  256
 #define BM_KEY_512B  512
 #define BM_KEY_1024B 1024
 
+/* value size */
 #define BM_VAL_1K  1024
 #define BM_VAL_4K  (1024 * 4)
 #define BM_VAL_8K  (1024 * 8)
 #define BM_VAL_16K (1024 * 16)
 #define BM_VAL_32K (1024 * 32)
 
+/* buffer to store all the keys */
 #define KEY_DESC_BUF (1024 * 1024)
 
-static char node[ 128 ] = "new_node";
-
+/* pool and container handle */
 static daos_handle_t poh;
 static daos_handle_t coh;
+
+static char node[ 128 ] = "new_node";
 
 #define FAIL( fmt, ... )                                            \
     do {                                                            \
