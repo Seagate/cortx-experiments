@@ -201,3 +201,44 @@ Such a difference applicable to all number of tested clients.
 ### Only one auth call is done in parallel while the other is sequential
 
 Estimation shows in this case it is possible to save up to 3.7 seconds on authentication phase for all requests.
+
+### Latest developments
+
+Here are histograms from this test:
+
+![Histograms](hist_auth.png)
+
+Based on these histograms, and and some other tests, here is the time line of
+the GET request as it is done in the code under test in this POC:
+
+![Timeline Old](timeline-with-old-code.png)
+
+There are three recent changes which are going to affect the flow, considered in this
+experiment:
+
+* Fixed regression in Auth server, which was causing first call to be
+  significantly longer than second.
+* There is an in-memory cache implemented in auth server, which eliminates
+  openldap lookups for repeated auth of the same user.  Together with above
+  change, these two will reduce first auth call to the same time as the 2nd call
+  (130 -> 11).
+* "Combined auth call" -- two auth calls are combined into single call.
+  Pre-requisite is loading bucket metadata (2 KVS calls).
+
+There is also 4th change in plan this PI:
+
+* Using in-memory cache for bucket metadata, so 2 KVS calls at the beginning of
+  the timeline will only be needed to initialize and refresh the cache.
+
+Resulting timeline:
+
+![Timeline New](timeline-with-new-code.png)
+
+With this new timeline we still have the opportunity to run things in parallel
+-- steps 3 and 4 (auth call and loading object metadata, and loading data if
+metadata load completes faster than auth).  But this will now bring only minor
+improvement: 11ms out of total time of hundreds of milliseconds.
+
+NOTE: time length of steps 4 and 5 are only approximations, and we need more
+test data to get their current values with latest code.  This is currently in
+progress in this PI.
