@@ -137,7 +137,7 @@ void tear_down( ) {
  * @param key_size   size of key
  * @return           none
  */
-void gen_key_names( char *key_buf, int nr, int key_size )
+void gen_key_name( char *key_buf, int nr, int key_size )
 {
    char key_name[ 20 ] = {
       0
@@ -174,7 +174,7 @@ static void kv_put_function( benchmark::State &state ) {
          state.PauseTiming( );
 
          /* generate different key */
-         gen_key_names( key_buf, i, key_size );
+         gen_key_name( key_buf, i, key_size );
 
          state.ResumeTiming( );
 
@@ -226,7 +226,7 @@ static void kv_get_function( benchmark::State &state ) {
          state.PauseTiming( );
 
          /* generate different key */
-         gen_key_names( key_buf, i, key_size );
+         gen_key_name( key_buf, i, key_size );
 
          daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
 
@@ -270,7 +270,7 @@ static void kv_list_function( benchmark::State &state ) {
    for ( int i = 0; i < num_ops; i++ )
    {
       /* generate different key */
-      gen_key_names( key_buf, i, key_size );
+      gen_key_name( key_buf, i, key_size );
 
       /* put keys and values */
       daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
@@ -376,7 +376,7 @@ static void kv_remove_function( benchmark::State &state ) {
          state.PauseTiming( );
 
          /* generate different key */
-         gen_key_names( key_buf, i, key_size );
+         gen_key_name( key_buf, i, key_size );
 
          /* put keys */
          daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
