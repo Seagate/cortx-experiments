@@ -1,5 +1,7 @@
 /**
- * Example kv store
+ * Benchmarking tests for daos kv store.
+ * Operation type    : put, get, list, remove.
+ * Opeation number   : NR_OPS_XXXX per each opeation
  */
 #include <benchmark/benchmark.h>
 #include <cstdio>
@@ -12,7 +14,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define POOL_ID "7d630b52-65c3-4061-aa87-4e02b4e6d818"
+#define POOL_ID "7d630b52-65c3-4061-aa87-4e02b4e6d818" /* pre-created pool uuid */
 
 /* number of operations */
 #define NR_OPS_100    100
@@ -111,21 +113,30 @@ int setup_main( )
 void tear_down( ) {
    int rc;
 
-   //close object handle
+   /* close object handle */
    daos_kv_close( oh, NULL );
 
+   /* close container */
    rc = daos_cont_close( coh, NULL );
    ASSERT( rc == 0, "cont close failed" );
 
+   /* disconnect pool */
    rc = daos_pool_disconnect( poh, NULL );
    ASSERT( rc == 0, "disconnect failed" );
 
-   /** teardown the DAOS stack */
+   /* teardown the DAOS stack */
    rc = daos_fini( );
    ASSERT( rc == 0, "daos_fini failed with %d", rc );
 }
 
-/* TODO */
+/**
+ * @brief This function generates key name of key_size using number given number
+ *
+ * @param key_buf    buffer to store key
+ * @param nr         key number used to generate unique key
+ * @param key_size   size of key
+ * @return           none
+ */
 void gen_key_names( char *key_buf, int nr, int key_size )
 {
    char key_name[ 20 ] = {
@@ -138,7 +149,7 @@ void gen_key_names( char *key_buf, int nr, int key_size )
    strncpy( ( char * )key_buf + strlen( key_buf ) - strlen( key_name ), ( char * )key_name, strlen( key_name ) );
 }
 
-/* TODO */
+/* Benchmarking function to test KV Put operation */
 static void kv_put_function( benchmark::State &state ) {
    int rc;
 
@@ -180,7 +191,7 @@ static void kv_put_function( benchmark::State &state ) {
    tear_down( );
 }
 
-/* TODO */
+/* Benchmarking function to test KV Get operation */
 static void kv_get_function( benchmark::State &state ) {
    int rc;
 
@@ -238,7 +249,7 @@ static void kv_get_function( benchmark::State &state ) {
    tear_down( );
 }
 
-/* TODO */
+/* Benchmarking function to test KV List operation */
 static void kv_list_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
@@ -339,7 +350,7 @@ static void kv_list_function( benchmark::State &state ) {
    tear_down( );
 }
 
-/* TODO */
+/* Benchmarking function to test KV Remove operation */
 static void kv_remove_function( benchmark::State &state ) {
    int rc;
 
@@ -367,6 +378,7 @@ static void kv_remove_function( benchmark::State &state ) {
          /* generate different key */
          gen_key_names( key_buf, i, key_size );
 
+         /* put keys */
          daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
 
          state.ResumeTiming( );
@@ -383,29 +395,29 @@ static void kv_remove_function( benchmark::State &state ) {
    tear_down( );
 }
 
-// Put keys
+/* Put keys */
 BENCHMARK( kv_put_function )
 ->ArgsProduct( ARG_MATRICS )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
-// Get keys
+/* Get keys */
 BENCHMARK( kv_get_function )
 ->ArgsProduct( ARG_MATRICS )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
-// list keys
+/* list keys */
 BENCHMARK( kv_list_function )
 ->ArgsProduct( ARG_MATRICS )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
-// remove keys
+/* remove keys */
 BENCHMARK( kv_remove_function )
 ->ArgsProduct( ARG_MATRICS )
 ->Iterations( 1 )
 ->Unit( benchmark::kMillisecond );
 
-// Run the benchmark
+/* Run the benchmark */
 BENCHMARK_MAIN( );
