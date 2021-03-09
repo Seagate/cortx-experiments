@@ -7,6 +7,7 @@
 #include <cstdio>
 #include <daos.h>
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,12 +43,20 @@
 /* buffer to hold keys while listing */
 #define KEY_LIST_BUF (1024 * 1024)
 
-#define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B , BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B }
-#define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K , BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K }
+#define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B /*, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B */}
+#define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K /*, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K */ }
 #define NR_OPS_OPTIONS       { NR_OPS_100 /*,NR_OPS_1000, NR_OPS_10000, NR_OPS_100000 */ }
 
 #define ARG_MATRICS\
    { ARG_KEY_SIZE_OPTIONS, ARG_VAL_SIZE_OPTIONS, NR_OPS_OPTIONS }
+
+#define DEBUG_LOG 0
+
+#if DEBUG_LOG
+#define LOG_MSG printf
+#else
+#define LOG_MSG //
+#endif
 
 static daos_handle_t poh; /* daos pool handle */
 static daos_handle_t coh; /* daos contianer handle */
@@ -321,7 +330,7 @@ static void kv_list_function( benchmark::State &state ) {
 
                /* obtain key_buf value from sgl.sg_iovs */
 
-               //printf( "key size is : %d\n", kds[ i ].kd_key_len );
+               LOG_MSG( "key size is : %d\n", kds[ i ].kd_key_len );
                memcpy( key_buf, ( char * )( ( sgl.sg_iovs )->iov_buf ) + offset, kds[ i ].kd_key_len );
                //printf( "key is : %s\n", key_buf );
 
