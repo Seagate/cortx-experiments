@@ -36,7 +36,7 @@ for element in bm_data:
         if s.isdigit():
             list_num.append(s)
             
-    # get key-size, value-size and number of opeations
+    # get key-size, value-size and number of operations
     str1 = str(list_num[0])
     str2 = str(list_num[1])
     str3 = str(list_num[2])
@@ -80,7 +80,7 @@ for bm in bm_data:
 # close file
 data_file.close()
 
-# reorder collumns in csv file using pandas library
+# reorder columns in csv file using pandas library
 df = pd.read_csv("benchmark_data_file.csv")
 df = df[["name", "keysize_valsize", "nr_ops", "realtime_ms", "cputime_ms", "realtime_per_op_ms", "cputime_per_op_ms","iterations", "threads"]]
 df.head()
