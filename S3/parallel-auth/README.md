@@ -223,22 +223,24 @@ experiment:
   change, these two will reduce first auth call to the same time as the 2nd call
   (130 -> 11).
 * "Combined auth call" -- two auth calls are combined into single call.
-  Pre-requisite is loading bucket metadata (2 KVS calls).
+  Pre-requisite is loading bucket metadata (2 KVS calls) and object metadata (1
+  KVS call).
 
 There is also 4th change in plan this PI:
 
 * Using in-memory cache for bucket metadata, so 2 KVS calls at the beginning of
-  the timeline will only be needed to initialize and refresh the cache.
+  the timeline will only be needed once in N seconds -- to initialize and
+  refresh the cache.
 
 Resulting timeline:
 
 ![Timeline New](timeline-with-new-code.png)
 
 With this new timeline we still have the opportunity to run things in parallel
--- steps 3 and 4 (auth call and loading object metadata, and loading data if
-metadata load completes faster than auth).  But this will now bring only minor
-improvement: 11ms out of total time of hundreds of milliseconds.
+-- steps 4 and 5 (combined auth call and loading object data).  But this will
+now bring only minor improvement: 11ms out of total time of hundreds of
+milliseconds.
 
-NOTE: time length of steps 4 and 5 are only approximations, and we need more
-test data to get their current values with latest code.  This is currently in
-progress in this PI.
+NOTE: time length of steps on  this timeline are only approximations, and we
+need more test data to get their current values with latest code.  This is
+currently in progress in this PI.
