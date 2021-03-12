@@ -12,10 +12,9 @@ yum clean all
 rm -rf /var/cache/yum/
 ```
 
-2. Install Consul
+2. Install latest Consul from cortx repos.
 ```
-yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-yum -y install consul-1.7.8 --nogpgcheck
+yum -y install consul --nogpgcheck
 ```
 
 ## Single Node Setup
@@ -87,21 +86,23 @@ node-2  <IP-2>:8301  alive   server  1.7.8      2         dc1   <all>
 node-3  <IP-3>:8301  alive   server  1.9.4      2         dc1   <all>
 ```
 
-# Consul Usage and Operation
+# Consul Installation as binary (Optional)
 
-## Consul Install [on DevVM]
+## Consul binary Install from offical consul site (It will not configure systemd service)
 *	wget https://releases.hashicorp.com/consul/1.8.0/consul_1.8.0_linux_amd64.zip (latest version is available @ https://www.consul.io/downloads)
 *	unzip consul_1.8.0_linux_amd64.zip [insatall zip unzip : yum install zip unzip -y]
 *	sudo mv consul /bin/
 *	fire 'consul' and you should be looking at consul help as shown below.
  <p align="center"><img src="../images/consul_help.JPG?raw=true"></p>
 
-## Running consul agent [server mode only]
+## Running consul agent [server mode only] 
 In this section we will be Running the consul as a server in a development mode to understand the default consul functionalities without extra configuration.
 *	consul agent –dev –node myMachine (-dev: Enable development server mode. This is useful for quickly starting a Consul agent with all persistence options turned off.)
 *	consul members –detailed
 *	consul leave
 This -dev flag should not be used in production environment.
+
+# Consul Operation and Usage
 
 ## Service registration and calling the service
 * There are two ways to register a service. Via service definition or using an HTTP API.
