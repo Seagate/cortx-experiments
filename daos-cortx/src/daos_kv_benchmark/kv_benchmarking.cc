@@ -15,13 +15,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define POOL_ID "7d630b52-65c3-4061-aa87-4e02b4e6d818" /* pre-created pool uuid */
+#define POOL_ID "2bd513ad-66d1-4312-829b-d69d8637b455" /* pre-created pool uuid */
 
 /* number of operations */
-#define NR_OPS_100    100
-#define NR_OPS_1000   1000
-#define NR_OPS_10000  10000
-#define NR_OPS_100000 100000
+#define NR_OPS_100     100
+#define NR_OPS_1000    1000
+#define NR_OPS_10000   10000
+#define NR_OPS_100000  100000
+#define NR_OPS_1000000 1000000
 
 /* number of query at a time while listing */
 #define NR_KV_PER_LISTING 8
@@ -43,9 +44,9 @@
 /* buffer to hold keys while listing */
 #define KEY_LIST_BUF (1024 * 1024)
 
-#define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B /*, BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B */}
-#define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K /*, BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K */ }
-#define NR_OPS_OPTIONS       { NR_OPS_100 /*,NR_OPS_1000, NR_OPS_10000, NR_OPS_100000 */ }
+#define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B , BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B }
+#define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K , BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K  }
+#define NR_OPS_OPTIONS       { NR_OPS_1000, NR_OPS_10000, NR_OPS_10000, NR_OPS_100000, NR_OPS_1000000 }
 
 #define ARG_MATRICS\
    { ARG_KEY_SIZE_OPTIONS, ARG_VAL_SIZE_OPTIONS, NR_OPS_OPTIONS }
@@ -129,6 +130,10 @@ void tear_down( ) {
    rc = daos_cont_close( coh, NULL );
    ASSERT( rc == 0, "cont close failed" );
 
+   /* delete container */
+   rc = daos_cont_destroy( poh, co_uuid, 1, NULL );
+   ASSERT( rc == 0, "cont delete failed" );
+
    /* disconnect pool */
    rc = daos_pool_disconnect( poh, NULL );
    ASSERT( rc == 0, "disconnect failed" );
@@ -140,6 +145,9 @@ void tear_down( ) {
 
 /**
  * @brief This function generates key name of key_size using number given number
+ *        Key format geneated by this function would be a string of characters
+ *        of key_size which starts with 'x' and last 16 bytes will be a number
+ *        'nr' with padding of zero before the number.
  *
  * @param key_buf    buffer to store key
  * @param nr         key number used to generate unique key
@@ -165,9 +173,9 @@ static void kv_put_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
 
-   unsigned int key_size = state.range( 0 );
-   unsigned int val_size = state.range( 1 );
-   unsigned int num_ops  = state.range( 2 );
+   unsigned int key_size = state.range( 0 ); // size of key
+   unsigned int val_size = state.range( 1 ); // size of value for the given key
+   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
@@ -207,9 +215,9 @@ static void kv_get_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
 
-   unsigned int key_size = state.range( 0 );
-   unsigned int val_size = state.range( 1 );
-   unsigned int num_ops  = state.range( 2 );
+   unsigned int key_size = state.range( 0 ); // size of key
+   unsigned int val_size = state.range( 1 ); // size of value for the given key
+   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
@@ -263,9 +271,9 @@ static void kv_list_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
 
-   unsigned int key_size = state.range( 0 );
-   unsigned int val_size = state.range( 1 );
-   unsigned int num_ops  = state.range( 2 );
+   unsigned int key_size = state.range( 0 ); // size of key
+   unsigned int val_size = state.range( 1 ); // size of value for the given key
+   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
    unsigned int nr_query = NR_KV_PER_LISTING;
 
    /* allocate key and value buffers */
@@ -285,29 +293,33 @@ static void kv_list_function( benchmark::State &state ) {
       daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
    }
 
+   char            *list_of_keys;
+   daos_key_desc_t kds[ NR_KV_PER_LISTING ];
+   daos_anchor_t   anchor = {
+      0
+   };
+   d_sg_list_t     sgl;
+   d_iov_t         sg_iov;
+
+   list_of_keys = ( char * )calloc( KEY_LIST_BUF, sizeof( char ) ); /* buffer to hold list of keys fetch in each list call */
+   d_iov_set( &sg_iov, list_of_keys, KEY_LIST_BUF );
+   sgl.sg_nr     = 1;
+   sgl.sg_nr_out = 0;
+   sgl.sg_iovs   = &sg_iov;
+
    /* actual computation starts here */
    for ( auto _ : state )
    {
-      char            *buf;
-      daos_key_desc_t kds[ NR_KV_PER_LISTING ];
-      daos_anchor_t   anchor = {
-         0
-      };
-      d_sg_list_t     sgl;
-      d_iov_t         sg_iov;
-
-      buf = ( char * )calloc( KEY_LIST_BUF, sizeof( char ) ); /* buffer to hold list of keys fetch in each list call */
-      d_iov_set( &sg_iov, buf, KEY_LIST_BUF );
-      sgl.sg_nr     = 1;
-      sgl.sg_nr_out = 0;
-      sgl.sg_iovs   = &sg_iov;
-
       while ( !daos_anchor_is_eof( &anchor ) )
       {
+         state.PauseTiming( );
+
          uint32_t nr = NR_KV_PER_LISTING;
          int      rc;
 
-         memset( buf, 0, KEY_LIST_BUF );
+         memset( list_of_keys, 0, KEY_LIST_BUF );
+
+         state.ResumeTiming( );
 
          rc = daos_kv_list( oh, DAOS_TX_NONE, &nr, kds, &sgl, &anchor, \
                             NULL );
@@ -325,6 +337,8 @@ static void kv_list_function( benchmark::State &state ) {
             /* compute each key and fetch value */
             for ( int i = 0; i < nr; i++ )
             {
+               state.PauseTiming( );
+
                memset( key_buf, 0, key_size );
                memset( rbuf, 0, val_size );
 
@@ -337,6 +351,8 @@ static void kv_list_function( benchmark::State &state ) {
                /* update offset for next key */
                offset += kds[ i ].kd_key_len;
 
+               state.ResumeTiming( );
+
                /* compute value for the key_buf */
                daos_size_t size = 0;
                size = val_size;
@@ -347,7 +363,7 @@ static void kv_list_function( benchmark::State &state ) {
          }
       }
 
-      free( ( char * )buf );
+      free( ( char * )list_of_keys );
    }
 
    /* free resources */
@@ -366,9 +382,9 @@ static void kv_remove_function( benchmark::State &state ) {
    /* perform setup */
    setup_main( );
 
-   unsigned int key_size = state.range( 0 );
-   unsigned int val_size = state.range( 1 );
-   unsigned int num_ops  = state.range( 2 );
+   unsigned int key_size = state.range( 0 ); // size of key
+   unsigned int val_size = state.range( 1 ); // size of value for the given key
+   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
