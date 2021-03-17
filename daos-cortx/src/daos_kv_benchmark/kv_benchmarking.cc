@@ -1,9 +1,21 @@
 /**
  * Benchmarking tests for daos kv store.
  * Operation type    : put, get, list, remove.
- * Opeation number   : NR_OPS_XXXX per each opeation
+ * Operation number   : NR_OPS_XXXX per each operation
  */
+
+/**
+ * @attention :
+ *
+ * POOL_UUID is the environment variable which is
+ * required to be set with the daos pool uuid value
+ * before running benchmarking test.
+ * This variable will be used in the uuid_parse().
+ *
+ */
+
 #include <benchmark/benchmark.h>
+
 #include <cstdio>
 #include <daos.h>
 #include <fcntl.h>
@@ -14,8 +26,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-#define POOL_ID "2bd513ad-66d1-4312-829b-d69d8637b455" /* pre-created pool uuid */
 
 /* number of operations */
 #define NR_OPS_100     100
@@ -46,7 +56,7 @@
 
 #define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B , BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B }
 #define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K , BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K  }
-#define NR_OPS_OPTIONS       { NR_OPS_1000, NR_OPS_10000, NR_OPS_10000, NR_OPS_100000, NR_OPS_1000000 }
+#define NR_OPS_OPTIONS       { NR_OPS_1000, NR_OPS_10000, NR_OPS_100000/*, NR_OPS_100000, NR_OPS_1000000*/ }
 
 #define ARG_MATRICS\
    { ARG_KEY_SIZE_OPTIONS, ARG_VAL_SIZE_OPTIONS, NR_OPS_OPTIONS }
@@ -58,6 +68,8 @@
 #else
 #define LOG_MSG //
 #endif
+
+//DEFINE_string(pool_uuid, "hello");
 
 static daos_handle_t poh; /* daos pool handle */
 static daos_handle_t coh; /* daos container handle */
@@ -83,15 +95,19 @@ daos_obj_id_t oid; /* daos object id */
 uuid_t pool_uuid; /* pool uuid */
 uuid_t co_uuid;   /* container uuid */
 
+//extern std::string FLAGS_pool_uuid;
+
 int setup_main( )
 {
    int rc;
+
+   char *pool_id = getenv( "POOL_UUID" ); /* get pool uuid from environment */
 
    /** initialize DAOS by connecting to local agent */
    rc = daos_init( );
    ASSERT( rc == 0, "daos_init failed with %d", rc );
 
-   rc = uuid_parse( POOL_ID, pool_uuid );
+   rc = uuid_parse( pool_id, pool_uuid );
 
    rc = daos_pool_connect( pool_uuid, NULL, DAOS_PC_RW, &poh,
                            NULL, NULL );
@@ -138,7 +154,7 @@ void tear_down( ) {
    rc = daos_pool_disconnect( poh, NULL );
    ASSERT( rc == 0, "disconnect failed" );
 
-   /* teardown the DAOS stack */
+   /* tear-down the DAOS stack */
    rc = daos_fini( );
    ASSERT( rc == 0, "daos_fini failed with %d", rc );
 }
@@ -195,7 +211,7 @@ static void kv_put_function( benchmark::State &state ) {
 
          state.ResumeTiming( );
 
-         /* actual function to mearsure time */
+         /* actual function to measure time */
          daos_kv_put( oh, DAOS_TX_NONE, 0, ( char * )key_buf, val_size, val_buf, NULL );
       }
    }
@@ -248,7 +264,7 @@ static void kv_get_function( benchmark::State &state ) {
 
          state.ResumeTiming( );
 
-         /* actual function to mearsure time */
+         /* actual function to measure time */
          daos_kv_get( oh, DAOS_TX_NONE, 0, key_buf, &size, rbuf, NULL );
       }
    }
@@ -401,7 +417,7 @@ static void kv_remove_function( benchmark::State &state ) {
 
          state.ResumeTiming( );
 
-         /* actual function to mearsure time */
+         /* actual function to measure time */
          daos_kv_remove( oh, DAOS_TX_NONE, 0, key_buf, NULL );
       }
    }
