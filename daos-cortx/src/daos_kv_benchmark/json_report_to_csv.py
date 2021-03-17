@@ -46,8 +46,10 @@ for element in bm_data:
     element['nr_ops']= str3
     
     # create more fields using existing data points
-    element['realtime_per_op_ms']=float(element['realtime_ms'])/int(element['nr_ops'])
-    element['cputime_per_op_ms']=float(element['cputime_ms'])/int(element['nr_ops'])
+    element['realtime_per_op_ms'] = float(
+        element['realtime_ms'])/int(element['nr_ops'])
+    element['cputime_per_op_ms'] = float(
+        element['cputime_ms'])/int(element['nr_ops'])
 
 # open new file to store updated fields
 with open('fine_data.json', 'w') as data_file:
