@@ -69,8 +69,6 @@
 #define LOG_MSG //
 #endif
 
-//DEFINE_string(pool_uuid, "hello");
-
 static daos_handle_t poh; /* daos pool handle */
 static daos_handle_t coh; /* daos container handle */
 
@@ -95,13 +93,12 @@ daos_obj_id_t oid; /* daos object id */
 uuid_t pool_uuid; /* pool uuid */
 uuid_t co_uuid;   /* container uuid */
 
-//extern std::string FLAGS_pool_uuid;
-
 int setup_main( )
 {
    int rc;
 
-   char *pool_id = getenv( "POOL_UUID" ); /* get pool uuid from environment */
+   /* get pool uuid from environment */
+   char *pool_id = getenv( "POOL_UUID" ); 
 
    /** initialize DAOS by connecting to local agent */
    rc = daos_init( );
