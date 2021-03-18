@@ -98,7 +98,8 @@ int setup_main( )
    int rc;
 
    /* get pool uuid from environment */
-   char *pool_id = getenv( "POOL_UUID" ); 
+   const char *pool_id = getenv( "POOL_UUID" );
+   ASSERT( pool_id != NULL, "POOL_UUID not set in the environment with pool-id" );
 
    /** initialize DAOS by connecting to local agent */
    rc = daos_init( );
