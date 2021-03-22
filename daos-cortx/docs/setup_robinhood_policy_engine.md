@@ -101,7 +101,7 @@
 
 In this exercise object movements from daos to cortx and cortx to daos will be made sure. This exercise will be carried out by defining policies inside a container and running those policies using robinhood policy engine. There are two prerequisites to carry out this test mentioned below.
 
-Node : There's a demonstration video available for the following exercise [here](). //TODO
+Node : There's a demonstration video available for the following exercise [here](https://www.youtube.com/watch?v=LwQcZO8aOvs&list=PLOLUar3XSz2P_4MxY4z0ut9-dMGDnpFPp&index=1).
 
 * Daos server node running on one VM
 
