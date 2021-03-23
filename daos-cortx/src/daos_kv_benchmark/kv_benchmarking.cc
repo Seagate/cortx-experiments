@@ -58,6 +58,8 @@
 #define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K , BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K  }
 #define NR_OPS_OPTIONS       { /*NR_OPS_100, NR_OPS_1000,*/ NR_OPS_10000 /*, NR_OPS_100000, NR_OPS_1000000*/ } //default ops are set to 10k by default 
 
+#define KEY_STR_SIZE 16
+
 #define ARG_MATRICS\
    { ARG_KEY_SIZE_OPTIONS, ARG_VAL_SIZE_OPTIONS, NR_OPS_OPTIONS }
 
@@ -174,10 +176,12 @@ void gen_key_name( char *key_buf, int nr, int key_size )
       0
    };
 
+   unsigned int key_buf_len =  key_size - 1;
+
    /* generate different key */
-   memset( key_buf, 'x', key_size - 1 );
-   sprintf( key_name, "%.16d", nr );
-   strncpy( ( char * )key_buf + strlen( key_buf ) - strlen( key_name ), ( char * )key_name, strlen( key_name ) );
+   memset( key_buf, 'x', key_buf_len );
+   sprintf( key_name, "%.16d", nr );// variable part of key_name is KEY_STR_SIZE(16) Bytes long
+   strncpy( ( char * )key_buf + key_buf_len - KEY_STR_SIZE, ( char * )key_name, KEY_STR_SIZE );
 }
 
 /* Benchmarking function to test KV Put operation */
