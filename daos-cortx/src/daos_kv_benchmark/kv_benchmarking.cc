@@ -181,7 +181,7 @@ void gen_key_name( char *key_buf, int nr, int key_size )
    /* generate different key */
    memset( key_buf, 'x', key_buf_len );
    sprintf( key_name, "%.16d", nr );// variable part of key_name is KEY_STR_SIZE(16) Bytes long
-   strncpy( ( char * )key_buf + key_buf_len - KEY_STR_SIZE, ( char * )key_name, KEY_STR_SIZE );
+   memcpy( ( char * )key_buf + key_buf_len - KEY_STR_SIZE, ( char * )key_name, KEY_STR_SIZE );
 }
 
 /* Benchmarking function to test KV Put operation */
