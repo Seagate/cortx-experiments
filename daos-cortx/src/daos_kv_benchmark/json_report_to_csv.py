@@ -1,10 +1,10 @@
 # Python program to convert
 # JSON file to CSV
 #
-# USAGE : 1. Create json file with report : 
+# USAGE : 1. Create json file with report :
 #            $ ./mybenchmark_out --benchmark_out=data.json
 #         2. run script :
-#            $ python3 json_report_to_csv.py    
+#            $ python3 json_report_to_csv.py
 
 import json
 import csv
@@ -18,7 +18,7 @@ with open('data.json') as json_file:
 # choose benchmarks report key
 bm_data = data['benchmarks']
 
-# choose one test at a time to alter fields 
+# choose one test at a time to alter fields
 for element in bm_data:
     # remove unwanted fields
     element.pop('run_type', None)
@@ -35,16 +35,16 @@ for element in bm_data:
     for s in element['name'].split('/'):
         if s.isdigit():
             list_num.append(s)
-            
+
     # get key-size, value-size and number of operations
     str1 = str(list_num[0])
     str2 = str(list_num[1])
     str3 = str(list_num[2])
 
     # create new fields - keysize_valsize and nr_ops
-    element['keysize_valsize']= str1 + str2
+    element['keysize_valsize']= str1 + '_' + str2
     element['nr_ops']= str3
-    
+
     # create more fields using existing data points
     element['realtime_per_op_ms'] = float(
         element['realtime_ms'])/int(element['nr_ops'])
@@ -53,7 +53,7 @@ for element in bm_data:
 
 # open new file to store updated fields
 with open('fine_data.json', 'w') as data_file:
-    data = json.dump(data, data_file)
+    json.dump(data, data_file)
 
 # close file
 data_file.close()
@@ -84,7 +84,7 @@ data_file.close()
 
 # reorder columns in csv file using pandas library
 df = pd.read_csv("benchmark_data_file.csv")
-df = df[["name", "keysize_valsize", "nr_ops", "realtime_ms", "cputime_ms", "realtime_per_op_ms", "cputime_per_op_ms","iterations", "threads"]]
+df = df[["name", "keysize_valsize", "realtime_ms", "keysize_valsize",  "cputime_ms", "keysize_valsize", "realtime_per_op_ms", "keysize_valsize", "cputime_per_op_ms","iterations", "threads", "nr_ops"]]
 df.head()
 print (df)
 
