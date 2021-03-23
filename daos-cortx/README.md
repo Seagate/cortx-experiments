@@ -6,5 +6,5 @@ https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_dao
 #### How to copy objects using mpifilutils from one POSIX container to another within a pool
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/mpifileutils_setup.md
 
-### How to perform daos KVS benchmarking using google benchmark
+#### How to perform daos KVS benchmarking using google benchmark
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/daos_kv_benchmark/README.md
