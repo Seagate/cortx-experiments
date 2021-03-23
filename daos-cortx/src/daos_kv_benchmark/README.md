@@ -2,14 +2,18 @@
 
 * This directory contains 3 files.
 
-  * kv_benchmarking.cc - Source file for daos kvs benchmarking test.
-
-  * Makefile - make file to create the binary(daos_benchmark)
-
-     Using make command generate the binary and use following command
-
-      `$ ./daos_benchmark --benchmark_out=data.json`
-
-  *  json_report_to_csv.py - A python script to convert the output json file(data.json) to csv file(benchmark_data_file.csv) using following command.
-     
-      `$ python3 json_report_to_csv.py`
+  * kv_benchmarking.cc
+    
+    Source file for daos kvs benchmarking test.
+    
+  * Makefile
+    
+    make file to create the binary(daos_benchmark). Using make command generate the binary and use following command
+    
+    `$ ./daos_benchmark --benchmark_out=data.json`
+      
+  * json_report_to_csv.py
+    
+    A python script to convert the output json file(data.json) to csv file(benchmark_data_file.csv) using following command.
+    
+    `$ python3 json_report_to_csv.py`
