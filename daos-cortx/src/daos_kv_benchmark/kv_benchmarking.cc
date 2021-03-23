@@ -56,7 +56,7 @@
 
 #define ARG_KEY_SIZE_OPTIONS { BM_KEY_64B , BM_KEY_128B, BM_KEY_256B, BM_KEY_512B, BM_KEY_1024B }
 #define ARG_VAL_SIZE_OPTIONS { BM_VAL_1K , BM_VAL_4K, BM_VAL_8K, BM_VAL_16K, BM_VAL_32K  }
-#define NR_OPS_OPTIONS       { NR_OPS_1000, NR_OPS_10000, NR_OPS_100000/*, NR_OPS_100000, NR_OPS_1000000*/ }
+#define NR_OPS_OPTIONS       { 100/*NR_OPS_10000, NR_OPS_10000, NR_OPS_100000, NR_OPS_100000, NR_OPS_1000000*/ }
 
 #define ARG_MATRICS\
    { ARG_KEY_SIZE_OPTIONS, ARG_VAL_SIZE_OPTIONS, NR_OPS_OPTIONS }
@@ -105,7 +105,7 @@ int setup_main( )
    rc = daos_init( );
    ASSERT( rc == 0, "daos_init failed with %d", rc );
 
-   rc = uuid_parse( pool_id, pool_uuid );
+   uuid_parse( pool_id, pool_uuid );
 
    rc = daos_pool_connect( pool_uuid, NULL, DAOS_PC_RW, &poh,
                            NULL, NULL );
@@ -193,7 +193,11 @@ static void kv_put_function( benchmark::State &state ) {
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
+   ASSERT( key_buf != NULL, "failed to allocate memory" );
+
    char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( val_buf != NULL, "failed to allocate memory" );
+
    memset( val_buf, 'z', val_size - 1 );                         // populate with some random value.
 
    /* actual computation starts here */
@@ -235,14 +239,20 @@ static void kv_get_function( benchmark::State &state ) {
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
-   char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( key_buf != NULL, "failed to allocate memory" );
 
+   char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( val_buf != NULL, "failed to allocate memory" );
    memset( val_buf, 'z', val_size - 1 );
 
    char *rbuf = ( char * )calloc( val_size, sizeof( char ) ); // rbuf to check value
+   ASSERT( rbuf != NULL, "failed to allocate memory" );
 
-   if ( rbuf == NULL )
-      return;
+   if ( rbuf == NULL ){
+        free(key_buf);
+        free(val_buf);
+        return;
+   }
 
    /* actual computation starts here */
    for ( auto _ : state )
@@ -288,10 +298,14 @@ static void kv_list_function( benchmark::State &state ) {
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
+   ASSERT( key_buf != NULL, "failed to allocate memory" );
+   
    char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( val_buf != NULL, "failed to allocate memory" );
    memset( val_buf, 'z', val_size - 1 );                         // populate with some random value.
 
    char *rbuf = ( char * )calloc( val_size, sizeof( char ) ); // rbuf to check value
+   ASSERT( rbuf != NULL, "failed to allocate memory" );
 
    /* call daos_kv_put for num_ops times */
    for ( int i = 0; i < num_ops; i++ )
@@ -312,6 +326,8 @@ static void kv_list_function( benchmark::State &state ) {
    d_iov_t         sg_iov;
 
    list_of_keys = ( char * )calloc( KEY_LIST_BUF, sizeof( char ) ); /* buffer to hold list of keys fetch in each list call */
+   ASSERT( list_of_keys != NULL, "failed to allocate memory" );
+   
    d_iov_set( &sg_iov, list_of_keys, KEY_LIST_BUF );
    sgl.sg_nr     = 1;
    sgl.sg_nr_out = 0;
@@ -395,8 +411,10 @@ static void kv_remove_function( benchmark::State &state ) {
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
-   char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( key_buf != NULL, "failed to allocate memory" );
 
+   char *val_buf = ( char * )calloc( val_size, sizeof( char ) ); // value buffer allocated
+   ASSERT( key_buf != NULL, "failed to allocate memory" );
    memset( val_buf, 'z', val_size - 1 );
 
    /* actual computation starts here */
