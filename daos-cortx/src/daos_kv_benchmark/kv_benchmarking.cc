@@ -193,7 +193,7 @@ static void kv_put_function( benchmark::State &state ) {
 
    unsigned int key_size = state.range( 0 ); // size of key
    unsigned int val_size = state.range( 1 ); // size of value for the given key
-   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
+   unsigned int num_ops  = state.range( 2 ); // num_ops is number of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
@@ -239,7 +239,7 @@ static void kv_get_function( benchmark::State &state ) {
 
    unsigned int key_size = state.range( 0 ); // size of key
    unsigned int val_size = state.range( 1 ); // size of value for the given key
-   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
+   unsigned int num_ops  = state.range( 2 ); // num_ops is number of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
@@ -297,7 +297,7 @@ static void kv_list_function( benchmark::State &state ) {
 
    unsigned int key_size = state.range( 0 ); // size of key
    unsigned int val_size = state.range( 1 ); // size of value for the given key
-   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
+   unsigned int num_ops  = state.range( 2 ); // num_ops is number of key-value pairs for the given test
    unsigned int nr_query = NR_KV_PER_LISTING;
 
    /* allocate key and value buffers */
@@ -411,7 +411,7 @@ static void kv_remove_function( benchmark::State &state ) {
 
    unsigned int key_size = state.range( 0 ); // size of key
    unsigned int val_size = state.range( 1 ); // size of value for the given key
-   unsigned int num_ops  = state.range( 2 ); // nr_ops is num of key-value pairs for the given test
+   unsigned int num_ops  = state.range( 2 ); // num_ops is number of key-value pairs for the given test
 
    /* allocate key and value buffers */
    char *key_buf = ( char * )calloc( key_size, sizeof( char ) ); // key buffer allocated
