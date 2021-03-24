@@ -1,4 +1,4 @@
-##KAFKA STREAMS PIPELINE DESIGN POC##
+# KAFKA STREAMS PIPELINE DESIGN POC #
 
 The main POC pipeline dsign related codes and documents are stored here in "Kafka-Streams/src/Kakfa to Elasticsearch" directory.
 
