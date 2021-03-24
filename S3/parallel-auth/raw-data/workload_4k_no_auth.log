@@ -1,0 +1,1073 @@
+parameters: -p /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 --nodes dell05-m02.colo.seagate.com,dell06-m02.colo.seagate.com,dell07-m02.colo.seagate.com --ha_type hare -w /root/perfline/perfline/workload/s3bench_rmt_upd.sh -e 0 -n 250 -c 250 -o 4Kb -- -getObjTag -headObj -sampleReads 1000 -skipCleanup -w sleep 10 -w /root/perfline/perfline/workload/s3bench_rmt_upd.sh -e 0 -n 500 -c 500 -o 4Kb -- -getObjTag -headObj -sampleReads 1000 -skipCleanup -w sleep 10 -w /root/perfline/perfline/workload/s3bench_rmt_upd.sh -e 0 -n 750 -c 750 -o 4Kb -- -getObjTag -headObj -sampleReads 1000 -skipCleanup --mkfs
+HA type: HARE
+Stop cluster
+Remove /var/log/seagate/motr/*
+Remove /var/motr/*
+Restart cluster
+2021-02-08 23:54:48: Generating cluster configuration... OK
+2021-02-08 23:54:50: Starting Consul server on this node.......... OK
+2021-02-08 23:54:58: Importing configuration into the KV store... OK
+2021-02-08 23:55:01: Starting Consul on other nodes.... OK
+2021-02-08 23:55:03: Updating Consul configuraton from the KV store... OK
+2021-02-08 23:55:06: Waiting for the RC Leader to get elected....... OK
+2021-02-08 23:55:10: Starting Motr (phase1, mkfs)... OK
+2021-02-08 23:55:18: Starting Motr (phase1, m0d)... OK
+2021-02-08 23:55:34: Starting Motr (phase2, mkfs)... OK
+2021-02-08 23:56:19: Starting Motr (phase2, m0d)... OK
+2021-02-08 23:56:48: Starting S3 servers (phase3)... OK
+2021-02-08 23:56:52: Checking health of services... OK
+wait for cluster start
+waiting for s3server tcp listeners
+found 21 listeners
+Create results folder
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+Start stat utilities
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/client /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+workload 0
+0
+smc73-m02:  Version:                    2021-02-04-04:50:32-04b03ce50b88c07fe8bf0e60b74af03dfbc12c38
+smc73-m02:  Parameters:                
+smc73-m02:     numClients:                 250
+smc73-m02:     numSamples:                 250
+smc73-m02:     objectSize (MB):            0.004
+smc73-m02:     sampleReads:                1000
+smc73-m02:     readObj:                    true
+smc73-m02:     headObj:                    true
+smc73-m02:     putObjTag:                  true
+smc73-m02:     getObjTag:                  true
+smc73-m02:     TLSHandshakeTimeout:        0
+smc73-m02:     bucket:                     bmax
+smc73-m02:     connectTimeout:             0
+smc73-m02:     deleteAtOnce:               1000
+smc73-m02:     deleteClients:              1
+smc73-m02:     deleteOnly:                 false
+smc73-m02:     endpoints:                 
+smc73-m02:        https://s3.seagate.com
+smc73-m02:     httpClientTimeout:          0
+smc73-m02:     idleConnTimeout:            0
+smc73-m02:     jsonOutput:                 false
+smc73-m02:     maxIdleConnsPerHost:        0
+smc73-m02:     multipartSize:              0
+smc73-m02:     numTags:                    10
+smc73-m02:     objectNamePrefix:           loadgen_test
+smc73-m02:     protocolDebug:              0
+smc73-m02:     reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:RPS;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Total Duration (s);Tests:Total Transferred (MB);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+smc73-m02:     responseHeaderTimeout:      0
+smc73-m02:     s3Disable100Continue:       false
+smc73-m02:     s3MaxRetries:               -1
+smc73-m02:     skipRead:                   false
+smc73-m02:     skipWrite:                  false
+smc73-m02:     tagNamePrefix:              tag_name_
+smc73-m02:     tagValPrefix:               tag_val_
+smc73-m02:     validate:                   false
+smc73-m02:     verbose:                    false
+smc73-m02:     zero:                       false
+smc73-m02:  Tests:                     
+smc73-m02:     Operation:                  Write
+smc73-m02:     RPS:                        100.806
+smc73-m02:     Total Requests Count:       250
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    0.394
+smc73-m02:     Total Duration (s):         2.480
+smc73-m02:     Total Transferred (MB):     0.977
+smc73-m02:     Duration Max:               2.470
+smc73-m02:     Duration Avg:               1.534
+smc73-m02:     Duration Min:               1.089
+smc73-m02:     Ttfb Max:                   2.470
+smc73-m02:     Ttfb Avg:                   1.534
+smc73-m02:     Ttfb Min:                   1.089
+smc73-m02:     Duration 90th-ile:          1.761
+smc73-m02:     Duration 99th-ile:          2.057
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              1.761
+smc73-m02:     Ttfb 99th-ile:              2.057
+smc73-m02: 
+smc73-m02:     Operation:                  PutObjTag
+smc73-m02:     RPS:                        364.463
+smc73-m02:     Total Requests Count:       250
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         0.686
+smc73-m02:     Duration Max:               0.684
+smc73-m02:     Duration Avg:               0.446
+smc73-m02:     Duration Min:               0.280
+smc73-m02:     Ttfb Max:                   0.684
+smc73-m02:     Ttfb Avg:                   0.446
+smc73-m02:     Ttfb Min:                   0.280
+smc73-m02:     Duration 90th-ile:          0.639
+smc73-m02:     Duration 99th-ile:          0.682
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.639
+smc73-m02:     Ttfb 99th-ile:              0.682
+smc73-m02: 
+smc73-m02:     Operation:                  GetObjTag
+smc73-m02:     RPS:                        1124.704
+smc73-m02:     Total Requests Count:       250000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         222.281
+smc73-m02:     Duration Max:               3.446
+smc73-m02:     Duration Avg:               0.222
+smc73-m02:     Duration Min:               0.009
+smc73-m02:     Ttfb Max:                   3.446
+smc73-m02:     Ttfb Avg:                   0.222
+smc73-m02:     Ttfb Min:                   0.009
+smc73-m02:     Duration 90th-ile:          0.429
+smc73-m02:     Duration 99th-ile:          1.006
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.429
+smc73-m02:     Ttfb 99th-ile:              1.006
+smc73-m02: 
+smc73-m02:     Operation:                  HeadObj
+smc73-m02:     RPS:                        1334.132
+smc73-m02:     Total Requests Count:       250000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         187.388
+smc73-m02:     Duration Max:               3.060
+smc73-m02:     Duration Avg:               0.187
+smc73-m02:     Duration Min:               0.005
+smc73-m02:     Ttfb Max:                   3.060
+smc73-m02:     Ttfb Avg:                   0.187
+smc73-m02:     Ttfb Min:                   0.005
+smc73-m02:     Duration 90th-ile:          0.198
+smc73-m02:     Duration 99th-ile:          0.772
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.198
+smc73-m02:     Ttfb 99th-ile:              0.772
+smc73-m02: 
+smc73-m02:     Operation:                  Read
+smc73-m02:     RPS:                        1167.123
+smc73-m02:     Total Requests Count:       250000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    4.559
+smc73-m02:     Total Duration (s):         214.202
+smc73-m02:     Total Transferred (MB):     976.562
+smc73-m02:     Duration Max:               3.011
+smc73-m02:     Duration Avg:               0.214
+smc73-m02:     Duration Min:               0.008
+smc73-m02:     Ttfb Max:                   3.011
+smc73-m02:     Ttfb Avg:                   0.214
+smc73-m02:     Ttfb Min:                   0.008
+smc73-m02:     Duration 90th-ile:          0.262
+smc73-m02:     Duration 99th-ile:          0.948
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.262
+smc73-m02:     Ttfb 99th-ile:              0.948
+workload 1
+workload 2
+0
+smc73-m02:  Version:                    2021-02-04-04:50:32-04b03ce50b88c07fe8bf0e60b74af03dfbc12c38
+smc73-m02:  Parameters:                
+smc73-m02:     numClients:                 500
+smc73-m02:     numSamples:                 500
+smc73-m02:     objectSize (MB):            0.004
+smc73-m02:     sampleReads:                1000
+smc73-m02:     readObj:                    true
+smc73-m02:     headObj:                    true
+smc73-m02:     putObjTag:                  true
+smc73-m02:     getObjTag:                  true
+smc73-m02:     TLSHandshakeTimeout:        0
+smc73-m02:     bucket:                     bmax
+smc73-m02:     connectTimeout:             0
+smc73-m02:     deleteAtOnce:               1000
+smc73-m02:     deleteClients:              1
+smc73-m02:     deleteOnly:                 false
+smc73-m02:     endpoints:                 
+smc73-m02:        https://s3.seagate.com
+smc73-m02:     httpClientTimeout:          0
+smc73-m02:     idleConnTimeout:            0
+smc73-m02:     jsonOutput:                 false
+smc73-m02:     maxIdleConnsPerHost:        0
+smc73-m02:     multipartSize:              0
+smc73-m02:     numTags:                    10
+smc73-m02:     objectNamePrefix:           loadgen_test
+smc73-m02:     protocolDebug:              0
+smc73-m02:     reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:RPS;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Total Duration (s);Tests:Total Transferred (MB);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+smc73-m02:     responseHeaderTimeout:      0
+smc73-m02:     s3Disable100Continue:       false
+smc73-m02:     s3MaxRetries:               -1
+smc73-m02:     skipRead:                   false
+smc73-m02:     skipWrite:                  false
+smc73-m02:     tagNamePrefix:              tag_name_
+smc73-m02:     tagValPrefix:               tag_val_
+smc73-m02:     validate:                   false
+smc73-m02:     verbose:                    false
+smc73-m02:     zero:                       false
+smc73-m02:  Tests:                     
+smc73-m02:     Operation:                  Write
+smc73-m02:     RPS:                        209.125
+smc73-m02:     Total Requests Count:       500
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    0.817
+smc73-m02:     Total Duration (s):         2.391
+smc73-m02:     Total Transferred (MB):     1.953
+smc73-m02:     Duration Max:               2.368
+smc73-m02:     Duration Avg:               1.382
+smc73-m02:     Duration Min:               0.905
+smc73-m02:     Ttfb Max:                   2.368
+smc73-m02:     Ttfb Avg:                   1.382
+smc73-m02:     Ttfb Min:                   0.905
+smc73-m02:     Duration 90th-ile:          2.056
+smc73-m02:     Duration 99th-ile:          2.361
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              2.056
+smc73-m02:     Ttfb 99th-ile:              2.361
+smc73-m02: 
+smc73-m02:     Operation:                  PutObjTag
+smc73-m02:     RPS:                        751.653
+smc73-m02:     Total Requests Count:       500
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         0.665
+smc73-m02:     Duration Max:               0.661
+smc73-m02:     Duration Avg:               0.489
+smc73-m02:     Duration Min:               0.022
+smc73-m02:     Ttfb Max:                   0.661
+smc73-m02:     Ttfb Avg:                   0.489
+smc73-m02:     Ttfb Min:                   0.022
+smc73-m02:     Duration 90th-ile:          0.617
+smc73-m02:     Duration 99th-ile:          0.656
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.617
+smc73-m02:     Ttfb 99th-ile:              0.656
+smc73-m02: 
+smc73-m02:     Operation:                  GetObjTag
+smc73-m02:     RPS:                        1141.498
+smc73-m02:     Total Requests Count:       500000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         438.021
+smc73-m02:     Duration Max:               2.092
+smc73-m02:     Duration Avg:               0.438
+smc73-m02:     Duration Min:               0.015
+smc73-m02:     Ttfb Max:                   2.092
+smc73-m02:     Ttfb Avg:                   0.438
+smc73-m02:     Ttfb Min:                   0.015
+smc73-m02:     Duration 90th-ile:          0.536
+smc73-m02:     Duration 99th-ile:          1.031
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.536
+smc73-m02:     Ttfb 99th-ile:              1.031
+smc73-m02: 
+smc73-m02:     Operation:                  HeadObj
+smc73-m02:     RPS:                        1125.148
+smc73-m02:     Total Requests Count:       500000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         444.386
+smc73-m02:     Duration Max:               2.429
+smc73-m02:     Duration Avg:               0.444
+smc73-m02:     Duration Min:               0.010
+smc73-m02:     Ttfb Max:                   2.429
+smc73-m02:     Ttfb Avg:                   0.444
+smc73-m02:     Ttfb Min:                   0.010
+smc73-m02:     Duration 90th-ile:          0.517
+smc73-m02:     Duration 99th-ile:          1.131
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.517
+smc73-m02:     Ttfb 99th-ile:              1.131
+smc73-m02: 
+smc73-m02:     Operation:                  Read
+smc73-m02:     RPS:                        1041.288
+smc73-m02:     Total Requests Count:       500000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    4.068
+smc73-m02:     Total Duration (s):         480.175
+smc73-m02:     Total Transferred (MB):     1953.125
+smc73-m02:     Duration Max:               3.544
+smc73-m02:     Duration Avg:               0.480
+smc73-m02:     Duration Min:               0.010
+smc73-m02:     Ttfb Max:                   3.544
+smc73-m02:     Ttfb Avg:                   0.480
+smc73-m02:     Ttfb Min:                   0.010
+smc73-m02:     Duration 90th-ile:          0.661
+smc73-m02:     Duration 99th-ile:          1.477
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.661
+smc73-m02:     Ttfb 99th-ile:              1.477
+workload 3
+workload 4
+0
+smc73-m02:  Version:                    2021-02-04-04:50:32-04b03ce50b88c07fe8bf0e60b74af03dfbc12c38
+smc73-m02:  Parameters:                
+smc73-m02:     numClients:                 750
+smc73-m02:     numSamples:                 750
+smc73-m02:     objectSize (MB):            0.004
+smc73-m02:     sampleReads:                1000
+smc73-m02:     readObj:                    true
+smc73-m02:     headObj:                    true
+smc73-m02:     putObjTag:                  true
+smc73-m02:     getObjTag:                  true
+smc73-m02:     TLSHandshakeTimeout:        0
+smc73-m02:     bucket:                     bmax
+smc73-m02:     connectTimeout:             0
+smc73-m02:     deleteAtOnce:               1000
+smc73-m02:     deleteClients:              1
+smc73-m02:     deleteOnly:                 false
+smc73-m02:     endpoints:                 
+smc73-m02:        https://s3.seagate.com
+smc73-m02:     httpClientTimeout:          0
+smc73-m02:     idleConnTimeout:            0
+smc73-m02:     jsonOutput:                 false
+smc73-m02:     maxIdleConnsPerHost:        0
+smc73-m02:     multipartSize:              0
+smc73-m02:     numTags:                    10
+smc73-m02:     objectNamePrefix:           loadgen_test
+smc73-m02:     protocolDebug:              0
+smc73-m02:     reportFormat:               Version;Parameters;Parameters:numClients;Parameters:numSamples;Parameters:objectSize (MB);Parameters:sampleReads;Parameters:readObj;Parameters:headObj;Parameters:putObjTag;Parameters:getObjTag;Tests:Operation;Tests:RPS;Tests:Total Requests Count;Tests:Errors Count;Tests:Total Throughput (MB/s);Tests:Total Duration (s);Tests:Total Transferred (MB);Tests:Duration Max;Tests:Duration Avg;Tests:Duration Min;Tests:Ttfb Max;Tests:Ttfb Avg;Tests:Ttfb Min;-Tests:Duration 25th-ile;-Tests:Duration 50th-ile;-Tests:Duration 75th-ile;-Tests:Ttfb 25th-ile;-Tests:Ttfb 50th-ile;-Tests:Ttfb 75th-ile;
+smc73-m02:     responseHeaderTimeout:      0
+smc73-m02:     s3Disable100Continue:       false
+smc73-m02:     s3MaxRetries:               -1
+smc73-m02:     skipRead:                   false
+smc73-m02:     skipWrite:                  false
+smc73-m02:     tagNamePrefix:              tag_name_
+smc73-m02:     tagValPrefix:               tag_val_
+smc73-m02:     validate:                   false
+smc73-m02:     verbose:                    false
+smc73-m02:     zero:                       false
+smc73-m02:  Tests:                     
+smc73-m02:     Operation:                  Write
+smc73-m02:     RPS:                        195.727
+smc73-m02:     Total Requests Count:       750
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    0.765
+smc73-m02:     Total Duration (s):         3.832
+smc73-m02:     Total Transferred (MB):     2.930
+smc73-m02:     Duration Max:               3.826
+smc73-m02:     Duration Avg:               2.148
+smc73-m02:     Duration Min:               1.052
+smc73-m02:     Ttfb Max:                   3.826
+smc73-m02:     Ttfb Avg:                   2.148
+smc73-m02:     Ttfb Min:                   1.052
+smc73-m02:     Duration 90th-ile:          2.882
+smc73-m02:     Duration 99th-ile:          3.222
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              2.882
+smc73-m02:     Ttfb 99th-ile:              3.222
+smc73-m02: 
+smc73-m02:     Operation:                  PutObjTag
+smc73-m02:     RPS:                        744.877
+smc73-m02:     Total Requests Count:       750
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         1.007
+smc73-m02:     Duration Max:               0.993
+smc73-m02:     Duration Avg:               0.608
+smc73-m02:     Duration Min:               0.248
+smc73-m02:     Ttfb Max:                   0.993
+smc73-m02:     Ttfb Avg:                   0.608
+smc73-m02:     Ttfb Min:                   0.248
+smc73-m02:     Duration 90th-ile:          0.909
+smc73-m02:     Duration 99th-ile:          0.952
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.909
+smc73-m02:     Ttfb 99th-ile:              0.952
+smc73-m02: 
+smc73-m02:     Operation:                  GetObjTag
+smc73-m02:     RPS:                        946.838
+smc73-m02:     Total Requests Count:       750000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         792.110
+smc73-m02:     Duration Max:               3.465
+smc73-m02:     Duration Avg:               0.792
+smc73-m02:     Duration Min:               0.012
+smc73-m02:     Ttfb Max:                   3.465
+smc73-m02:     Ttfb Avg:                   0.792
+smc73-m02:     Ttfb Min:                   0.012
+smc73-m02:     Duration 90th-ile:          0.931
+smc73-m02:     Duration 99th-ile:          1.695
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.931
+smc73-m02:     Ttfb 99th-ile:              1.695
+smc73-m02: 
+smc73-m02:     Operation:                  HeadObj
+smc73-m02:     RPS:                        950.071
+smc73-m02:     Total Requests Count:       750000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Duration (s):         789.415
+smc73-m02:     Duration Max:               2.917
+smc73-m02:     Duration Avg:               0.789
+smc73-m02:     Duration Min:               0.014
+smc73-m02:     Ttfb Max:                   2.917
+smc73-m02:     Ttfb Avg:                   0.789
+smc73-m02:     Ttfb Min:                   0.014
+smc73-m02:     Duration 90th-ile:          0.945
+smc73-m02:     Duration 99th-ile:          1.578
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              0.945
+smc73-m02:     Ttfb 99th-ile:              1.578
+smc73-m02: 
+smc73-m02:     Operation:                  Read
+smc73-m02:     RPS:                        915.080
+smc73-m02:     Total Requests Count:       750000
+smc73-m02:     Errors Count:               0
+smc73-m02:     Total Throughput (MB/s):    3.575
+smc73-m02:     Total Duration (s):         819.600
+smc73-m02:     Total Transferred (MB):     2929.688
+smc73-m02:     Duration Max:               5.232
+smc73-m02:     Duration Avg:               0.819
+smc73-m02:     Duration Min:               0.012
+smc73-m02:     Ttfb Max:                   5.232
+smc73-m02:     Ttfb Avg:                   0.819
+smc73-m02:     Ttfb Min:                   0.012
+smc73-m02:     Duration 90th-ile:          1.006
+smc73-m02:     Duration 99th-ile:          1.771
+smc73-m02:     Errors:                     []
+smc73-m02:     Ttfb 90th-ile:              1.006
+smc73-m02:     Ttfb 99th-ile:              1.771
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+Stop stat utilities
+Collect stat artifacts
+Stop cluster
+Shutting down RC Leader at dell05-m02.colo.seagate.com... OK
+Collect artifacts
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats/dell05-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats/dell06-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats/dell07-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d/configs /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d/m0trace_ios /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+dell07-m02: /var/motr/m0d-0x7200000000000001:0x116 ~
+dell07-m02: dump m0trace.*
+dell06-m02: /var/motr/m0d-0x7200000000000001:0x9a ~
+dell06-m02: dump m0trace.*
+dell05-m02: /var/motr/m0d-0x7200000000000001:0xc ~
+dell05-m02: dump m0trace.*
+dell06-m02: ~
+dell06-m02: /var/motr/m0d-0x7200000000000001:0xb1 ~
+dell06-m02: dump m0trace.*
+dell07-m02: ~
+dell07-m02: /var/motr/m0d-0x7200000000000001:0x12d ~
+dell07-m02: dump m0trace.*
+dell05-m02: ~
+dell05-m02: /var/motr/m0d-0x7200000000000001:0x23 ~
+dell05-m02: dump m0trace.*
+dell06-m02: ~
+dell05-m02: ~
+dell07-m02: ~
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d/dumps /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+dell05-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0xc/addb-stobs-160028/o ~
+dell06-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x9a/addb-stobs-267853/o ~
+dell07-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x116/addb-stobs-12955/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumps_160028.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_160028.db
+dell05-m02: m0trace.5813
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0xc/addb-stobs-165711/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumps_267853.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_267853.db
+dell06-m02: m0trace.107690
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x9a/addb-stobs-273463/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumps_165711.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_165711.db
+dell05-m02: m0trace.6250
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x23/addb-stobs-162203/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumps_162203.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_162203.db
+dell05-m02: m0trace.9768
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x23/addb-stobs-167971/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumps_12955.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_12955.db
+dell07-m02: m0trace.196741
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x116/addb-stobs-7025/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumps_7025.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_7025.db
+dell07-m02: m0trace.204916
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x12d/addb-stobs-15211/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumps_273463.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_273463.db
+dell06-m02: m0trace.108094
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0xb1/addb-stobs-269993/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumps_269993.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_269993.db
+dell06-m02: m0trace.110757
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0xb1/addb-stobs-275785/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumps_15211.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_15211.db
+dell07-m02: m0trace.205321
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/addb/m0d-0x7200000000000001:0x12d/addb-stobs-9217/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumps_9217.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_9217.db
+dell07-m02: m0trace.212919
+dell07-m02: ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumps_167971.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_167971.db
+dell05-m02: m0trace.10192
+dell05-m02: ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumps_275785.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_275785.db
+dell06-m02: m0trace.111146
+dell06-m02: ~
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/m0d /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server/dell05-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+s3server-0x7200000000000001:0x3a s3server-0x7200000000000001:0x3d s3server-0x7200000000000001:0x40 s3server-0x7200000000000001:0x43 s3server-0x7200000000000001:0x46 s3server-0x7200000000000001:0x49 s3server-0x7200000000000001:0x4c s3server-0x7200000000000001:0x4f s3server-0x7200000000000001:0x52 s3server-0x7200000000000001:0x55 s3server-0x7200000000000001:0x58 s3server-0x7200000000000001:0x5b s3server-0x7200000000000001:0x5e s3server-0x7200000000000001:0x61 s3server-0x7200000000000001:0x64 s3server-0x7200000000000001:0x67 s3server-0x7200000000000001:0x6a s3server-0x7200000000000001:0x6d s3server-0x7200000000000001:0x70 s3server-0x7200000000000001:0x73 s3server-0x7200000000000001:0x76
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server/dell06-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+s3server-0x7200000000000001:0x101 s3server-0x7200000000000001:0x104 s3server-0x7200000000000001:0xc8 s3server-0x7200000000000001:0xcb s3server-0x7200000000000001:0xce s3server-0x7200000000000001:0xd1 s3server-0x7200000000000001:0xd4 s3server-0x7200000000000001:0xd7 s3server-0x7200000000000001:0xda s3server-0x7200000000000001:0xdd s3server-0x7200000000000001:0xe0 s3server-0x7200000000000001:0xe3 s3server-0x7200000000000001:0xe6 s3server-0x7200000000000001:0xe9 s3server-0x7200000000000001:0xec s3server-0x7200000000000001:0xef s3server-0x7200000000000001:0xf2 s3server-0x7200000000000001:0xf5 s3server-0x7200000000000001:0xf8 s3server-0x7200000000000001:0xfb s3server-0x7200000000000001:0xfe
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server/dell07-m02.colo.seagate.com /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+s3server-0x7200000000000001:0x144 s3server-0x7200000000000001:0x147 s3server-0x7200000000000001:0x14a s3server-0x7200000000000001:0x14d s3server-0x7200000000000001:0x150 s3server-0x7200000000000001:0x153 s3server-0x7200000000000001:0x156 s3server-0x7200000000000001:0x159 s3server-0x7200000000000001:0x15c s3server-0x7200000000000001:0x15f s3server-0x7200000000000001:0x162 s3server-0x7200000000000001:0x165 s3server-0x7200000000000001:0x168 s3server-0x7200000000000001:0x16b s3server-0x7200000000000001:0x16e s3server-0x7200000000000001:0x171 s3server-0x7200000000000001:0x174 s3server-0x7200000000000001:0x177 s3server-0x7200000000000001:0x17a s3server-0x7200000000000001:0x17d s3server-0x7200000000000001:0x180
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/s3server /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x101/addb_281476/o ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x3a/addb_170157/o ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x144/addb_16992/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_281476.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_281476.db
+dell06-m02: m0trace.114543
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x104/addb_281803/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_16992.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_16992.db
+dell07-m02: m0trace.215986
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x147/addb_17014/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170157.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170157.db
+dell05-m02: m0trace.15454
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x3d/addb_170185/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170185.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170185.db
+dell05-m02: m0trace.16296
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x40/addb_170427/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_281803.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_281803.db
+dell06-m02: m0trace.115172
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xc8/addb_277478/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17014.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17014.db
+dell07-m02: m0trace.217202
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x14a/addb_17036/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170427.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170427.db
+dell05-m02: m0trace.17055
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x43/addb_170526/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277478.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277478.db
+dell06-m02: m0trace.115781
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xcb/addb_277512/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17036.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17036.db
+dell07-m02: m0trace.218603
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x14d/addb_17062/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170526.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170526.db
+dell05-m02: m0trace.17858
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x46/addb_171020/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277512.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277512.db
+dell06-m02: m0trace.117648
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xce/addb_277535/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17062.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17062.db
+dell07-m02: m0trace.219799
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x150/addb_17098/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_171020.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_171020.db
+dell05-m02: m0trace.18664
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x49/addb_171507/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: _addb2-dump
+dell05-m02: dumpc_171507.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_171507.db
+dell05-m02: m0trace.19471
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x4c/addb_171858/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277535.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277535.db
+dell06-m02: m0trace.118239
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xd1/addb_277557/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17098.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17098.db
+dell07-m02: m0trace.220992
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x153/addb_17148/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_171858.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_171858.db
+dell05-m02: m0trace.19884
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x4f/addb_172086/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: _addb2-dump
+dell05-m02: dumpc_172086.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_172086.db
+dell05-m02: m0trace.20688
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x52/addb_172486/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277557.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277557.db
+dell06-m02: m0trace.118870
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xd4/addb_277586/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17148.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17148.db
+dell07-m02: m0trace.222403
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x156/addb_17195/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_172486.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_172486.db
+dell05-m02: m0trace.21159
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x55/addb_172768/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277586.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277586.db
+dell06-m02: m0trace.119457
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xd7/addb_277638/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17195.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17195.db
+dell07-m02: m0trace.223622
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x159/addb_17233/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_172768.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_172768.db
+dell05-m02: m0trace.23526
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x58/addb_173015/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277638.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277638.db
+dell06-m02: m0trace.120084
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xda/addb_277692/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17233.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17233.db
+dell07-m02: m0trace.226016
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x15c/addb_17265/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_173015.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_173015.db
+dell05-m02: m0trace.24336
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x5b/addb_173526/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277692.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277692.db
+dell06-m02: m0trace.120703
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xdd/addb_277738/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17265.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17265.db
+dell07-m02: m0trace.227220
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x15f/addb_17347/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_173526.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_173526.db
+dell05-m02: m0trace.25265
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x5e/addb_173859/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: _addb2-dump
+dell05-m02: dumpc_173859.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_173859.db
+dell05-m02: m0trace.26184
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x61/addb_174023/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: _addb2-dump
+dell05-m02: dumpc_174023.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_174023.db
+dell05-m02: m0trace.26599
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x64/addb_169900/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277738.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277738.db
+dell06-m02: m0trace.121304
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xe0/addb_277769/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17347.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17347.db
+dell07-m02: m0trace.228520
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x162/addb_17851/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_169900.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_169900.db
+dell05-m02: m0trace.27012
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x67/addb_169939/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_277769.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_277769.db
+dell06-m02: m0trace.121945
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xe3/addb_278018/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_17851.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_17851.db
+dell07-m02: m0trace.230017
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x165/addb_18208/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_169939.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_169939.db
+dell05-m02: m0trace.27822
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x6a/addb_169953/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_18208.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_18208.db
+dell07-m02: m0trace.231419
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x168/addb_18512/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_278018.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_278018.db
+dell06-m02: m0trace.122779
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xe6/addb_278307/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_169953.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_169953.db
+dell05-m02: m0trace.28631
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x6d/addb_170006/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_18512.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_18512.db
+dell07-m02: m0trace.232601
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x16b/addb_18977/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_278307.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_278307.db
+dell06-m02: m0trace.123411
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xe9/addb_278784/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170006.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170006.db
+dell05-m02: m0trace.29430
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x70/addb_170025/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_18977.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_18977.db
+dell07-m02: m0trace.234013
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x16e/addb_19297/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_278784.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_278784.db
+dell06-m02: m0trace.124040
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xec/addb_279128/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170025.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170025.db
+dell05-m02: m0trace.30240
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x73/addb_170059/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_19297.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_19297.db
+dell07-m02: m0trace.235188
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x171/addb_19536/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_279128.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_279128.db
+dell06-m02: m0trace.124669
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xef/addb_279456/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170059.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170059.db
+dell05-m02: m0trace.31037
+dell05-m02: ~
+dell05-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x76/addb_170106/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_19536.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_19536.db
+dell07-m02: m0trace.236593
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x174/addb_19982/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_279456.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_279456.db
+dell06-m02: m0trace.125268
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xf2/addb_279760/o ~
+dell05-m02: 100000000000000:2
+dell05-m02: dumpc_170106.txt
+dell05-m02: logfile.txt
+dell05-m02: m0play_170106.db
+dell05-m02: m0trace.31835
+dell05-m02: ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_19982.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_19982.db
+dell07-m02: m0trace.237786
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x177/addb_20263/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_279760.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_279760.db
+dell06-m02: m0trace.125895
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xf5/addb_280179/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_20263.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_20263.db
+dell07-m02: m0trace.238963
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x17a/addb_20600/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_280179.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_280179.db
+dell06-m02: m0trace.126490
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xf8/addb_280456/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_20600.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_20600.db
+dell07-m02: m0trace.240389
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x17d/addb_20991/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_280456.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_280456.db
+dell06-m02: m0trace.127114
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xfb/addb_280798/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: dumpc_20991.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_20991.db
+dell07-m02: m0trace.241572
+dell07-m02: ~
+dell07-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0x180/addb_21303/o ~
+dell07-m02: 100000000000000:2
+dell07-m02: _addb2-dump
+dell07-m02: dumpc_21303.txt
+dell07-m02: logfile.txt
+dell07-m02: m0play_21303.db
+dell07-m02: m0trace.242965
+dell07-m02: ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_280798.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_280798.db
+dell06-m02: m0trace.127722
+dell06-m02: ~
+dell06-m02: /var/log/seagate/motr/s3server-0x7200000000000001:0xfe/addb_281162/o ~
+dell06-m02: 100000000000000:2
+dell06-m02: dumpc_281162.txt
+dell06-m02: logfile.txt
+dell06-m02: m0play_281162.db
+dell06-m02: m0trace.128327
+dell06-m02: ~
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+merge m0d/dumps/m0play_15211.db
+merge m0d/dumps/m0play_160028.db
+merge m0d/dumps/m0play_162203.db
+merge m0d/dumps/m0play_165711.db
+merge m0d/dumps/m0play_167971.db
+merge m0d/dumps/m0play_267853.db
+merge m0d/dumps/m0play_269993.db
+merge m0d/dumps/m0play_273463.db
+merge m0d/dumps/m0play_275785.db
+merge m0d/dumps/m0play_7025.db
+merge m0d/dumps/m0play_9217.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_169900.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_169939.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_169953.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170006.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170025.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170059.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170106.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170157.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170185.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170427.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_170526.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_171020.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_171507.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_171858.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_172086.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_172486.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_172768.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_173015.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_173526.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_173859.db
+merge s3server/dell05-m02.colo.seagate.com/m0play_174023.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277478.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277512.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277535.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277557.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277586.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277638.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277692.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277738.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_277769.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_278018.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_278307.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_278784.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_279128.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_279456.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_279760.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_280179.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_280456.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_280798.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_281162.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_281476.db
+merge s3server/dell06-m02.colo.seagate.com/m0play_281803.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_16992.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17014.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17036.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17062.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17098.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17148.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17195.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17233.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17265.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17347.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_17851.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_18208.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_18512.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_18977.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_19297.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_19536.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_19982.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_20263.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_20600.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_20991.db
+merge s3server/dell07-m02.colo.seagate.com/m0play_21303.db
+Generate plots, hists, etc
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3/stats /var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+/var/log/perfline/result_08b709b7-62bc-40c2-b7ca-0df33201fbf3 ~/perfline/perfline
+Close results dir
+~/perfline/perfline

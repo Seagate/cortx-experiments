@@ -1,16 +1,108 @@
-## Consul Install [on DevVM]
+# Configure consul on system
+
+## Basic configuration
+
+1. Configure Repos
+```
+yum install -y yum-utils
+yum-config-manager --add-repo "${CORTX_RELEASE_REPO}/3rd_party/"
+yum-config-manager --add-repo "${CORTX_RELEASE_REPO}/cortx_iso/"
+rpm --import "${CORTX_RELEASE_REPO}/cortx_iso/RPM-GPG-KEY-Seagate"
+yum clean all
+rm -rf /var/cache/yum/
+```
+
+2. Install latest Consul from cortx repos.
+```
+yum -y install consul --nogpgcheck
+```
+
+## Single Node Setup
+
+1. Update systemd file
+```
+$ vim /usr/lib/systemd/system/consul.service
+ExecStart=/usr/bin/consul agent -dev
+```
+
+2. Reload Systemd
+```
+systemctl daemon-reload
+```
+
+3. Start service
+```
+systemctl status consul
+systemctl enable consul
+systemctl restart consul
+```
+
+## Multi Node Configuration
+
+1. Get All Ip
+```
+<IP-1>
+<IP-2>
+<IP-3>
+```
+
+2. Get Encrypt Key from any one node
+  - It will produce key and copy this key as used in configuration.
+```
+consul keygen
+```
+
+3. Update configuration file
+    - Update `/etc/consul.d/consul.hcl` file on each node.
+```ini
+data_dir = "/opt/consul"
+
+client_addr = "0.0.0.0"
+bind_addr = "{{ GetInterfaceIP \"eth2\" }}"
+
+ui = true
+
+server = true
+bootstrap_expect=3
+# Copy encrypt key output from point 2 to below
+encrypt = "9ORLhr97vw="
+retry_join = ["<IP-1>", "<IP-2>", "<IP-3>"]
+```
+
+4. Start consul service on all node
+```
+systemctl status consul
+systemctl enable consul
+systemctl restart consul
+```
+
+5. Check consul service
+```
+consul members
+
+Node      Address    Status   Type   Build  Protocol      DC   Segment
+node-1  <IP-1>:8301  alive   server  1.7.8      2         dc1   <all>
+node-2  <IP-2>:8301  alive   server  1.7.8      2         dc1   <all>
+node-3  <IP-3>:8301  alive   server  1.9.4      2         dc1   <all>
+```
+
+# Consul Installation as binary (Optional)
+
+## Consul binary Install from offical consul site (It will not configure systemd service)
 *	wget https://releases.hashicorp.com/consul/1.8.0/consul_1.8.0_linux_amd64.zip (latest version is available @ https://www.consul.io/downloads)
 *	unzip consul_1.8.0_linux_amd64.zip [insatall zip unzip : yum install zip unzip -y]
 *	sudo mv consul /bin/
 *	fire 'consul' and you should be looking at consul help as shown below.
  <p align="center"><img src="../images/consul_help.JPG?raw=true"></p>
- 
-## Running consul agent [server mode only]
+
+## Running consul agent [server mode only] 
 In this section we will be Running the consul as a server in a development mode to understand the default consul functionalities without extra configuration.
 *	consul agent –dev –node myMachine (-dev: Enable development server mode. This is useful for quickly starting a Consul agent with all persistence options turned off.)
 *	consul members –detailed
 *	consul leave
 This -dev flag should not be used in production environment.
+
+# Consul Operation and Usage
 
 ## Service registration and calling the service
 * There are two ways to register a service. Via service definition or using an HTTP API.
@@ -23,17 +115,17 @@ This -dev flag should not be used in production environment.
 * Restart the agent
 * consul agent –dev –config-dir= {directory chosen in first step}/consul.d -node=myMachine
 * Quering the service
-  * Curl http://localhost:8500/v1/catalog/service/web 
+  * Curl http://localhost:8500/v1/catalog/service/web
   * for further details on service is available at https://learn.hashicorp.com/consul/getting-started/services
 
 ## KV operations using consul kv cli
 * Two ways to store key-value
   * http api
   * consul kv cli
-  
-* Put 
+
+* Put
   * consul kv put key val
-  * example : consul kv put foo bar	
+  * example : consul kv put foo bar
 * Get
   * consul kv get -recurse
   * consul kv get key
@@ -56,23 +148,23 @@ This -dev flag should not be used in production environment.
     * consul put foo test1
     * consul kv get -detailed foo
       * Above command Shows details as
-        
+
         `[CreateIndex      101]`
-        
+
         `Flags            0`
-        
+
         `Key              foo`
-        
+
         `LockIndex        0`
-        
+
         `ModifyIndex      101`
-        
+
         `Session          -`
-        
+
         `Value            test1`
-        
+
     * Check modify-index and if found as passed as args in put command, then only let set foo key with test2
-    * consul kv put -cas -modify-index=97 foo test2 
+    * consul kv put -cas -modify-index=97 foo test2
   * We get an error messsage as as modify index is 101 and we our cas condition says 97 value: “Error! Did not write to foo: CAS failed”
 
 ## Locking in KV
@@ -84,7 +176,7 @@ This -dev flag should not be used in production environment.
 		* whenever anyone will try to acquire sem1 lock, then one has to wait for termination of child process (pwd in this case).
 
 ## Multi Node Cluster Setup
-* On the first node (N1) install consul and run consul with the following command- 
+* On the first node (N1) install consul and run consul with the following command-
 
 	* consul agent -server -bind=<IP_ADDRESS of that node> -bootstrap-expect=<NO_OF_SERVERS_NODES_IN_CLUSTER> -node=<NODE_NAME> -data-dir=<DATA_DIR_PATH> -config-dir=<CONFIG_DIR_PATH>
 
@@ -135,7 +227,7 @@ This -dev flag should not be used in production environment.
         ]
     }
 
-* Start the consul agent (server or client) using the command 
+* Start the consul agent (server or client) using the command
 	* consul agent –config-dir=<path to your config dir>
 
 * Define the bootstrap_expect option only in one server as only a single server can be present in bootstrap mode in a cluster. Never use bootstrap_expect option on multiple agents.

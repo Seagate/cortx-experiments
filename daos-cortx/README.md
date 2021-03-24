@@ -6,5 +6,8 @@ https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_dao
 #### How to copy objects using mpifilutils from one POSIX container to another within a pool
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/mpifileutils_setup.md
 
+#### How to move data from doas node to cortx node and vice-versa using aws s3 cli
+https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/datamovment_with_s3.md
+
 #### How to perform daos KVS benchmarking using google benchmark
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/daos_kv_benchmark/README.md
