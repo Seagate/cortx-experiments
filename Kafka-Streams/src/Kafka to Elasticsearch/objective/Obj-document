@@ -1,0 +1,19 @@
+Here our motive is to design a pipeline which wil ingest data into kafka topics, which is being populated by a producer generating continuous data. 
+This data stream must then be consumed by kafka streams application in form of records for some data manipulation.
+Manipulation to be performed here is: Windowed Word Count operation along with timestamp and data to be outputted to elasticsearch database.
+Conversion of records to JSON. (As, data residing in elasticsearch needs to be in json format).
+Further, the data could be consumed if needed by a consumer, but main motive is to sink it into a database (Here, elasticsearch)
+The Connectivity part is done using Kafka Connect!
+You can read about different kafka connectors here at Confluent: https://docs.confluent.io/home/connect/overview.html
+
+Pre requisites for implementation:
+1. Elasticsearch (Better if 7 or above version).
+2. Java/JDK 8 (if not possible then, Lambda functions used in the streams application need to be changed accordingly. Lambda functions are supported for java 8 and above only).
+3. Kafka Connect from Confluent.
+
+Related docs and informative links:
+https://www.confluent.io/hub/confluentinc/kafka-connect-elasticsearch
+https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html
+https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora
+
+
