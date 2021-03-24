@@ -22,7 +22,7 @@ public class SessionWindow {
 
         Properties streamsConfiguration = new Properties();
         streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "Any name of your choice but should follow the app id variable name rules, eg: SEAGATEAPP");
-        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "your virtual machines fqdn:9092, eg: ssc-vm-1234.colo.seagate.com:9092");
+        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "list of FQDN of your vm's:9092, eg: ssc-vm-1234.colo.seagate.com:9092, ssc..:9092,");
         streamsConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "(earliest/latest) depending on your requirement");
         streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
