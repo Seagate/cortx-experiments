@@ -1,3 +1,6 @@
+/*This is a windowing application written using Kafka streams DSL.
+It performs a windowed word count operation on data consumed form input topic*/
+
 package org.apache.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -29,9 +32,9 @@ public class HoppingWindow {
         Serde<Windowed<String>> windowSerde = Serdes.serdeFrom(windowedSerializer, windowedDeserializer);
 
         Properties streamsConfiguration = new Properties();
-        streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "CSGO");
-        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ssc-vm-c-0333.colo.seagate.com:9092, ssc-vm-c-0332.colo.seagate.com:9092, ssc-vm-0789.colo.seagate.com:9092");
-        streamsConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "Any name of your choice");
+        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "List of FQDN of your vm's:9092, eg: ssc-vm-1234.colo.seagate.com:9092, ssc...:9092");
+        streamsConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "(earliest/latest) depending on your requirement");
         streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
@@ -39,7 +42,7 @@ public class HoppingWindow {
         Duration advanceMs =    Duration.ofMinutes(1);
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, String> initialstream = builder.stream("TextLinesTopic", Consumed.with(Serdes.String(), Serdes.String()));
+        KStream<String, String> initialstream = builder.stream("NAME OF INPUT TOPIC", Consumed.with(Serdes.String(), Serdes.String()));
 
         KStream<String, String> Hstream = initialstream
                 .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")));
@@ -53,7 +56,7 @@ public class HoppingWindow {
         Htable
                 .toStream()
                 .selectKey((key, word) -> key.key())
-                .to("hoppingoutputtopic", Produced.with(Serdes.String(), Serdes.Long()));
+                .to("NAME OF OUTPUT TOPIC", Produced.with(Serdes.String(), Serdes.Long()));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfiguration);
         streams.start();
