@@ -1,5 +1,4 @@
-/*This is a manifest file comprising of the artifacts, dependencies and plugins required to run the Windowing applications 
-alongwith the properties file.*/
+/*This file comprises of the artifacts, dependencies, plugins and configuration details used by maven to build the Windowing application project.*/
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
