@@ -1,3 +1,6 @@
+/*This a simple application implementing word count operation 
+for tumbling window processing using kafka streams DSL.*/
+
 package org.apache.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -30,14 +33,14 @@ public class TumblingWindow {
         Serde<Windowed<String>> windowSerde = Serdes.serdeFrom(windowedSerializer, windowedDeserializer);
 
         Properties streamsConfiguration = new Properties();
-        streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "GTA");
-        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ssc-vm-c-0333.colo.seagate.com:9092, ssc-vm-c-0332.colo.seagate.com:9092, ssc-vm-0789.colo.seagate.com:9092");
-        streamsConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "Any name as per app id variable declaration rules");
+        streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "list of all the FQDNS of the vm:9092, eg: ssc-vm-c-1234.colo.seagate.com:9092, ssc...:9092, ");
+        streamsConfiguration.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "(earliest/latest) depending on your requirement");
         streamsConfiguration.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
         StreamsBuilder builder = new StreamsBuilder();
-        KStream<String, String> initialstream = builder.stream("TextLinesTopic", Consumed.with(Serdes.String(), Serdes.String()));
+        KStream<String, String> initialstream = builder.stream("NAME OF THE INPUT TOPIC", Consumed.with(Serdes.String(), Serdes.String()));
 
         KStream<String, String> Tstream = initialstream
                 .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")));
@@ -51,7 +54,7 @@ public class TumblingWindow {
         Ttable
                 .toStream()
                 .selectKey((key, word) -> key.key())
-                .to("tumblingoutputtopic", Produced.with(Serdes.String(), Serdes.Long()));
+                .to("NAME OF THE OUTPUT TOPIC", Produced.with(Serdes.String(), Serdes.Long()));
 
         TgroupedStream.count(Materialized.<String, Long, KeyValueStore<Bytes, byte[]>>as("simple-word-count")
                 .withValueSerde(Serdes.Long()));
