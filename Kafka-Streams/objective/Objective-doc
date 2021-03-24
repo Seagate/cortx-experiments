@@ -1,7 +1,5 @@
 Here we are trying different windowing approaches used by Kafka streams DSL for stream data manioulation.
 Operation in all the codes is samw, i.e. Word count application.
-Main motive was to study Kafka streams DSL.
+Primary motive was to study the Kafka streams DSL for main POC purpose.
 
-In src folder, There is another directory named "Kakfa to Elasticsearch".
-That directory contains the final Output, codes, documents, etc related to the Kafka -> kafka Streams -> Kafka Connect -> Database Sink Pipeline.
  
