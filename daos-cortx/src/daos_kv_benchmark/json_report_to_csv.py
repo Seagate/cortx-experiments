@@ -1,9 +1,9 @@
 # Python program to convert
-# JSON file to CSV
+# JSON file to CSV file
 #
 # USAGE : 1. Create json file with report :
 #            $ ./mybenchmark_out --benchmark_out=data.json
-#         2. run script :
+#         2. Run script :
 #            $ python3 json_report_to_csv.py
 
 import json
@@ -64,7 +64,7 @@ data_file = open('benchmark_data_file.csv', 'w')
 # create the csv writer object
 csv_writer = csv.writer(data_file)
 
-# Counter variable used for writing
+# counter variable used for writing
 # headers to the CSV file
 count = 0
 
@@ -84,7 +84,7 @@ data_file.close()
 
 # reorder columns in csv file using pandas library
 df = pd.read_csv("benchmark_data_file.csv")
-df = df[["name", "keysize_valsize", "realtime_ms", "keysize_valsize",  "cputime_ms", "keysize_valsize", "realtime_per_op_ms", "keysize_valsize", "cputime_per_op_ms","iterations", "threads", "nr_ops"]]
+df = df[["name", "keysize_valsize", "realtime_ms", "keysize_valsize", "cputime_ms", "keysize_valsize", "realtime_per_op_ms", "keysize_valsize", "cputime_per_op_ms","iterations", "threads", "nr_ops"]]
 df.head()
 print (df)
 
