@@ -1,1 +1,22 @@
+Kafka Streams Windowing applications using DSL
+-> Some important details and chages in configuration for files in src folder.
+
+1.  Use of Java 8 and above JDK as the application uses lambda functions supported by java version 8 and above.
+2.  The pom.xml, MANIFEST.MF, log4j.properties file are common to all the streams application, just change the main java class names in each file respectively.
+3.  POM.xml contains all the dependencies and plugins required for the project by maven.
+4.  In the BOOTSTRAP_SERVERS_CONFIG, replace the VM names by the ones you are using.
+5.  The APPLICATION_ID_CONFIG must be simple but unique name.
+6.  If you need to specify any other serdes for the application you can do it explicitly in streams DSL.
+7.  In order to package the whole code, use fatjar to create a jar file alongwith dependencies.
+
+8.  For creating a jar file,
+  8.1.  File >> Project Structure >> Artifacts >> JAR >> from module with dependencies
+  8.2.  Change manifest directory, <project folder>\src\main\java to <project folder>\src\main\resources
+  8.3.  Build the Artifacts.
+  8.4.  Create new run/debug configuration for application. 
+  8.5.  Add the "assembly:single" maven goal after build to be executed last. Save and Run.
+  8.6.  JAR file gets created in target folder.
+
+9.  Next, for running the application JAR file through terminal; use java -jar /target/JAR_FILENAME.jar
+10. Please refer to Kafka streams official DSL Developer guide for more information: https://kafka.apache.org/10/documentation/streams/developer-guide/
 
