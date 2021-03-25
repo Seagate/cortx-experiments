@@ -1,0 +1,99 @@
+0 "START" "296546/166/s3_request_state"
+4349 "AUTH_CLNT_CONSTRUCT" "296546/166/s3_request_state"
+65930 "S3Action::load_metadata" "296546/166/s3_request_state"
+67088 "S3Action::set_authorization_meta" "296546/166/s3_request_state"
+67675 "S3Action::check_authorization" "296546/166/s3_request_state"
+70513 "AUTH_CLNT_CHK_AUTHZ" "296546/166/s3_request_state"
+77530 "AUTH_OP_CTX_CONSTRUCT" "296546/166/s3_request_state"
+97526 "AUTH_OP_CTX_NEW_CONN" "296546/166/s3_request_state"
+253779 "AUTH_CLNT_EXEC_AUTH_CONN" "296546/166/s3_request_state"
+288996 "AUTH_OP_ON_EVENT_CONNECTED" "296546/166/s3_request_state"
+299849 "AUTH_OP_ON_WRITE" "296546/166/s3_request_state"
+7864143 "AUTH_OP_ON_HEADERS_READ" "296546/166/s3_request_state"
+7870127 "AUTH_OP_ON_AUTHZ_RESP" "296546/166/s3_request_state"
+8140796 "AUTH_CLNT_CHK_AUTHZ_SUCC" "296546/166/s3_request_state"
+8141977 "S3PutBucketAction::validate_request" "296546/166/s3_request_state"
+8174557 "S3PutBucketAction::validate_bucket_name" "296546/166/s3_request_state"
+8180984 "S3PutBucketAction::read_metadata" "296546/166/s3_request_state"
+48755403 "S3PutBucketAction::create_bucket" "296546/166/s3_request_state"
+1266192582 "S3PutBucketAction::send_response_to_s3_client" "296546/166/s3_request_state"
+1266240328 "COMPLETE" "296546/166/s3_request_state"
+1266276510 "AUTH_CLNT_DESTRUCT" "296546/166/s3_request_state"
+1266283141 "AUTH_OP_CTX_DESTRUCT" "296546/166/s3_request_state"
+
+
+8287236 "initialised" "296546/4580/client_req"
+8300748 "launched" "296546/4580/client_req"
+48550683 "executed" "296546/4580/client_req"
+48552227 "stable" "296546/4580/client_req"
+
+
+8312253 "init" "296546/4581/dix_req"
+8523265 "layout-discovery" "296546/4581/dix_req"
+46932546 "discovery-done" "296546/4581/dix_req"
+47156092 "in-progress" "296546/4581/dix_req"
+48539811 "final" "296546/4581/dix_req"
+
+
+48851907 "initialised" "296546/4590/client_req"
+48860584 "launched" "296546/4590/client_req"
+654899879 "executed" "296546/4590/client_req"
+654902005 "stable" "296546/4590/client_req"
+
+
+48867074 "init" "296546/4591/dix_req"
+49051488 "layout-discovery" "296546/4591/dix_req"
+50103764 "discovery-done" "296546/4591/dix_req"
+50417071 "in-progress" "296546/4591/dix_req"
+654860597 "final" "296546/4591/dix_req"
+
+
+655051290 "initialised" "296546/4606/client_req"
+655064142 "launched" "296546/4606/client_req"
+657039034 "executed" "296546/4606/client_req"
+657040275 "stable" "296546/4606/client_req"
+
+
+655072394 "init" "296546/4607/dix_req"
+655241215 "discovery-done" "296546/4607/dix_req"
+655265335 "idxop-meta-update" "296546/4607/dix_req"
+657033308 "final" "296546/4607/dix_req"
+
+
+657148336 "initialised" "296546/4613/client_req"
+657158743 "launched" "296546/4613/client_req"
+658482486 "executed" "296546/4613/client_req"
+658485590 "stable" "296546/4613/client_req"
+
+
+657165554 "init" "296546/4614/dix_req"
+657306786 "discovery-done" "296546/4614/dix_req"
+657331385 "idxop-meta-update" "296546/4614/dix_req"
+658453962 "final" "296546/4614/dix_req"
+
+
+658684761 "initialised" "296546/4620/client_req"
+658693538 "launched" "296546/4620/client_req"
+660096678 "executed" "296546/4620/client_req"
+660097784 "stable" "296546/4620/client_req"
+
+
+658701452 "init" "296546/4621/dix_req"
+658859887 "discovery-done" "296546/4621/dix_req"
+658883836 "idxop-meta-update" "296546/4621/dix_req"
+660092127 "final" "296546/4621/dix_req"
+
+
+660263766 "initialised" "296546/4627/client_req"
+660274888 "launched" "296546/4627/client_req"
+1266100044 "executed" "296546/4627/client_req"
+1266101675 "stable" "296546/4627/client_req"
+
+
+660281354 "init" "296546/4628/dix_req"
+660431574 "layout-discovery" "296546/4628/dix_req"
+661468362 "discovery-done" "296546/4628/dix_req"
+661761914 "in-progress" "296546/4628/dix_req"
+1266088021 "final" "296546/4628/dix_req"
+
+
