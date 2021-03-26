@@ -166,5 +166,6 @@ and 2nd corresponding to phase's avg duration.
   - requests that have total avg duration
   - requests that have each phase's duration close to phase's avg duration
 - Need a diagram of requests' queues - the number of requests in particular state during the time
+- Need to check with mero team if probable delete index could be removed now
 
 Conclusion: Additional research with help of mero is required
