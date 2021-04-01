@@ -5,6 +5,6 @@ CFLAGS=-I${daos_dir}/src/include
 LIBDIR=-L${benchmark_dir}/benchmark/build/src -L${daos_dir}/install/lib64
 LIBS=-lpthread -lbenchmark -ldaos -lgurt -ldaos_common -luuid
 
-#Recipe line starts with a single TAB
+#Recipe line starts with a single tab
 daos_benchmark : kv_benchmarking.cc
-        ${CC} -o $@ $^ -std=c++11 -isystem benchmark/include ${CFLAGS} ${LIBDIR} ${LIBS}
+        ${CC} -o $@ $^ -std=c++11 -isystem ${benchmark_dir}/benchmark/include ${CFLAGS} ${LIBDIR} ${LIBS}
