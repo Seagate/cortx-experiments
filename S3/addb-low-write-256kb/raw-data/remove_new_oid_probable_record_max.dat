@@ -1,0 +1,141 @@
+0 "START" "97943/7372/s3_request_state"
+2215 "AUTH_CLNT_CONSTRUCT" "97943/7372/s3_request_state"
+59716 "S3Action::load_metadata" "97943/7372/s3_request_state"
+506261909 "S3Action::set_authorization_meta" "97943/7372/s3_request_state"
+506263386 "S3Action::check_authorization" "97943/7372/s3_request_state"
+506264803 "AUTH_CLNT_CHK_AUTHZ" "97943/7372/s3_request_state"
+506266865 "AUTH_OP_CTX_CONSTRUCT" "97943/7372/s3_request_state"
+506269629 "AUTH_OP_CTX_NEW_CONN" "97943/7372/s3_request_state"
+506375875 "AUTH_CLNT_EXEC_AUTH_CONN" "97943/7372/s3_request_state"
+506386208 "AUTH_OP_ON_EVENT_CONNECTED" "97943/7372/s3_request_state"
+506399480 "AUTH_OP_ON_WRITE" "97943/7372/s3_request_state"
+507336925 "AUTH_OP_ON_HEADERS_READ" "97943/7372/s3_request_state"
+507341553 "AUTH_OP_ON_AUTHZ_RESP" "97943/7372/s3_request_state"
+507387455 "AUTH_CLNT_CHK_AUTHZ_SUCC" "97943/7372/s3_request_state"
+507388417 "S3PutObjectAction::validate_put_request" "97943/7372/s3_request_state"
+507399291 "S3PutObjectAction::create_object" "97943/7372/s3_request_state"
+5541831186 "S3PutObjectAction::initiate_data_streaming" "97943/7372/s3_request_state"
+5774070463 "S3PutObjectAction::save_metadata" "97943/7372/s3_request_state"
+6104386389 "S3PutObjectAction::send_response_to_s3_client" "97943/7372/s3_request_state"
+6104438366 "S3PutObjectAction::remove_new_oid_probable_record" "97943/7372/s3_request_state"
+12482046518 "COMPLETE" "97943/7372/s3_request_state"
+12483190488 "AUTH_CLNT_DESTRUCT" "97943/7372/s3_request_state"
+12483223293 "AUTH_OP_CTX_DESTRUCT" "97943/7372/s3_request_state"
+
+
+119641 "initialised" "97943/311043/client_req"
+127063 "launched" "97943/311043/client_req"
+224453270 "executed" "97943/311043/client_req"
+224454963 "stable" "97943/311043/client_req"
+
+
+130339 "init" "97943/311044/dix_req"
+205523 "layout-discovery" "97943/311044/dix_req"
+3734692 "discovery-done" "97943/311044/dix_req"
+4045101 "in-progress" "97943/311044/dix_req"
+224445935 "final" "97943/311044/dix_req"
+
+
+224547705 "initialised" "97943/311103/client_req"
+224555093 "launched" "97943/311103/client_req"
+365368110 "executed" "97943/311103/client_req"
+365369517 "stable" "97943/311103/client_req"
+
+
+224558045 "init" "97943/311104/dix_req"
+224583927 "layout-discovery" "97943/311104/dix_req"
+298562907 "discovery-done" "97943/311104/dix_req"
+299033922 "in-progress" "97943/311104/dix_req"
+365362789 "final" "97943/311104/dix_req"
+
+
+365485528 "initialised" "97943/311139/client_req"
+365494623 "launched" "97943/311139/client_req"
+506195275 "executed" "97943/311139/client_req"
+506196649 "stable" "97943/311139/client_req"
+
+
+365497731 "init" "97943/311140/dix_req"
+365521074 "layout-discovery" "97943/311140/dix_req"
+457821069 "discovery-done" "97943/311140/dix_req"
+458057091 "in-progress" "97943/311140/dix_req"
+506188131 "final" "97943/311140/dix_req"
+
+
+507440852 "initialised" "97943/311187/client_req"
+507623037 "launched" "97943/311187/client_req"
+579203085 "executed" "97943/311187/client_req"
+579205330 "stable" "97943/311187/client_req"
+
+
+507479768 "COB_REQ_ACTIVE" "97943/311188/cob_req"
+507621899 "COB_REQ_SENDING" "97943/311188/cob_req"
+579144048 "COB_REQ_DONE" "97943/311188/cob_req"
+
+
+579380386 "initialised" "97943/311202/client_req"
+579393778 "launched" "97943/311202/client_req"
+5541776213 "executed" "97943/311202/client_req"
+5541777639 "stable" "97943/311202/client_req"
+
+
+579398585 "init" "97943/311203/dix_req"
+579439478 "layout-discovery" "97943/311203/dix_req"
+632702158 "discovery-done" "97943/311203/dix_req"
+633043827 "in-progress" "97943/311203/dix_req"
+5541758468 "final" "97943/311203/dix_req"
+
+
+5542558455 "initialised" "97943/312581/client_req"
+5545249279 "launched" "97943/312581/client_req"
+5774008294 "executed" "97943/312581/client_req"
+5774009722 "stable" "97943/312581/client_req"
+
+
+5542583238 "IO_initial" "97943/312582/ioo_req"
+5544005110 "IO_reading" "97943/312582/ioo_req"
+5573223961 "IO_read_complete" "97943/312582/ioo_req"
+5574814435 "IO_writing" "97943/312582/ioo_req"
+5773944932 "IO_write_complete" "97943/312582/ioo_req"
+5774006740 "IO_req_complete" "97943/312582/ioo_req"
+
+
+5774117083 "initialised" "97943/312775/client_req"
+5774125148 "launched" "97943/312775/client_req"
+5844611312 "executed" "97943/312775/client_req"
+5844612559 "stable" "97943/312775/client_req"
+
+
+5774142788 "init" "97943/312776/dix_req"
+5774169260 "layout-discovery" "97943/312776/dix_req"
+5778179733 "discovery-done" "97943/312776/dix_req"
+5778354850 "in-progress" "97943/312776/dix_req"
+5844603866 "final" "97943/312776/dix_req"
+
+
+5844801812 "initialised" "97943/312826/client_req"
+5844809102 "launched" "97943/312826/client_req"
+6104334430 "executed" "97943/312826/client_req"
+6104335782 "stable" "97943/312826/client_req"
+
+
+5844811669 "init" "97943/312827/dix_req"
+5844861231 "layout-discovery" "97943/312827/dix_req"
+5845757879 "discovery-done" "97943/312827/dix_req"
+5846059149 "in-progress" "97943/312827/dix_req"
+6104326160 "final" "97943/312827/dix_req"
+
+
+6104476030 "initialised" "97943/312976/client_req"
+6104482867 "launched" "97943/312976/client_req"
+12206973386 "executed" "97943/312976/client_req"
+12206975641 "stable" "97943/312976/client_req"
+
+
+6104486113 "init" "97943/312977/dix_req"
+6104563407 "layout-discovery" "97943/312977/dix_req"
+6199216600 "discovery-done" "97943/312977/dix_req"
+6199394378 "in-progress" "97943/312977/dix_req"
+12206959096 "final" "97943/312977/dix_req"
+
+

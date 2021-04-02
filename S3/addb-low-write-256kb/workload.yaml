@@ -1,0 +1,33 @@
+common:
+  version: 1
+  description: smal obj test nw
+  priority: 1
+  batch_id: eos17395
+  user: dmitrii.surnin@seagate.com
+  send_email: false
+
+workload:
+  - cmd: sleep 10
+  - cmd: /root/perfline/perfline/workload/s3bench_ext.sh -n 9216 -c 128 -o 256Kb -e 0 -- -sampleReads 15 -label small256kb-nw -t csv -o ./small256kbrepnw.csv -skipCleanup
+  - cmd: /root/perfline/perfline/workload/s3bench_ext.sh -n 9216 -c 256 -o 256Kb -e 0 -- -sampleReads 15 -label small256kb-nw -t csv+ -o ./small256kbrepnw.csv -skipCleanup
+  - cmd: /root/perfline/perfline/workload/s3bench_ext.sh -n 9216 -c 384 -o 256Kb -e 0 -- -sampleReads 15 -label small256kb-nw -t csv+ -o ./small256kbrepnw.csv -skipCleanup
+  - cmd: /root/perfline/perfline/workload/s3bench_ext.sh -n 9216 -c 512 -o 256Kb -e 0 -- -sampleReads 15 -label small256kb-nw -t csv+ -o ./small256kbrepnw.csv -skipCleanup
+
+git:
+  motr:
+    repo: https://github.com/dsurnin/cortx-motr.git
+    branch: test-ext-addb-size-for-client
+  s3server:
+    repo: https://github.com/Seagate/cortx-s3server.git
+    branch: main
+  hare:
+    repo: https://github.com/Seagate/cortx-hare.git
+    branch: main
+
+execution_options:
+  mkfs: true
+  no_m0trace_files: false
+  no_m0trace_dumps: false
+  no_addb_stobs: false
+  no_addb_dumps: false
+  no_m0play_db: false
