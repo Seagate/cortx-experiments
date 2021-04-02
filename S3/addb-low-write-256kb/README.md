@@ -155,6 +155,23 @@ and 2nd corresponding to phase's avg duration.
 | remove_new_oid_probable_record_avg.dat.png |                                                                                                    | Avg 417.72 PID 297378 ID 6797                                                                       | single dix req; no gap;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | remove_new_oid_probable_record_max.dat.png |                                                                                                    | Max 6377.61 PID 97943 ID 7372                                                                       | single dix req; requires additional mero level research and s3server src                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
+## Notes from S3/Motr discussion:
+
+* Further steps: Use queues tool (Max fixed it).  See which stages are most filled.
+* Motr: DIX is blocked on TX close operation.
+* Try: POC with commented out probable delete index operations.  See how big the improvement is.
+* Issue with BG delete not working, and probable-delete index growing.  May
+  affect tests.  (Maybe add S3 flag to skip probable-delete operations, or
+  new S3 API to re-create probable-delete index.)
+* Not seeing gaps between Motr ops -- means there's no visible lock-ups in S3 code.
+* Observed only two instances of long "gaps":
+  * on auth server request
+  * send resp to client
+  * Both are related to network IO.
+  * Future: when analyzing "tails", this must be looked into.
+* Future: Need ADDB probes on every async step.  This will help in profiling, as we'll be able to build histograms for every step.
+  * Now, for example, load metadata includes 3 motr op -- no easy way to profile them individually.
+
 ## Summary
 
 - There are no any significant gaps between mero ops and s3
