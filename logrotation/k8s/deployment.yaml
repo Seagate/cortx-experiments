@@ -23,7 +23,7 @@ spec:
       #     claimName: logger-shared-pvc
       containers:
       - name: motr  
-        image: logrotate-solution:1.1
+        image: logrotate-solution:1.3
         volumeMounts:
         # - name: logger-shared-storage
         #   mountPath: "/var/log/cortx/"
