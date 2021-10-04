@@ -1,21 +1,11 @@
 # /usr/bin/python3
 
-import yaml
 import os
 import time
-
-config_file = "/opt/cortx/component/config.yaml"
-log_dir = ""
+import sys
 
 
-def read_log_location():
-    with open(config_file) as f:
-        conf = yaml.load(f, Loader=yaml.loader.SafeLoader)
-        log_dir = (conf["cortx"]["common"]["storage"]["log"])
-    return log_dir
-
-
-def keep_logging_to_file():
+def keep_logging_to_file(log_dir):
     print("writing infinitely to log file ", end="")
     log_file = os.path.join(log_dir, "component.log")
     i = 0
@@ -34,10 +24,9 @@ def keep_logging_to_file():
             exit(1)
 
 
-if __name__ == "__main__":
-    local = read_log_location()
+def start_logging(local):
     log_dir = os.path.join(local, "component")
     os.makedirs(log_dir, exist_ok=True)
-    print(log_dir)
+    sys.stdout.write(log_dir)
     print("______________________")
-    keep_logging_to_file()
+    keep_logging_to_file(log_dir)

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: motr
+  name: s3
   labels:
     app: logger-with-rotator
 spec:
@@ -22,10 +22,15 @@ spec:
       #   persistentVolumeClaim:
       #     claimName: logger-shared-pvc
       containers:
-      - name: motr  
-        image: logrotate-solution:1.3
+      - name: s3  
+        image: logrotate-solution:2.0
+        command: ["/usr/bin/python3"]
+        args: ["/opt/cortx/component/startup/entrypoint_logrotate.py",
+               "--config", "yaml:///opt/cortx/component/services/confstore.yaml"]
         volumeMounts:
         # - name: logger-shared-storage
         #   mountPath: "/var/log/cortx/"
         - name: logger-local-storage
           mountPath: "/var/log/cortx/"
+      nodeSelector:
+        disktype: hdd

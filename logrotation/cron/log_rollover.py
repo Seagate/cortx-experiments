@@ -5,7 +5,7 @@ import shutil
 import argparse
 import sys
 
-config_file = "/opt/cortx/component/config.yaml"
+config_file = "/opt/cortx/component/services/confstore.yaml"
 max_file_count = 4
 
 
