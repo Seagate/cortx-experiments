@@ -43,7 +43,7 @@ def update_log_dir(rotate_config, log_path):
 
 
 def usage():
-    """ Print usage instructions """
+    """Print usage instructions."""
     sys.stderr.write(
         "usage:  python3 startup.py --config <url>\n"
         "where:\n"

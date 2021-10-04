@@ -10,7 +10,7 @@ max_file_count = 4
 
 
 def usage():
-    """ Print usage instructions """
+    """Print usage instructions."""
     sys.stderr.write(
         "usage:  python3 log_rollover.py --logpath <path>\n"
         "where:\n"

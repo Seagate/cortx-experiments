@@ -24,7 +24,7 @@ def get_local(config_url):
 
 
 def run_command(command):
-    """Run the command and get the response and error returned"""
+    """Run the command and get the response and error returned."""
     process = subprocess.Popen(
         command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     response, error = process.communicate()
@@ -47,7 +47,7 @@ def setup_cron_job(local):
 
 
 def usage():
-    """ Print usage instructions """
+    """Print usage instructions."""
     sys.stderr.write(
         "usage:  python3 startup.py --config <url>\n"
         "where:\n"
