@@ -1,10 +1,11 @@
 #! /bin/bash
 
-# Execute the either of the startup script.
+# Method can be either `cronjob` or `logrotate`.
 # NOTE: The config url should be like "yaml://opt/cortx/component/config.yaml" 
 #       kept it as file dir since cortx-utils is not installed.
-# /usr/bin/python3 /opt/cortx/component/logrotate/config/startup.py --config /opt/cortx/component/config.yaml
-/usr/bin/python3 /opt/cortx/component/logrotate/cron/startup.py --config /opt/cortx/component/config.yaml
+/usr/bin/python3 /opt/cortx/component/startup/logrotate_setup.py \
+--config /opt/cortx/component/config.yaml \
+--method cronjob
 
 # start the crond service
 /usr/sbin/crond start
