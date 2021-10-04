@@ -5,9 +5,6 @@ import shutil
 import argparse
 import sys
 
-config_file = "/opt/cortx/component/services/confstore.yaml"
-max_file_count = 4
-
 
 def usage():
     """Print usage instructions."""

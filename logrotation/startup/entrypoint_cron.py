@@ -7,12 +7,11 @@ from cortx.utils.process import SimpleProcess
 import os
 
 sys.path.append('/opt/cortx/component/test')
-from logger import start_logging    
+from logger import start_logging
 
 
 def get_local(config_url):
     """Get local log path from the config url."""
-    print(config_url)
     Conf.load('Config', config_url)
     return Conf.get('Config', 'cortx>common>storage>log')
 
@@ -65,7 +64,6 @@ if __name__ == "__main__":
     local = get_local(args.config)
 
     # Setp 2: Add cron job in crontab.
-    print(local)
     setup_cron_job(local)
 
     # Step 3: Start the crond service.

@@ -8,7 +8,7 @@ import shutil
 import os
 
 sys.path.append('/opt/cortx/component/test')
-from logger import start_logging 
+from logger import start_logging
 
 
 def get_local(config_url):
