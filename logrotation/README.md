@@ -6,27 +6,27 @@ Log rotation options for components
 
 ## Linux Cron Job
 - At the entry point,
-  - Execute a startup script.\
+  - Run a startup script.\
   Input to the script is config url.\
   The script will add a crontab entry to periodically schedule the logrotate script.
   - Start the crond service.
-  - Execute the component entrypoint script.
+  - Run the component entrypoint script.
 
 - Logrotate script
   - will be scheduled at fixed interval as configured in crontab entry.
   - log path will the input to the script.
-  - will rotate the logs when executed by cron
+  - will rotate the logs when run by the cron
 
 ## Logrotate
 - At the entry point,
-  - Execute a startup script.\
+  - Run a startup script.\
   Input to the script is config url.\
   The script will fetch the local from config and update the log path accordingly in logrotate configuration file
   & move the config file to the location /etc/logrotate.d  
-  _**NOTE**: Logrotate applies the config Daily by default, can be forced to Hourly by moving the logrotate execute script from cron.daily to cron.hourly.\
-  If we want to schedule it more frequently then we need to add a cron job which execute logrotate config with -f flag._
+  _**NOTE**: Logrotate applies the config Daily by default, can be forced to Hourly by moving the logrotate script from cron.daily to cron.hourly.\
+  If we want to schedule it more frequently then we need to add a cron job which runs logrotate config with -f flag._
   - start the crond service.
-  - Execute the component entrypoint script.
+  - Run the component entrypoint script.
 
 - Logrotate Config
   - will have configurations for log rotation.
