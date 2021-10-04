@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: motr
+  labels:
+    app: logger-with-rotator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger-with-rotator
+  template:
+    metadata:
+      labels:
+        app: logger-with-rotator
+    spec:
+      volumes:
+      - name: logger-local-storage
+        persistentVolumeClaim:
+          claimName: logger-local-pvc
+      # - name: logger-shared-storage
+      #   persistentVolumeClaim:
+      #     claimName: logger-shared-pvc
+      containers:
+      - name: motr  
+        image: logrotate-solution:1.1
+        volumeMounts:
+        # - name: logger-shared-storage
+        #   mountPath: "/var/log/cortx/"
+        - name: logger-local-storage
+          mountPath: "/var/log/cortx/"

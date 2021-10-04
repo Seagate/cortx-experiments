@@ -1,0 +1,4 @@
+cortx:
+  common:
+    storage:
+      log: /var/log/cortx/

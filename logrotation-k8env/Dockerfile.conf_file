@@ -1,0 +1,17 @@
+FROM centos:7.9.2009
+
+RUN yum install -y python3 crontabs logrotate
+
+RUN pip3 install pyyaml
+
+RUN mkdir -p /opt/cortx/component/logrotate /opt/cortx/component/entrypoint
+
+COPY ./logger.py ./config.yaml /opt/cortx/component/
+
+ADD ./logrotate /opt/cortx/component/logrotate/
+
+ADD ./entrypoint /opt/cortx/component/entrypoint/
+
+RUN chmod 0644 /opt/cortx/component/logrotate/config/log_rollover.conf
+
+CMD ["/bin/bash", "/opt/cortx/component/entrypoint/entrypoint.sh"]
