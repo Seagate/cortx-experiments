@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3
+  labels:
+    app: logger-with-rotator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger-with-rotator
+  template:
+    metadata:
+      labels:
+        app: logger-with-rotator
+    spec:
+      volumes:
+      - name: logger-local-storage
+        persistentVolumeClaim:
+          claimName: logger-local-pvc
+      # - name: logger-shared-storage
+      #   persistentVolumeClaim:
+      #     claimName: logger-shared-pvc
+      containers:
+      - name: s3  
+        image: logrotate-solution:2.0
+        command: ["/usr/bin/python3"]
+        args: ["/opt/cortx/component/startup/entrypoint_logrotate.py",
+               "--config", "yaml:///opt/cortx/component/startup/confstore.yaml"]
+        volumeMounts:
+        # - name: logger-shared-storage
+        #   mountPath: "/var/log/cortx/"
+        - name: logger-local-storage
+          mountPath: "/var/log/cortx/"
