@@ -1,5 +1,9 @@
 # Enable Log Rotation for Components
 
+## cortx-re requirements:
+  - "crontab" , "logrotate" are the RPM requirements that needs to added to cortx-all image.
+  - by refering ./test/image/Dockerfile we can find out if any further additions are required to cortx-all image.
+
 Log rotation options for components
   - linux cron job
   - logrotate
