@@ -10,20 +10,14 @@ sys.path.append('/opt/cortx/component/test')
 from logger import start_logging
 
 
-def get_local(config_url):
-    """Get local log path from the config url."""
-    Conf.load('Config', config_url)
-    return Conf.get('Config', 'cortx>common>storage>log')
-
-
 def setup_cron_job(local):
     """Add a crontab entry."""
-    cron_shedule = "* * * * *"  # every minute
+    cron_schedule = "* * * * *"  # every minute
     rollover_script_cmd = \
         "/usr/bin/python3 /opt/cortx/component/cron/log_rollover.py"
     log_dir = os.path.join(local, "component")
     with open("/etc/cron.d/cron_entries", 'a') as f:
-        f.write(f"{cron_shedule} {rollover_script_cmd} --logpath {log_dir}\n")
+        f.write(f"{cron_schedule} {rollover_script_cmd} --logpath {log_dir}\n")
     _, err, retcode = SimpleProcess("crontab /etc/cron.d/cron_entries").run()
     if retcode != 0:
         sys.stderr.write(err)
@@ -61,9 +55,10 @@ if __name__ == "__main__":
         exit(1)
 
     # Step 1: get local log dir from the cofig url.
-    local = get_local(args.config)
+    Conf.load('Config', args.config)
+    local = Conf.get('Config', 'cortx>common>storage>log')
 
-    # Setp 2: Add cron job in crontab.
+    # Step 2: Add cron job in crontab.
     setup_cron_job(local)
 
     # Step 3: Start the crond service.

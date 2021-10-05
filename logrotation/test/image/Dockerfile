@@ -23,14 +23,12 @@ RUN yum install --nogpgcheck -y cortx-py-utils
 RUN mkdir -p /opt/cortx/component/logrotate \
              /opt/cortx/component/cron \
              /opt/cortx/component/startup \
-             /opt/cortx/component/services \
              /opt/cortx/component/test
 
 COPY ./test/logger.py /opt/cortx/component/test
 COPY ./logrotate/ /opt/cortx/component/logrotate
 COPY ./cron/ /opt/cortx/component/cron
 COPY ./startup/ /opt/cortx/component/startup
-COPY ./services/ /opt/cortx/component/services
 
 # Grant 0644 permission to executable file via cron or logrotate 
 RUN chmod 0644 /opt/cortx/component/logrotate/log_rollover.conf \

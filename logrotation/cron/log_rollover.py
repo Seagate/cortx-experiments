@@ -27,6 +27,8 @@ if __name__ == "__main__":
     log_dir = args.logpath
     max_i = 0
     log_file = os.path.join(log_dir, "component.log")
+    # NOTE: following is basic logrotation logic component will
+    #       use logic as per need.
     if os.stat(log_file).st_size == 0:
         exit(0)
     for root, dirs, files in os.walk(log_dir):
@@ -38,4 +40,3 @@ if __name__ == "__main__":
         shutil.copyfile(log_file, f"{log_file}.{max_i+1}")
         with open(log_file, 'w') as logf:
             logf.truncate()
-        # rollover is not implemented.

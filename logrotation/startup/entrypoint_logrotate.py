@@ -11,12 +11,6 @@ sys.path.append('/opt/cortx/component/test')
 from logger import start_logging
 
 
-def get_local(config_url):
-    """Get local log path from the config url."""
-    Conf.load('Config', config_url)
-    return Conf.get('Config', 'cortx>common>storage>log')
-
-
 def setup_logrotate_job(local):
     """Configure & move logrotate config file to appropriate location."""
     rotate_conf_file = \
@@ -71,9 +65,10 @@ if __name__ == "__main__":
         exit(1)
 
     # Step 1: get local log dir from the cofig url.
-    local = get_local(args.config)
+    Conf.load('Config', args.config)
+    local = Conf.get('Config', 'cortx>common>storage>log')
 
-    # Setp 2: Configure log path in logratate config &
+    # Step 2: Configure log path in logratate config &
     #         move the file to /etc/logrotate.d
     setup_logrotate_job(local)
 

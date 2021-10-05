@@ -26,11 +26,9 @@ spec:
         image: logrotate-solution:2.0
         command: ["/usr/bin/python3"]
         args: ["/opt/cortx/component/startup/entrypoint_logrotate.py",
-               "--config", "yaml:///opt/cortx/component/services/confstore.yaml"]
+               "--config", "yaml:///opt/cortx/component/startup/confstore.yaml"]
         volumeMounts:
         # - name: logger-shared-storage
         #   mountPath: "/var/log/cortx/"
         - name: logger-local-storage
           mountPath: "/var/log/cortx/"
-      nodeSelector:
-        disktype: hdd
