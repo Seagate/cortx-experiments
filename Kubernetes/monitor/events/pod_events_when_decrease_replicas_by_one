@@ -1,0 +1,60 @@
+Summary:
+3 Modified events followed by deleted event.
+First modified event - deletionTimestamp related fields are added.
+Second modified event - containers are stopped, fields related to container status are added.
+Third modified event - termination grace period is over.
+Delete event - Confirms that pod is delted from k8s otherwise entry remains but pod is not running.
+
+
+
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-plv4n, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>type : ['ADDED', 'MODIFIED']
+head<>raw_object<>metadata<>resourceVersion : ['400357', '401042']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>deletionTimestamp
+head<>raw_object<>metadata<>deletionGracePeriodSeconds
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-plv4n, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['401042', '401091']
+head<>raw_object<>metadata<>managedFields_1<>time : ['2021-10-10T12:21:25Z', '2021-10-10T12:30:00Z']
+head<>raw_object<>status<>conditions_1<>status : ['True', 'False']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-10T12:21:25Z', '2021-10-10T12:30:00Z']
+head<>raw_object<>status<>conditions_2<>status : ['True', 'False']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-10T12:21:25Z', '2021-10-10T12:30:00Z']
+head<>raw_object<>status<>containerStatuses_0<>ready : [True, False]
+head<>raw_object<>status<>containerStatuses_0<>started : [True, False]
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason
+head<>raw_object<>status<>conditions_1<>reason
+head<>raw_object<>status<>conditions_1<>message
+head<>raw_object<>status<>conditions_2<>reason
+head<>raw_object<>status<>conditions_2<>message
+head<>raw_object<>status<>containerStatuses_0<>state<>terminated<>exitCode
+head<>raw_object<>status<>containerStatuses_0<>state<>terminated<>reason
+head<>raw_object<>status<>containerStatuses_0<>state<>terminated<>startedAt
+head<>raw_object<>status<>containerStatuses_0<>state<>terminated<>finishedAt
+head<>raw_object<>status<>containerStatuses_0<>state<>terminated<>containerID
+NOT IN TWO.......................................
+head<>raw_object<>status<>containerStatuses_0<>state<>running<>startedAt
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-plv4n, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['401091', '401092']
+head<>raw_object<>metadata<>deletionTimestamp : ['2021-10-10T12:29:59Z', '2021-10-10T12:29:29Z']
+head<>raw_object<>metadata<>deletionGracePeriodSeconds : [30, 0]
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = DELETED, Pod = dummy-deploy-5878b9ff49-plv4n, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+****************************************************************************
+****************************************************************************
+

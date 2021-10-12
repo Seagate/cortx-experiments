@@ -1,0 +1,227 @@
+Event Type = ADDED, Pod = dummy-deploy-5878b9ff49-2g7rg, Node = None
+****************************************************************************
+****************************************************************************
+Event Type = ADDED, Pod = dummy-deploy-5878b9ff49-fhmtt, Node = None
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-2g7rg, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>type : ['ADDED', 'MODIFIED']
+head<>raw_object<>metadata<>resourceVersion : ['402049', '402053']
+NOT IN ONE.......................................
+head<>raw_object<>spec<>nodeName
+head<>raw_object<>status<>conditions_0<>type
+head<>raw_object<>status<>conditions_0<>status
+head<>raw_object<>status<>conditions_0<>lastProbeTime
+head<>raw_object<>status<>conditions_0<>lastTransitionTime
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-fhmtt, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>type : ['ADDED', 'MODIFIED']
+head<>raw_object<>metadata<>resourceVersion : ['402052', '402054']
+NOT IN ONE.......................................
+head<>raw_object<>spec<>nodeName
+head<>raw_object<>status<>conditions_0<>type
+head<>raw_object<>status<>conditions_0<>status
+head<>raw_object<>status<>conditions_0<>lastProbeTime
+head<>raw_object<>status<>conditions_0<>lastTransitionTime
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-2g7rg, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['402053', '402061']
+head<>raw_object<>status<>conditions_0<>type : ['PodScheduled', 'Initialized']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_1<>manager
+head<>raw_object<>metadata<>managedFields_1<>operation
+head<>raw_object<>metadata<>managedFields_1<>apiVersion
+head<>raw_object<>metadata<>managedFields_1<>time
+head<>raw_object<>metadata<>managedFields_1<>fieldsType
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:containerStatuses
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:hostIP
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:startTime
+head<>raw_object<>metadata<>managedFields_1<>subresource
+head<>raw_object<>status<>conditions_1<>type
+head<>raw_object<>status<>conditions_1<>status
+head<>raw_object<>status<>conditions_1<>lastProbeTime
+head<>raw_object<>status<>conditions_1<>lastTransitionTime
+head<>raw_object<>status<>conditions_1<>reason
+head<>raw_object<>status<>conditions_1<>message
+head<>raw_object<>status<>conditions_2<>type
+head<>raw_object<>status<>conditions_2<>status
+head<>raw_object<>status<>conditions_2<>lastProbeTime
+head<>raw_object<>status<>conditions_2<>lastTransitionTime
+head<>raw_object<>status<>conditions_2<>reason
+head<>raw_object<>status<>conditions_2<>message
+head<>raw_object<>status<>conditions_3<>type
+head<>raw_object<>status<>conditions_3<>status
+head<>raw_object<>status<>conditions_3<>lastProbeTime
+head<>raw_object<>status<>conditions_3<>lastTransitionTime
+head<>raw_object<>status<>hostIP
+head<>raw_object<>status<>startTime
+head<>raw_object<>status<>containerStatuses_0<>name
+head<>raw_object<>status<>containerStatuses_0<>state<>waiting<>reason
+head<>raw_object<>status<>containerStatuses_0<>lastState
+head<>raw_object<>status<>containerStatuses_0<>ready
+head<>raw_object<>status<>containerStatuses_0<>restartCount
+head<>raw_object<>status<>containerStatuses_0<>image
+head<>raw_object<>status<>containerStatuses_0<>imageID
+head<>raw_object<>status<>containerStatuses_0<>started
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-fhmtt, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['402054', '402062']
+head<>raw_object<>status<>conditions_0<>type : ['PodScheduled', 'Initialized']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_1<>manager
+head<>raw_object<>metadata<>managedFields_1<>operation
+head<>raw_object<>metadata<>managedFields_1<>apiVersion
+head<>raw_object<>metadata<>managedFields_1<>time
+head<>raw_object<>metadata<>managedFields_1<>fieldsType
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Initialized"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastProbeTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:type
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:containerStatuses
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:hostIP
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:startTime
+head<>raw_object<>metadata<>managedFields_1<>subresource
+head<>raw_object<>status<>conditions_1<>type
+head<>raw_object<>status<>conditions_1<>status
+head<>raw_object<>status<>conditions_1<>lastProbeTime
+head<>raw_object<>status<>conditions_1<>lastTransitionTime
+head<>raw_object<>status<>conditions_1<>reason
+head<>raw_object<>status<>conditions_1<>message
+head<>raw_object<>status<>conditions_2<>type
+head<>raw_object<>status<>conditions_2<>status
+head<>raw_object<>status<>conditions_2<>lastProbeTime
+head<>raw_object<>status<>conditions_2<>lastTransitionTime
+head<>raw_object<>status<>conditions_2<>reason
+head<>raw_object<>status<>conditions_2<>message
+head<>raw_object<>status<>conditions_3<>type
+head<>raw_object<>status<>conditions_3<>status
+head<>raw_object<>status<>conditions_3<>lastProbeTime
+head<>raw_object<>status<>conditions_3<>lastTransitionTime
+head<>raw_object<>status<>hostIP
+head<>raw_object<>status<>startTime
+head<>raw_object<>status<>containerStatuses_0<>name
+head<>raw_object<>status<>containerStatuses_0<>state<>waiting<>reason
+head<>raw_object<>status<>containerStatuses_0<>lastState
+head<>raw_object<>status<>containerStatuses_0<>ready
+head<>raw_object<>status<>containerStatuses_0<>restartCount
+head<>raw_object<>status<>containerStatuses_0<>image
+head<>raw_object<>status<>containerStatuses_0<>imageID
+head<>raw_object<>status<>containerStatuses_0<>started
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-2g7rg, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['402061', '402076']
+head<>raw_object<>metadata<>managedFields_1<>time : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>phase : ['Pending', 'Running']
+head<>raw_object<>status<>conditions_1<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>conditions_2<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>containerStatuses_0<>ready : [False, True]
+head<>raw_object<>status<>containerStatuses_0<>imageID : ['', 'docker://sha256:144fd8cfd92c34a1b8508ca97810383e2e06ef001834ba4034418d19a1e89fb2']
+head<>raw_object<>status<>containerStatuses_0<>started : [False, True]
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:phase
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIP
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>k:{"ip":"10.244.1.21"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>k:{"ip":"10.244.1.21"}<>f:ip
+head<>raw_object<>status<>podIP
+head<>raw_object<>status<>podIPs_0<>ip
+head<>raw_object<>status<>containerStatuses_0<>state<>running<>startedAt
+head<>raw_object<>status<>containerStatuses_0<>containerID
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason
+head<>raw_object<>status<>conditions_1<>reason
+head<>raw_object<>status<>conditions_1<>message
+head<>raw_object<>status<>conditions_2<>reason
+head<>raw_object<>status<>conditions_2<>message
+head<>raw_object<>status<>containerStatuses_0<>state<>waiting<>reason
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Pod = dummy-deploy-5878b9ff49-fhmtt, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['402062', '402079']
+head<>raw_object<>metadata<>managedFields_1<>time : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>phase : ['Pending', 'Running']
+head<>raw_object<>status<>conditions_1<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>conditions_2<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-10T12:41:21Z', '2021-10-10T12:41:24Z']
+head<>raw_object<>status<>containerStatuses_0<>ready : [False, True]
+head<>raw_object<>status<>containerStatuses_0<>imageID : ['', 'docker://sha256:144fd8cfd92c34a1b8508ca97810383e2e06ef001834ba4034418d19a1e89fb2']
+head<>raw_object<>status<>containerStatuses_0<>started : [False, True]
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:phase
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIP
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>k:{"ip":"10.244.1.22"}<>.
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:podIPs<>k:{"ip":"10.244.1.22"}<>f:ip
+head<>raw_object<>status<>podIP
+head<>raw_object<>status<>podIPs_0<>ip
+head<>raw_object<>status<>containerStatuses_0<>state<>running<>startedAt
+head<>raw_object<>status<>containerStatuses_0<>containerID
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"ContainersReady"}<>f:reason
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message
+head<>raw_object<>metadata<>managedFields_1<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason
+head<>raw_object<>status<>conditions_1<>reason
+head<>raw_object<>status<>conditions_1<>message
+head<>raw_object<>status<>conditions_2<>reason
+head<>raw_object<>status<>conditions_2<>message
+head<>raw_object<>status<>containerStatuses_0<>state<>waiting<>reason
+****************************************************************************
+****************************************************************************
+
+

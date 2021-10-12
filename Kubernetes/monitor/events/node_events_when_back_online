@@ -1,0 +1,373 @@
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405081', '405627']
+head<>raw_object<>metadata<>managedFields_3<>manager : ['kubelet', 'kube-controller-manager']
+head<>raw_object<>metadata<>managedFields_3<>time : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>metadata<>managedFields_4<>manager : ['kube-controller-manager', 'kubelet']
+head<>raw_object<>metadata<>managedFields_4<>time : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_1<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>reason : ['NodeStatusUnknown', 'KubeletHasSufficientMemory']
+head<>raw_object<>status<>conditions_1<>message : ['Kubelet stopped posting node status.', 'kubelet has sufficient memory available']
+head<>raw_object<>status<>conditions_2<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_2<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_2<>reason : ['NodeStatusUnknown', 'KubeletHasNoDiskPressure']
+head<>raw_object<>status<>conditions_2<>message : ['Kubelet stopped posting node status.', 'kubelet has no disk pressure']
+head<>raw_object<>status<>conditions_3<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_3<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_3<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_3<>reason : ['NodeStatusUnknown', 'KubeletHasSufficientPID']
+head<>raw_object<>status<>conditions_3<>message : ['Kubelet stopped posting node status.', 'kubelet has sufficient PID available']
+head<>raw_object<>status<>conditions_4<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_4<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_4<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_4<>reason : ['NodeStatusUnknown', 'KubeletNotReady']
+head<>raw_object<>status<>conditions_4<>message : ['Kubelet stopped posting node status.', 'PLEG is not healthy: pleg has yet to be successful']
+head<>raw_object<>status<>nodeInfo<>bootID : ['a0d419dc-dc81-4f3b-9fde-9ef36a0a4298', 'd2354796-5ae1-4ba9-9be0-fc62c96e9cef']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_4<>subresource = status
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_3<>subresource = status
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>metadata<>managedFields_5<>manager = kube-controller-manager
+head<>raw_object<>metadata<>managedFields_5<>operation = Update
+head<>raw_object<>metadata<>managedFields_5<>apiVersion = v1
+head<>raw_object<>metadata<>managedFields_5<>time = 2021-10-10T13:16:41Z
+head<>raw_object<>metadata<>managedFields_5<>fieldsType = FieldsV1
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>subresource = status
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405627', '405631']
+NOT IN ONE.......................................
+head<>raw_object<>spec<>taints_2<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_2<>effect = NoSchedule
+head<>raw_object<>spec<>taints_2<>timeAdded = 2021-10-10T13:23:38Z
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405631', '405632']
+head<>raw_object<>spec<>taints_0<>effect : ['NoSchedule', 'NoExecute']
+head<>raw_object<>spec<>taints_0<>timeAdded : ['2021-10-10T13:16:41Z', '2021-10-10T13:16:46Z']
+head<>raw_object<>spec<>taints_1<>key : ['node.kubernetes.io/unreachable', 'node.kubernetes.io/not-ready']
+head<>raw_object<>spec<>taints_1<>effect : ['NoExecute', 'NoSchedule']
+head<>raw_object<>spec<>taints_1<>timeAdded : ['2021-10-10T13:16:46Z', '2021-10-10T13:23:38Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>spec<>taints_2<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_2<>effect = NoSchedule
+head<>raw_object<>spec<>taints_2<>timeAdded = 2021-10-10T13:23:38Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405632', '405634']
+head<>raw_object<>status<>conditions_4<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_4<>reason : ['KubeletNotReady', 'KubeletReady']
+head<>raw_object<>status<>conditions_4<>message : ['PLEG is not healthy: pleg has yet to be successful', 'kubelet is posting ready status']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405634', '405635']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>spec<>taints_1<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_1<>effect = NoSchedule
+head<>raw_object<>spec<>taints_1<>timeAdded = 2021-10-10T13:23:38Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1688.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405225', '405637']
+head<>raw_object<>status<>conditions_1<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_2<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_3<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_4<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405635', '405651']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>spec<>taints_0<>key = node.kubernetes.io/unreachable
+head<>raw_object<>spec<>taints_0<>effect = NoExecute
+head<>raw_object<>spec<>taints_0<>timeAdded = 2021-10-10T13:16:46Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405651', '405670']
+head<>raw_object<>metadata<>annotations<>flannel.alpha.coreos.com/backend-data : ['{"VNI":1,"VtepMAC":"4e:42:48:e9:7b:31"}', '{"VNI":1,"VtepMAC":"72:ce:1e:a5:7f:73"}']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405670', '405671']
+head<>raw_object<>status<>conditions_0<>lastHeartbeatTime : ['2021-10-09T07:30:04Z', '2021-10-10T13:23:49Z']
+head<>raw_object<>status<>conditions_0<>lastTransitionTime : ['2021-10-09T07:30:04Z', '2021-10-10T13:23:49Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405081', '405627']
+head<>raw_object<>metadata<>managedFields_3<>manager : ['kubelet', 'kube-controller-manager']
+head<>raw_object<>metadata<>managedFields_3<>time : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>metadata<>managedFields_4<>manager : ['kube-controller-manager', 'kubelet']
+head<>raw_object<>metadata<>managedFields_4<>time : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_1<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_1<>reason : ['NodeStatusUnknown', 'KubeletHasSufficientMemory']
+head<>raw_object<>status<>conditions_1<>message : ['Kubelet stopped posting node status.', 'kubelet has sufficient memory available']
+head<>raw_object<>status<>conditions_2<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_2<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_2<>reason : ['NodeStatusUnknown', 'KubeletHasNoDiskPressure']
+head<>raw_object<>status<>conditions_2<>message : ['Kubelet stopped posting node status.', 'kubelet has no disk pressure']
+head<>raw_object<>status<>conditions_3<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_3<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_3<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_3<>reason : ['NodeStatusUnknown', 'KubeletHasSufficientPID']
+head<>raw_object<>status<>conditions_3<>message : ['Kubelet stopped posting node status.', 'kubelet has sufficient PID available']
+head<>raw_object<>status<>conditions_4<>status : ['Unknown', 'False']
+head<>raw_object<>status<>conditions_4<>lastHeartbeatTime : ['2021-10-10T13:13:45Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_4<>lastTransitionTime : ['2021-10-10T13:16:41Z', '2021-10-10T13:23:38Z']
+head<>raw_object<>status<>conditions_4<>reason : ['NodeStatusUnknown', 'KubeletNotReady']
+head<>raw_object<>status<>conditions_4<>message : ['Kubelet stopped posting node status.', 'PLEG is not healthy: pleg has yet to be successful']
+head<>raw_object<>status<>nodeInfo<>bootID : ['a0d419dc-dc81-4f3b-9fde-9ef36a0a4298', 'd2354796-5ae1-4ba9-9be0-fc62c96e9cef']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_4<>subresource = status
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_3<>subresource = status
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>metadata<>managedFields_5<>manager = kube-controller-manager
+head<>raw_object<>metadata<>managedFields_5<>operation = Update
+head<>raw_object<>metadata<>managedFields_5<>apiVersion = v1
+head<>raw_object<>metadata<>managedFields_5<>time = 2021-10-10T13:16:41Z
+head<>raw_object<>metadata<>managedFields_5<>fieldsType = FieldsV1
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>subresource = status
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405627', '405631']
+NOT IN ONE.......................................
+head<>raw_object<>spec<>taints_2<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_2<>effect = NoSchedule
+head<>raw_object<>spec<>taints_2<>timeAdded = 2021-10-10T13:23:38Z
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405631', '405632']
+head<>raw_object<>spec<>taints_0<>effect : ['NoSchedule', 'NoExecute']
+head<>raw_object<>spec<>taints_0<>timeAdded : ['2021-10-10T13:16:41Z', '2021-10-10T13:16:46Z']
+head<>raw_object<>spec<>taints_1<>key : ['node.kubernetes.io/unreachable', 'node.kubernetes.io/not-ready']
+head<>raw_object<>spec<>taints_1<>effect : ['NoExecute', 'NoSchedule']
+head<>raw_object<>spec<>taints_1<>timeAdded : ['2021-10-10T13:16:46Z', '2021-10-10T13:23:38Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>spec<>taints_2<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_2<>effect = NoSchedule
+head<>raw_object<>spec<>taints_2<>timeAdded = 2021-10-10T13:23:38Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405632', '405634']
+head<>raw_object<>status<>conditions_4<>status : ['False', 'True']
+head<>raw_object<>status<>conditions_4<>reason : ['KubeletNotReady', 'KubeletReady']
+head<>raw_object<>status<>conditions_4<>message : ['PLEG is not healthy: pleg has yet to be successful', 'kubelet is posting ready status']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405634', '405635']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>spec<>taints_1<>key = node.kubernetes.io/not-ready
+head<>raw_object<>spec<>taints_1<>effect = NoSchedule
+head<>raw_object<>spec<>taints_1<>timeAdded = 2021-10-10T13:23:38Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1688.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405225', '405637']
+head<>raw_object<>status<>conditions_1<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_2<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_3<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+head<>raw_object<>status<>conditions_4<>lastHeartbeatTime : ['2021-10-10T13:18:37Z', '2021-10-10T13:23:39Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405635', '405651']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>spec<>taints_0<>key = node.kubernetes.io/unreachable
+head<>raw_object<>spec<>taints_0<>effect = NoExecute
+head<>raw_object<>spec<>taints_0<>timeAdded = 2021-10-10T13:16:46Z
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405651', '405670']
+head<>raw_object<>metadata<>annotations<>flannel.alpha.coreos.com/backend-data : ['{"VNI":1,"VtepMAC":"4e:42:48:e9:7b:31"}', '{"VNI":1,"VtepMAC":"72:ce:1e:a5:7f:73"}']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405670', '405671']
+head<>raw_object<>status<>conditions_0<>lastHeartbeatTime : ['2021-10-09T07:30:04Z', '2021-10-10T13:23:49Z']
+head<>raw_object<>status<>conditions_0<>lastTransitionTime : ['2021-10-09T07:30:04Z', '2021-10-10T13:23:49Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+
