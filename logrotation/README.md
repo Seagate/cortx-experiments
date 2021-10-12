@@ -7,16 +7,17 @@
 Log rotation options for components
   - linux cron job
   - logrotate
+  - python logger
 
 ## Linux Cron Job
   - At Container entry point,
     - Run a startup script.\
     Input to the script is config url.\
-    The script will add a crontab entry to periodically schedule the logrotate script.
+    The script will add a crontab entry to periodically schedule the custom log_rollover script.
     - Start the crond service.
     - now component can continue it's entrypoint implementation.
 
-  - Logrotate script
+  - Custom log_rollover script
     - will be scheduled at fixed interval as configured in crontab entry.
     - log path will the input to the script.
     - will rotate the logs when run by the cron
@@ -36,3 +37,8 @@ Log rotation options for components
     - will have configurations for log rotation.
     - will have a template log_path that should be updated during the startup phase.
     - if config has "_hourly_" as scheduled frequency then please refer the NOTE from entry point stage.
+
+## Python Logger
+  - Cortx utils has logger with RotatingFileHandler.
+  - It automatically rotates the logs as per file size and backup files count specified during object creation.
+  - example usecase is given at ./python/logger_with_rotation.py
