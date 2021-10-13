@@ -1,0 +1,4 @@
+class NotSupportedObjectError(Exception):
+    pass
+
+

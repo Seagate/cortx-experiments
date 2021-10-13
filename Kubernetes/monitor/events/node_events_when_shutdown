@@ -1,0 +1,117 @@
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['404824', '405065']
+head<>raw_object<>status<>conditions_1<>status : ['False', 'Unknown']
+head<>raw_object<>status<>conditions_1<>lastTransitionTime : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>status<>conditions_1<>reason : ['KubeletHasSufficientMemory', 'NodeStatusUnknown']
+head<>raw_object<>status<>conditions_1<>message : ['kubelet has sufficient memory available', 'Kubelet stopped posting node status.']
+head<>raw_object<>status<>conditions_2<>status : ['False', 'Unknown']
+head<>raw_object<>status<>conditions_2<>lastTransitionTime : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>status<>conditions_2<>reason : ['KubeletHasNoDiskPressure', 'NodeStatusUnknown']
+head<>raw_object<>status<>conditions_2<>message : ['kubelet has no disk pressure', 'Kubelet stopped posting node status.']
+head<>raw_object<>status<>conditions_3<>status : ['False', 'Unknown']
+head<>raw_object<>status<>conditions_3<>lastTransitionTime : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>status<>conditions_3<>reason : ['KubeletHasSufficientPID', 'NodeStatusUnknown']
+head<>raw_object<>status<>conditions_3<>message : ['kubelet has sufficient PID available', 'Kubelet stopped posting node status.']
+head<>raw_object<>status<>conditions_4<>status : ['True', 'Unknown']
+head<>raw_object<>status<>conditions_4<>lastTransitionTime : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+head<>raw_object<>status<>conditions_4<>reason : ['KubeletReady', 'NodeStatusUnknown']
+head<>raw_object<>status<>conditions_4<>message : ['kubelet is posting ready status', 'Kubelet stopped posting node status.']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_5<>manager = kube-controller-manager
+head<>raw_object<>metadata<>managedFields_5<>operation = Update
+head<>raw_object<>metadata<>managedFields_5<>apiVersion = v1
+head<>raw_object<>metadata<>managedFields_5<>time = 2021-10-10T13:16:41Z
+head<>raw_object<>metadata<>managedFields_5<>fieldsType = FieldsV1
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_5<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_5<>subresource = status
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:status = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastTransitionTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:message = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:reason = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:status = None
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405065', '405068']
+head<>raw_object<>metadata<>managedFields_3<>manager : ['kube-controller-manager', 'kubelet']
+head<>raw_object<>metadata<>managedFields_3<>time : ['2021-10-08T10:15:30Z', '2021-10-09T07:29:54Z']
+head<>raw_object<>metadata<>managedFields_4<>manager : ['kubelet', 'kube-controller-manager']
+head<>raw_object<>metadata<>managedFields_4<>time : ['2021-10-09T07:29:54Z', '2021-10-10T13:16:41Z']
+NOT IN ONE.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_3<>subresource = status
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:spec<>f:taints = None
+head<>raw_object<>spec<>taints_0<>key = node.kubernetes.io/unreachable
+head<>raw_object<>spec<>taints_0<>effect = NoSchedule
+head<>raw_object<>spec<>taints_0<>timeAdded = 2021-10-10T13:16:41Z
+NOT IN TWO.......................................
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:metadata<>f:annotations<>f:node.alpha.kubernetes.io/ttl = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDR = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>. = None
+head<>raw_object<>metadata<>managedFields_3<>fieldsV1<>f:spec<>f:podCIDRs<>v:"10.244.1.0/24" = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:allocatable<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:ephemeral-storage = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:capacity<>f:memory = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"DiskPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"MemoryPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"PIDPressure"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:conditions<>k:{"type":"Ready"}<>f:lastHeartbeatTime = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:images = None
+head<>raw_object<>metadata<>managedFields_4<>fieldsV1<>f:status<>f:nodeInfo<>f:bootID = None
+head<>raw_object<>metadata<>managedFields_4<>subresource = status
+****************************************************************************
+****************************************************************************
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1689.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405068', '405081']
+NOT IN ONE.......................................
+head<>raw_object<>spec<>taints_1<>key = node.kubernetes.io/unreachable
+head<>raw_object<>spec<>taints_1<>effect = NoExecute
+head<>raw_object<>spec<>taints_1<>timeAdded = 2021-10-10T13:16:46Z
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+

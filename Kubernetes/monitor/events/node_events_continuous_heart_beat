@@ -1,0 +1,12 @@
+Event Type = MODIFIED, Node = ssc-vm-g3-rhev4-1690.colo.seagate.com
+DIFFERENT........................................
+head<>raw_object<>metadata<>resourceVersion : ['405126', '405521']
+head<>raw_object<>status<>conditions_1<>lastHeartbeatTime : ['2021-10-10T13:17:21Z', '2021-10-10T13:22:24Z']
+head<>raw_object<>status<>conditions_2<>lastHeartbeatTime : ['2021-10-10T13:17:21Z', '2021-10-10T13:22:24Z']
+head<>raw_object<>status<>conditions_3<>lastHeartbeatTime : ['2021-10-10T13:17:21Z', '2021-10-10T13:22:24Z']
+head<>raw_object<>status<>conditions_4<>lastHeartbeatTime : ['2021-10-10T13:17:21Z', '2021-10-10T13:22:24Z']
+NOT IN ONE.......................................
+NOT IN TWO.......................................
+****************************************************************************
+****************************************************************************
+
