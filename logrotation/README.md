@@ -11,7 +11,7 @@
 
 ### Custom Log Rollover Script with Cron Job
 - At container entry point:
-  - Run a [startup script](startup/entrypoint_cron.py) (Input to the script is config url).\
+  - Run a component [startup script](startup/entrypoint_cron.py) (Input to the script is config url).\
   This script will add a crontab entry to periodically schedule the custom log_rollover script.
 
   - Start the crond service.
@@ -19,18 +19,18 @@
 
 - Custom log_rollover script:
   - Will be scheduled at fixed interval as configured in crontab entry.
-  - Log path will the input to the script.
+  - Log path will be the input to the script.
   - Will rotate the logs when run by the cron
 
-### `Logrorate` Utility with Cron Job
+### `Logrotate` Utility with Cron Job
 - At container entry point:
-  - Run a [startup script](startup/entrypoint_logrotate.py) (Input to the script is config url).\
-  This script will fetch the local from config and update the log path accordingly in logrotate configuration file & move the config file to the location `/etc/logrotate.d`
+  - Run a component [startup script](startup/entrypoint_logrotate.py) (Input to the script is config url).\
+  This script will fetch the log path (eg. /share/var/log/cortx/) from config url and update the path accordingly in logrotate configuration file & move the config file to the location `/etc/logrotate.d`.
 
   - Start the crond service.
   - Continue with further entry-point implementation.
 
-  **NOTE**: Logrotate applies the config daily by default, can be forced to Hourly by moving the logrotate script from cron.daily to cron.hourly.\
+  **NOTE**: Logrotate applies the config daily by default, can be forced to Hourly by the cmd `mv /etc/cron.daily/logrotate /etc/cron.hourly`.\
   If we want to schedule it more frequently then we need to add a cron job which runs logrotate config with -f flag.
 
 - Logrotate config:
@@ -39,6 +39,6 @@
   - If config has "_hourly_" as scheduled frequency then please refer the NOTE from entry point stage.
 
 ### Python Logger from cortx-py-utils
+- [example usecase](python_logger/logger_with_rotation.py)
 - Cortx utils has logger with RotatingFileHandler.
-- It automatically rotates the logs as per file size and backup files count specified during object creation.
-- example usecase is given at ./python/logger_with_rotation.py
+- It automatically rotates the logs as per file size and backup files count specified during logger initialization.
