@@ -11,7 +11,7 @@
 
 ### Custom Log Rollover Script with Cron Job
 - At container entry point:
-  - Run a component [startup script](startup/entrypoint_cron.py) (Input to the script is config url).\
+  - Run component [startup script](startup/entrypoint_cron.py) (Input to the script is config url).\
   This script will add a crontab entry to periodically schedule the custom log_rollover script.
 
   - Start the crond service.
@@ -24,7 +24,7 @@
 
 ### `Logrotate` Utility with Cron Job
 - At container entry point:
-  - Run a component [startup script](startup/entrypoint_logrotate.py) (Input to the script is config url).\
+  - Run component [startup script](startup/entrypoint_logrotate.py) (Input to the script is config url).\
   This script will fetch the log path (eg. /share/var/log/cortx/) from config url and update the path accordingly in logrotate configuration file & move the config file to the location `/etc/logrotate.d`.
 
   - Start the crond service.
