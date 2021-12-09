@@ -1,20 +1,55 @@
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include "RestClient.hpp"
 
-int main(int argc, char* argv[])
+bool checkResponse(std::vector<char>& response)
 {
-    if ((argc > 4) || (argc < 3))
+    std::string temp = std::string(response.begin(), response.end());
+
+    if ((temp.find("HTTP/1.1 1") != -1) || (temp.find("HTTP/1.1 2") != -1) || (temp.find("HTTP/1.1 3") != -1))
     {
-        std::cout << "Usage: ./a.out [HTTP Verb] [endpoint] [body(optional)]" << std::endl;
-        return -1;
+        return true;
     }
-    else
+
+    return false;
+}
+
+void displayResult(std::map<bool, int>& result)
+{
+    std::cout << "Number of Requests made: " << 5 << std::endl;
+    std::cout << "Number of successful Requests: " << result[true] << std::endl;
+    std::cout << "Number of failed Requests: " << result[false] << std::endl;
+}
+
+int main()
+{
+    char choice;
+    std::string httpVerb, endpoint, body; 
+    std::map<bool, int> result;
+
+    for (int i = 0; i < 5; i++)
     {
-        std::string httpVerb = argv[1];
-        std::string endpoint = argv[2];
-        std::string body = ((argc == 4) ? argv[3] : "");
+        std::cout << "Request Number: " << i + 1 << std::endl;
+
+        std::cout << "Verb: ";
+        std::cin >> httpVerb;
+        std::cout << "Endpoint: ";
+        std::cin >> endpoint;
+
+        std::cout << "Do you want to provide a body?(y/n) ";
+        std::cin >> choice;
+
+        if ((choice == 'y') || (choice == 'Y'))
+        {
+            std::cout << "Body: ";
+            std::cin >> body;
+        }
+        else
+        {
+            body = "";
+        }
 
         restClient rc(endpoint);
         std::string ret = rc.init();
@@ -33,7 +68,8 @@ int main(int argc, char* argv[])
             return -1;
         }
 
-        char choice;
+        cin.clear();
+        cin.ignore(100 , '\n');
 
         while (true)
         {
@@ -80,6 +116,10 @@ int main(int argc, char* argv[])
         }
         std::cout << std::endl;
 
-        return 0;
+        auto check = checkResponse(data);
+        result[check]++;
     }
+
+    displayResult(result);
+    return 0;
 }
