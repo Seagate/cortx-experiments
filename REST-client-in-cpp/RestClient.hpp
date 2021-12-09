@@ -1,3 +1,6 @@
+#ifndef REST_HPP
+#define REST_HPP
+
 #include <iostream>
 #include <cstring>
 #include <sstream>
@@ -213,3 +216,5 @@ class restClient
         }
     }
 };
+
+#endif
