@@ -177,6 +177,8 @@ std::string restClient::sendRequest(const std::string& verb, const std::string& 
 
 std::string restClient::readResponse(std::vector<char>& data, int& size)
 {
+    std::cout << "Reading from socket ..." << std::endl;
+
     while(true)
     {
         char buf[1024] = {'\0'};
@@ -195,7 +197,6 @@ std::string restClient::readResponse(std::vector<char>& data, int& size)
         {
             if (errno == EAGAIN)
             {
-                std::cout << "Reading from socket ..." << std::endl;
                 auto ret = waitForCompletion(true);
 
                 // For scenerio when nothing is left to read in socket
