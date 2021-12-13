@@ -4,6 +4,7 @@
 
 #include "RestClient.hpp"
 
+// Check if response was successful
 bool checkResponse(std::vector<char>& response)
 {
     std::string temp = std::string(response.begin(), response.end());
@@ -16,6 +17,7 @@ bool checkResponse(std::vector<char>& response)
     return false;
 }
 
+// Display overall results of all the requests
 void displayResult(std::map<bool, int>& result)
 {
     std::cout << "Number of Requests made: " << 5 << std::endl;
@@ -23,33 +25,18 @@ void displayResult(std::map<bool, int>& result)
     std::cout << "Number of failed Requests: " << result[false] << std::endl;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    char choice;
-    std::string httpVerb, endpoint, body; 
-    std::map<bool, int> result;
-
-    for (int i = 0; i < 5; i++)
+    if ((argc > 4) || (argc < 3))
     {
-        std::cout << "Request Number: " << i + 1 << std::endl;
-
-        std::cout << "Verb: ";
-        std::cin >> httpVerb;
-        std::cout << "Endpoint: ";
-        std::cin >> endpoint;
-
-        std::cout << "Do you want to provide a body?(y/n) ";
-        std::cin >> choice;
-
-        if ((choice == 'y') || (choice == 'Y'))
-        {
-            std::cout << "Body: ";
-            std::cin >> body;
-        }
-        else
-        {
-            body = "";
-        }
+        std::cout << "Usage: ./a.out [endpoint] [body(optional)]" << std::endl;
+        return -1;
+    }
+    else
+    {
+        std::string httpVerb = argv[1], endpoint = argv[2], choice;
+        std::string body = ((argc == 4) ? argv[4]: ""); 
+        std::map<bool, int> result;
 
         restClient rc(endpoint);
         std::string ret = rc.init();
@@ -68,58 +55,85 @@ int main()
             return -1;
         }
 
-        cin.clear();
-        cin.ignore(100 , '\n');
-
-        while (true)
+        for (int i = 0; i < 5; i++)
         {
-            std::cout << "Are there any additional headers?(y/n)" << std::endl;
-            std::cin >> choice;
+            std::cout << "Request Number: " << i + 1 << std::endl;
 
-            if ((choice == 'n') || (choice == 'N'))
+            // It asks for verb, endpoint and body to make next requests
+            // For first request, all info was already provided by command-line
+            if (i != 0)
             {
-                break;
+                std::cout << "Verb: ";
+                std::cin >> httpVerb;
+                std::cout << "Endpoint: ";
+                std::cin >> endpoint;
+                rc.setEndpoint(endpoint);
+
+                std::cout << "Do you want to provide a body?(y/n) ";
+                std::cin >> choice;
+
+                if ((choice == "y") || (choice == "Y"))
+                {
+                    std::cout << "Body: ";
+                    std::cin >> body;
+                }
+                else
+                {
+                    body = "";
+                }
             }
 
-            std::string key, value;
+            // if user wants to specify any explicit headers 
+            while (true)
+            {
+                std::cout << "Are there any additional headers?(y/n)" << std::endl;
+                std::cin >> choice;
 
-            std::cout << "Enter key: ";
-            std::cin >> key;
-            std::cout << "Enter value: ";
-            std::cin >> value;
+                if ((choice == "n") || (choice == "N"))
+                {
+                    break;
+                }
 
-            rc.updateHeader(key, value);
+                std::string key, value;
+
+                std::cout << "Enter key: ";
+                std::cin >> key;
+                std::cout << "Enter value: ";
+                std::cin >> value;
+
+                rc.updateHeader(key, value);
+            }
+
+            ret = rc.sendRequest(httpVerb, body);
+
+            if (ret != "")
+            {
+                std::cout << "sendRequest() failed: " << ret << std::endl;
+                return -1;
+            }
+            
+            std::vector<char> data;
+            int size = 0;
+
+            ret = rc.readResponse(data, size);
+
+            if (ret != "")
+            {
+                std::cout << "readResponse failed: " << ret << std::endl;
+            }
+
+            std::cout << "Response:" << std::endl;
+            for (int i = 0; i < size; i++)
+            {
+                std::cout << data[i];
+            }
+            std::cout << std::endl;
+
+            auto check = checkResponse(data);
+            result[check]++;    
         }
 
-        ret = rc.sendRequest(httpVerb, body);
-
-        if (ret != "")
-        {
-            std::cout << "sendRequest() failed: " << ret << std::endl;
-            return -1;
-        }
-        
-        std::vector<char> data;
-        int size = 0;
-
-        ret = rc.readResponse(data, size);
-
-        if (ret != "")
-        {
-            std::cout << "readResponse failed: " << ret << std::endl;
-        }
-
-        std::cout << "Response:" << std::endl;
-        for (int i = 0; i < size; i++)
-        {
-            std::cout << data[i];
-        }
-        std::cout << std::endl;
-
-        auto check = checkResponse(data);
-        result[check]++;
+        displayResult(result);
+        return 0;
     }
-
-    displayResult(result);
-    return 0;
 }

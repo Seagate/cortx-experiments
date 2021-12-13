@@ -8,6 +8,7 @@ The purpose of this POC was to create a standalone C++ REST Client, that can be 
 
 ## Development
 
- - RestClient.hpp implements the restClient Class
+ - RestClient.hpp includes restClient Class defination.
+ - RestClient.cpp implements restClient class.
  - TestClient.cpp includes our main to test our class.
  - Socket Programming was used to create connection.
