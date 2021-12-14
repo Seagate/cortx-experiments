@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
     else
     {
         std::string httpVerb = argv[1], endpoint = argv[2], choice;
-        std::string body = ((argc == 4) ? argv[4]: ""); 
+        std::string body = ((argc == 4) ? argv[3]: ""); 
         std::map<bool, int> result;
 
         restClient rc(endpoint);
