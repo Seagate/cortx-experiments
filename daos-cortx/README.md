@@ -1,4 +1,6 @@
-__CORTX-DAOS integration project__ planned to demonstrate data movement between CORTX object storage optimised for high capacity Seagate HDDs and DAOS object storage optimised for Intel Optane DC and NVMe SSDs.
+# CORTX-DAOS integration project
+
+This project is planned in order to demonstrate data movement between CORTX object storage optimised for high capacity Seagate HDDs and DAOS object storage optimised for Intel Optane DC and NVMe SSDs.
 
 #### How to setup single node daos
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_daos.md
@@ -11,3 +13,6 @@ https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/datamovme
 
 #### How to perform daos KVS benchmarking using google benchmark
 https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/src/daos_kv_benchmark/README.md
+
+### Test for daos to CORTX and vice-versa data movement using Robinhood Policy Engine
+https://github.com/Seagate/cortx-experiments/blob/main/daos-cortx/docs/setup_robinhood_policy_engine.md
