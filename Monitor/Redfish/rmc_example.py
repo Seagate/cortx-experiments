@@ -6,15 +6,14 @@
 
 import os
 import time
-import json
 from redfish.ris.rmc import RmcApp
 App = RmcApp([])
 
 # When running remotely connect using the address, account name,
 # and password to send https requests
-login_host = "https://****/"
-login_account = "*****"
-login_password = "*****"
+login_host = "https://server_ip/"
+login_account = "username"
+login_password = "password"
 
 config_dir = r'C:\redfish_cache'
 App.config.set_cachedir(os.path.join(config_dir, 'cache'))

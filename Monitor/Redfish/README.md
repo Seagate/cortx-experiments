@@ -6,7 +6,7 @@ Python already have urllib and requests modules which can be used for fetching U
 
 This experiment checks which python library will be more suitable to get data via redfish apis for monitoring.
 
-# Observation
+## Observation
 
  Redfish python library itself is using urllib.parse module to fetach URIs of redfish.
  
@@ -27,6 +27,6 @@ Due to this, read() method can be used with urllib but not with requests.
   
 redfish python library returns own class type : <class 'redfish.rest.v1.RestResponse'> but this class also wrapper for HTTPResponse.
   
-# Conclusion
+## Conclusion
 
 To avoid third party library dependancies, should prefer urllib python modules, as its base of other libraries (redfish, requests) which is useful to call RestAPI and get Response. 

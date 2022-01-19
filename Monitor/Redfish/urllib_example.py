@@ -14,9 +14,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 # When running remotely connect using the address, account name,
 # and password to send https requests
-login_host = "https://****"
-login_account = "*****"
-login_password = "*****"
+login_host = "https://server_ip"
+login_account = "username"
+login_password = "password"
 
 request = urllib.request.Request(login_host)
 creds = "%s:%s" % (login_account, login_password)

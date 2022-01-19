@@ -3,16 +3,15 @@
 # by calling api get response.
 # Authentication used here is session based.
 
-import sys
 import redfish
 import json
 
 # When running remotely connect using the address, account name,
 # and password to send https requests
 
-login_host = "https://****"
-login_account = "*****"
-login_password = "*****"
+login_host = "https://server_ip"
+login_account = "username"
+login_password = "password"
 
 # Create a REDFISH object
 REDFISH_OBJ = redfish.redfish_client(base_url=login_host,
