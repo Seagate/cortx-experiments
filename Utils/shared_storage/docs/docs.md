@@ -1,0 +1,3 @@
+Shared storage framework was introduced in LR environment wherein there was a need to have shared storage for support bundle framework.
+
+NOTE: Shared storage is more of an adapter type class and it can support more than one type of shared storage (Just like conf store)
