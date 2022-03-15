@@ -18,6 +18,7 @@ def userauth():
 
 class FailedJqlException(Exception):
     def __init__(self, message):
+        '''Helper exception'''
         super().__init__(message)
 
 

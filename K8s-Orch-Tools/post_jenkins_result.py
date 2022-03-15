@@ -50,8 +50,7 @@ if __name__ == '__main__':
     #
     # Upload test comment
     #
-    # TODO: remove this hardcoded file, replace with args.jenkins_Result
-    filesummary = "/tmp/setup-cortx-cluster-solution-input_357/summary.txt"
+    filesummary = os.path.join(args.jenkins_result, "summary.txt")
     headers = {"Content-Type": "application/json"}
 
     # For the content of the summary file, I want to print the first three

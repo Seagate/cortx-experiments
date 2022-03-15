@@ -60,7 +60,6 @@ import datetime
 import re
 import os
 import sys
-import tempfile
 import time
 
 from yaml import load, Loader
