@@ -16,7 +16,7 @@
 #
 #
 # Usage:  trigger_jenkins.py <options>
-# 
+#
 #  -s <solution.yaml>  The solution.yaml file that describes your cluster.
 #                    This file will be uploaded to the Jenkins job, which
 #                    copies it to /var/tmp/solution.yaml on the first node
@@ -48,7 +48,7 @@
 # =============
 # After the Job has been run, the artifacts created by the job, the
 # console output, and a summary suitable for pasting into a report
-# are created in /tmp/setup-cortx-cluster-solution-input_<build-number>.
+# are created in ./setup-cortx-cluster-solution-input_<build-number>.
 #
 #
 ########################################################
@@ -60,16 +60,17 @@ import datetime
 import re
 import os
 import sys
+import tempfile
 import time
 
 from yaml import load, Loader
 import requests
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-
-
-JENKINS_JOB = "http://eos-jenkins.colo.seagate.com/job/Cortx-Kubernetes/job/setup-cortx-cluster-solution-input"
+JENKINS_JOB = "https://eos-jenkins.colo.seagate.com/job/Cortx-Kubernetes/job/setup-cortx-cluster-solution-input"
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--solution', dest='solution_file', required=True)
@@ -138,6 +139,7 @@ print("*********************************************")
 if not args.debug_skip_trigger:
 
     r = requests.post(jenkins_build_url, auth=(username, password),
+                      verify=False,
                       data={'CORTX_SCRIPTS_BRANCH': args.cortx_k8s_tag,
                             'hosts': ' '.join(hosts)},
                       files={'input/solution.yaml': open(args.solution_file, "rb")})
@@ -154,7 +156,7 @@ if not args.debug_skip_trigger:
 
     queue_item_url += 'api/json'
     while True:
-        r = requests.get(queue_item_url)
+        r = requests.get(queue_item_url, verify=False)
         if r.status_code == 200:
             build_data = r.json()
             if 'executable' in build_data:
@@ -166,9 +168,9 @@ if not args.debug_skip_trigger:
 else:
     build_url = args.debug_skip_trigger
 
+build_url = build_url.replace('http:', 'https:')
 
-
-r = requests.get(build_url+'/api/json')
+r = requests.get(build_url+'/api/json', verify=False)
 
 print("\n\nJob started.  Waiting for job to complete")
 print(f"Jenkins url: {build_url}\n")
@@ -188,7 +190,7 @@ while True:
         print(f"Job running:   started: {job_started_str}    now: {now_str}     elapsed: {elapsed_str}")
         datetimer = nowtime
 
-    r = requests.get(build_url+'/api/json')
+    r = requests.get(build_url+'/api/json', verify=False)
     if r.status_code != 200:
         print(f"Error: Could not contact Jenkins server at {build_url+'/api/json'}")
         continue
@@ -216,14 +218,14 @@ else:
 # Download all artifacts
 #
 m = re.search(r'.+/([\w\-]+)/(\d+)/$', builddata['url'])
-artifactdir = f"/tmp/{m.group(1)}_{m.group(2)}"
+artifactdir = f"{m.group(1)}_{m.group(2)}"
 
 if not os.path.isdir(artifactdir):
     os.mkdir(artifactdir)
 
 for artifact in builddata['artifacts']:
     print(f"Downloading artifact: {artifactdir}/{artifact['fileName']}")
-    r = requests.get(build_url+f"artifact/{artifact['relativePath']}")
+    r = requests.get(build_url+f"artifact/{artifact['relativePath']}", verify=False)
     f = open(os.path.join(artifactdir, artifact['fileName']), 'wb')
     f.write(r.content)
     f.close()
@@ -232,7 +234,7 @@ logname = 'console.log'
 print(f"Downloading log: {artifactdir}/{logname}")
 
 log_url = f"{builddata['url']}timestamps/?time=HH:mm:ss&timeZone=GMT-8&appendLog&locale=en"
-r = requests.get(log_url)
+r = requests.get(log_url, verify=False)
 f = open(os.path.join(artifactdir, logname), 'wb')
 f.write(r.content)
 f.close()
