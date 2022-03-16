@@ -138,7 +138,7 @@ print("*********************************************")
 if not args.debug_skip_trigger:
 
     r = requests.post(jenkins_build_url, auth=(username, password),
-                      verify=False,
+                      verify=False,   # NOSEC
                       data={'CORTX_SCRIPTS_BRANCH': args.cortx_k8s_tag,
                             'hosts': ' '.join(hosts)},
                       files={'input/solution.yaml': open(args.solution_file, "rb")})
@@ -155,7 +155,7 @@ if not args.debug_skip_trigger:
 
     queue_item_url += 'api/json'
     while True:
-        r = requests.get(queue_item_url, verify=False)
+        r = requests.get(queue_item_url, verify=False)   # NOSEC
         if r.status_code == 200:
             build_data = r.json()
             if 'executable' in build_data:
@@ -169,7 +169,7 @@ else:
 
 build_url = build_url.replace('http:', 'https:')
 
-r = requests.get(build_url+'/api/json', verify=False)
+r = requests.get(build_url+'/api/json', verify=False)   # NOSEC
 
 print("\n\nJob started.  Waiting for job to complete")
 print(f"Jenkins url: {build_url}\n")
@@ -189,7 +189,7 @@ while True:
         print(f"Job running:   started: {job_started_str}    now: {now_str}     elapsed: {elapsed_str}")
         datetimer = nowtime
 
-    r = requests.get(build_url+'/api/json', verify=False)
+    r = requests.get(build_url+'/api/json', verify=False)   # NOSEC
     if r.status_code != 200:
         print(f"Error: Could not contact Jenkins server at {build_url+'/api/json'}")
         continue
@@ -224,7 +224,7 @@ if not os.path.isdir(artifactdir):
 
 for artifact in builddata['artifacts']:
     print(f"Downloading artifact: {artifactdir}/{artifact['fileName']}")
-    r = requests.get(build_url+f"artifact/{artifact['relativePath']}", verify=False)
+    r = requests.get(build_url+f"artifact/{artifact['relativePath']}", verify=False)   # NOSEC
     f = open(os.path.join(artifactdir, artifact['fileName']), 'wb')
     f.write(r.content)
     f.close()
@@ -233,7 +233,7 @@ logname = 'console.log'
 print(f"Downloading log: {artifactdir}/{logname}")
 
 log_url = f"{builddata['url']}timestamps/?time=HH:mm:ss&timeZone=GMT-8&appendLog&locale=en"
-r = requests.get(log_url, verify=False)
+r = requests.get(log_url, verify=False)   # NOSEC
 f = open(os.path.join(artifactdir, logname), 'wb')
 f.write(r.content)
 f.close()
