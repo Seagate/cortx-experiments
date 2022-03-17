@@ -41,7 +41,7 @@ def query(jql, querydict=None):
     retry_count = 0
     while True:
         try:
-            print("%s GET %s" % (time.ctime(), url), file=sys.stderr)
+            print(f"{time.ctime()} GET {url}", file=sys.stderr)
             r = requests.get(url, auth=auth, headers=headers)
             break
         except Exception as e:
