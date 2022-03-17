@@ -26,11 +26,10 @@ def query(jql, querydict=None):
 
     querystring = ''
     if querydict:
-        querystring = '&'.join(['%s=%s'%(k,v) for k,v in list(querydict.items())]) + '&'
+        querystring = '&'.join([f'{k}={v}' for k,v in list(querydict.items())]) + '&'
 
 
-    url = "https://jts.seagate.com/rest/api/2/search?%sjql=%s" % (querystring, jql)
-    #url = "https://jts.seagate.com/rest/api/2/search?%sjql=%s&expand=changelog" % (querystring, jql)
+    url = f"https://jts.seagate.com/rest/api/2/search?{querystring}jql={jql}"
 
     auth = userauth()
     headers = {
@@ -46,7 +45,7 @@ def query(jql, querydict=None):
             break
         except Exception as e:
             retry_count += 1
-            print("Exception caught: %s.  Retrying (%d)." % (str(e), retry_count))
+            print(f"Exception caught: {e}.  Retrying ({retry_count}).")
 
     if r.status_code != 200:
         raise FailedJqlException(r.text)
@@ -57,21 +56,20 @@ def query_all(jql, querydict=None, verbose=True):
     # Take care of pagination of all queries.  Return a list of issues.
 
     result = []
-    startAt = 0
-    maxResults = 100
+    start_at = 0
+    max_results = 100
     while True:
         if not querydict:
             querydict = {}
-        querydict.update({'startAt': startAt, 'maxResults': maxResults})
+        querydict.update({'startAt': start_at, 'maxResults': max_results})
         qout = query(jql, querydict=querydict)
-        f = open("qout.debug", "w")
-        f.write(json.dumps(qout))
-        f.close()
+        with open("qout.debut", "w") as f:
+            f.write(json.dumps(qout))
 
         result += qout['issues']
         if verbose:
-            print("Got %d issues so far" % len(result), file=sys.stderr)
-        if startAt + len(qout['issues']) >= qout['total']:
+            print("Got {len(result)} issues so far", file=sys.stderr)
+        if start_at + len(qout['issues']) >= qout['total']:
             break
-        startAt += len(qout['issues'])
+        start_at += len(qout['issues'])
     return result

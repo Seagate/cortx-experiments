@@ -62,7 +62,7 @@ import os
 import sys
 import time
 
-from yaml import load, Loader
+import yaml
 import requests
 
 import urllib3
@@ -113,13 +113,12 @@ if not os.path.exists(args.solution_file):
     print("File {args.solution_file} does not exist.", file=sys.stderr)
     sys.exit(1)
 
-solution_content = load(open(args.solution_file), Loader=Loader)
+solution_content = yaml.safe_load(open(args.solution_file))
 nodes = solution_content['solution']['nodes']
 hosts = [f"hostname={n['name']},user={args.node_user},password={args.node_password}" for n in nodes.values()]
 
 jenkins_build_url = JENKINS_JOB+'/buildWithParameters'
 
-hosts0 = hosts[0]
 hosts_other = '\n'.join(['                       '+h for h in hosts[1:]])
 dashboard_header = f"""command = {' '.join(sys.argv)}
                 user = {username}
@@ -234,20 +233,18 @@ print(f"Downloading log: {artifactdir}/{logname}")
 
 log_url = f"{builddata['url']}timestamps/?time=HH:mm:ss&timeZone=GMT-8&appendLog&locale=en"
 r = requests.get(log_url, verify=False)   # NOSEC
-f = open(os.path.join(artifactdir, logname), 'wb')
-f.write(r.content)
-f.close()
+with open(os.path.join(artifactdir, logname), 'wb') as f:
+    f.write(r.content)
 
 summary_filename = 'summary.txt'
 print(f"Writing summary: {artifactdir}/{summary_filename}")
-f = open(os.path.join(artifactdir, summary_filename), 'w')
-print(f"Build: {build_url}", file=f)
-print(f"Completed at {time.ctime()}", file=f)
-print(f"Result = {result}", file=f)
-print('', file=f)
-summary_hidden_pw = re.sub(r'password=[^\s]+', 'password=<hidden>', dashboard_header)
-print(summary_hidden_pw, file=f)
-f.close()
+with open(os.path.join(artifactdir, summary_filename), 'w') as f:
+    print(f"Build: {build_url}", file=f)
+    print(f"Completed at {time.ctime()}", file=f)
+    print(f"Result = {result}", file=f)
+    print('', file=f)
+    summary_hidden_pw = re.sub(r'password=[^\s]+', 'password=<hidden>', dashboard_header)
+    print(summary_hidden_pw, file=f)
 
 print("\nDone! \n")
 

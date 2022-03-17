@@ -9,7 +9,7 @@
 import argparse
 import requests
 import os
-from pprint import pprint
+import pprint
 
 import jira_common
 
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     print(f"Posting file {zipfile} to {url}")
     r = requests.post(url, auth=auth, headers=headers, files={'file': open(zipfile, 'rb')})
     data = r.json()
-    pprint(data)
+    pprint.pprint(data)
     attachment_url = data[0]['content']
 
     os.unlink(zipfile)
@@ -59,12 +59,14 @@ if __name__ == '__main__':
     file_content = open(filesummary).read()
     file1, file2 = file_content.split('\n\n')
 
-    content = '*Code tested*\n\n'
-    content += file1 + '\n'
-    content += '{code}\n'
-    content += file2 + '\n'
-    content += '{code}\n'
-    content += f'\n[See attached logs|{attachment_url}]\n'
+    content = f'''*Code tested*
+{file1}
+{{code}}
+{file2}
+{{code}}
+
+[See attached logs|{attachment_url}]
+'''
 
     print("content ---------------------------------")
     print(content)
