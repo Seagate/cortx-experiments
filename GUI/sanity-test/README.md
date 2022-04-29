@@ -1,6 +1,10 @@
 ## Prerequisites
 
-Nodejs and npm are required for running the test cases. Download the project present in the 'rack' branch of cortx-management portal. Create a prod build with the command 'npm run build'. Build artifacts will be present inside the 'dist' folder. Run the command 'npx serve' from this 'dist' folder. This would start a server on the port 3000 and serves the project. Same set of test cases have been written using different test frameworks to explore them.
+- Nodejs and npm are required for running the test cases. Download the project present in the 'rack' branch of cortx-management portal.
+- Create a prod build with the command 'npm run build'. Build artifacts will be present inside the 'dist' folder.
+- Run the command 'npx serve' from this 'dist' folder.
+- This would start a server on the port 3000 and serves the project.
+- Same set of test cases have been written using different test frameworks to explore them.
 
 ### Jest-puppeteer
 
