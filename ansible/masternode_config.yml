@@ -1,0 +1,35 @@
+---
+- hosts: kubernetes-master-nodes
+  become: true
+  tasks:
+
+  - name: Initializing kubeadm
+    shell: kubeadm init
+    register: token_output
+
+  - name: Parsing the kubeadm join token
+    set_fact:
+      join_cmd: '{{ token_output.stdout_lines[-2][:-2] }}{{ token_output.stdout_lines[-1] }}'
+
+  - name: Storing Logs and Generated token for future purpose.
+    local_action: 
+      module: copy 
+      content: "{{ join_cmd }}"
+      dest: /token_file
+  
+  - name: Printing result
+    debug:
+      msg: "{{ join_cmd }}"
+
+  - name: Enable and start the kubelet service
+    service:
+      name: kubelet
+      state: started
+      enabled: yes
+
+  - name: Copying required files for k8s
+    shell: |
+      mkdir -p $HOME/.kube
+      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      sudo chown $(id -u):$(id -g) $HOME/.kube/config
+      kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml

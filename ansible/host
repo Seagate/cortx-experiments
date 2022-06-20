@@ -1,0 +1,15 @@
+[kubernetes-master-nodes]
+ssc-vm-g4-rhev4-1754.colo.seagate.com ansible_host=10.230.245.132
+
+[kubernetes-worker-nodes]
+ssc-vm-g4-rhev4-1755.colo.seagate.com ansible_host=10.230.250.144
+ssc-vm-g4-rhev4-1756.colo.seagate.com ansible_host=10.230.250.201
+
+[all:vars]
+master=ssc-vm-g4-rhev4-1754.colo.seagate.com
+worker1=ssc-vm-g4-rhev4-1755.colo.seagate.com
+worker2=ssc-vm-g4-rhev4-1756.colo.seagate.com
+
+master_ip=10.230.245.132
+worker_ip1=10.230.250.144
+worker_ip2=10.230.250.201

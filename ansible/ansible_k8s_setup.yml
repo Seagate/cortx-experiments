@@ -1,0 +1,11 @@
+---
+
+- import_playbook: initial_setup.yml
+
+- import_playbook: workernode_config.yml
+
+- import_playbook: masternode_config.yml
+
+- import_playbook: join_nodes.yml
+
+- import_playbook: final_setup.yml

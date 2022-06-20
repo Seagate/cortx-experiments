@@ -1,0 +1,17 @@
+---
+- hosts: kubernetes-master-nodes
+
+  become: true
+  tasks:
+
+  - name: Assigning roles to worker nodes
+    shell: kubectl label node "{{ item }}" node-role.kubernetes.io/worker=worker
+    loop:
+     - "{{ worker1 }}"
+     - "{{ worker2 }}"
+
+  - name: Untaint master node
+    ignore_errors: True
+    shell: |
+      kubectl taint nodes --all node-role.kubernetes.io/master-
+      kubectl taint nodes --all node-role.kubernetes.io/control-plane-
