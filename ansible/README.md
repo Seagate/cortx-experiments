@@ -15,4 +15,13 @@ This ansible directory contains of ansible playbook (ansible_k8s_setup.yml) that
 
 ## Working
 - In the background *ansible_k8s_setup.yml* invokes 5 different playbooks to setup the entire cluster.
-- This particular process will create a k8s cluster in such a way that the master node will also be used to schedule pods(ie. pods on primary).
+    - initial_setup.yml (This will setup the initial configurations that needs to be done on all the nodes)
+
+    - workernode_config.yml (This will configure the worker nodes i.e. starting the k8s services)
+
+    - masternode_config.yml (This will configure the master node like starting the k8s services and generate the join token for workers)
+
+    - join_nodes.yml (This will join the worker nodes to the cluster using join token)
+
+    - final_setup.yml (This will assign roles to workers and perform taint operation on the master node)
+- This particular process will create a k8s cluster in such a way that the master node will also be used to schedule pods(ie. pods on primary). If one don’t want to schedule pods on primary, then, comment out Untaint master node task from final_setup.yml
