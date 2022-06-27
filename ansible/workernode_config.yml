@@ -1,0 +1,14 @@
+---
+- hosts: kubernetes-worker-nodes
+  become: true
+  tasks:
+
+  - name: Initializing kubeadm
+    shell: kubeadm init
+    register: output
+
+  - name: Starting the kubelet services
+    service:
+      name: kubelet
+      state: started
+      enabled: yes
