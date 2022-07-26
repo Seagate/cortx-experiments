@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    tag: "{{ tag }}"
+    path: "{{ path }}"
+  tasks:
+    - name: build a halo container image
+      shell: docker image build -t {{ tag }} {{ path }}
+      register: output
+      failed_when: output.rc != 0
+
+    - name: save halo container image as a tarball
+      shell: docker save {{ tag }} > {{ path }}/cortx-halo.tar
+      register: output
+      failed_when: output.rc != 0
+

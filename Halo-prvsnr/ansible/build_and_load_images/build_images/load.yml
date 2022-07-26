@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: copy tarball on all the hosts
+      copy:
+        src: /root/build_images/cortx-halo.tar
+        dest: /root
+
+    - name: load the Cortx-halo image on all the hosts
+      shell: docker load < /root/cortx-halo.tar
+      register: output
+      failed_when: output.rc != 0
+
+
