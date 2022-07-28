@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 from runner import Runner
 import recover_nodes
@@ -20,5 +19,5 @@ if __name__ == "__main__":
         print("Trying to recover failed Nodes!!!")
         print("========================================")
         recover_nodes.main()
-        rc = start(playbook=args.playbook, ini=args.ini)
+        rc = start(playbook=args.playbook, ini='/tmp/failed_nodes_ini')
 

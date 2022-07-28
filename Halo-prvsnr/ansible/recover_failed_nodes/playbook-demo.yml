@@ -44,10 +44,3 @@
      - name: Add entries for failed nodes
        local_action: lineinfile line={{ inventory_hostname }} path=/tmp/failed_nodes_ini
        when: output.rc != 0
-
-- hosts: localhost
-  tasks:
-     - name: Create an ini file for failed nodes
-       ansible.builtin.copy:
-         src: /tmp/failed_nodes_ini
-         dest: /root/failed_nodes_ini

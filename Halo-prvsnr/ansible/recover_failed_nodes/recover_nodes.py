@@ -30,12 +30,13 @@ class Recover:
                 f.write("\n")
 
     def run_recovery(self):
-        for key, values in self.recover_mapping.items():
+        for values in self.recover_mapping.values():
             if os.path.exists(f'/root/{values}Ini'):
                 recovery_class = Recover.str_to_class(values)
                 recovery_class(f'/root/{values}Ini').run()
 
-    def cleanup(self):
+    @staticmethod
+    def cleanup():
         path = os.listdir('/root')
         for file in path:
             if file.endswith("Ini"):
@@ -56,6 +57,7 @@ def main():
         sys.exit(1)
     recover.create_ini_files_for_failed_nodes()
     recover.run_recovery()
+
 
 if __name__ == "__main__":
     main()
