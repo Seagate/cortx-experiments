@@ -1,8 +1,8 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/364bc1d3c60c4fc7816f1901f93f3773)](https://www.codacy.com/gh/Seagate/cortx-experiments/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Seagate/cortx-experiments&amp;utm_campaign=Badge_Grade)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://github.com/Seagate/cortx-experiments/blob/main/LICENSE) 
 [![Slack](https://img.shields.io/badge/chat-on%20Slack-blue")](https://join.slack.com/t/cortxcommunity/shared_invite/zt-femhm3zm-yiCs5V9NBxh89a_709FFXQ?) 
 [![YouTube](https://img.shields.io/badge/Video-YouTube-red)](https://cortx.link/videos)
 
+# Disclaimer: This project is not maintained anymore
 # CORTX-Experiments
 
 The cortex-experiments repo is used for recording all the pocs and experiments executed by architecture team.
